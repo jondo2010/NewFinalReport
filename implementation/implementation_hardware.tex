@@ -11,7 +11,7 @@ Commonality between modules, same life-support system.
 Schematic capture and PCB layout using EagleCAD.
 
 
-\subsection{Commonalities }
+\subsection{Commonalities}
 
 
 \subsubsection{Microcontroller}
@@ -31,36 +31,8 @@ Schematic capture and PCB layout using EagleCAD.
 
 \input{implementation/implementation_hardware_engine_transmission.tex}
 
+\input{implementation/implementation_hardware_braking.tex}
 
-\subsection{Braking Module}
-
-<Picture of board>
-
-
-\subsubsection{Stepper Motor Driver}
-
-
-\subsubsection{Analogue-to-Digital Converter}
-
-
-\subsubsection{End-of-Travel Microswitches}
-
-
-\subsection{Telemetry Module}
-
-
-\subsubsection{Wireless Modem}
-
-To meet the range and data throughput requirements for the telemetry system, an XBee Pro wireles modem was used. The XBee requires 3.3v I/O levels and power supply, and so a second linear voltage regulator was used in the design, the LT1521 from Linear Technology. Since the AT90CAN129 has only 2 built-in UARTS that were used for the RS232 interfaces to the ECU and DAQ, an third external UART was added to the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has an active-low IRQ line connected to external interrupt line EXT7 on the microcontroller. 
-
-The wireless transmitter is an XBee Pro Modem from Digi International. The modem is in a package designed for mounting on a printed circuit board, and is attached to the telemetry module directly. This modems requires a 3.3V power supply. and consumes at most 215mA of current during transmit. Since the common module hardware only provides power for 5V devices, the telemetry module has a second LDO regulator providing 3.3V. A separate antenna port is connected to the modem and mounted in the side of the module enclosure.
-
-
-
-\subsubsection{External SPI USART}
-
-
-\subsubsection{Two-Channel ECU and DAC USART}
-
+\input{implementation/implementation_hardware_telemetry.tex}
 
 \input{implementation/implementation_hardware_driver_interface.tex}

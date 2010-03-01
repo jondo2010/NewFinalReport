@@ -1,0 +1,88 @@
+%
+%	final_report.tex
+%
+%	Final Report Outline
+%
+%	John Hughes and Michael Jean
+%	University of Manitoba
+%
+
+\documentclass[english]{scrreprt}
+
+\KOMAoptions{fontsize=11pt}
+\KOMAoptions{paper=letter}
+
+% Preamble
+
+\include{preamble}
+\renewcommand{\baselinestretch}{1.0}
+
+\begin{document}
+\pagenumbering{roman}
+
+% Title Page
+
+\subject{Design and implementation of a distributed automotive sensor/actuator network}
+\title{Final Report}
+
+\author{John Hughes\\ Michael Jean\\ Group Advisor: Dr. W. Kinsner}
+
+\maketitle
+
+\begin{abstract}
+\include{abstract}
+\end{abstract}
+
+\tableofcontents{}
+
+\newpage
+\addcontentsline{toc}{chapter}{List of Figures}
+\phantomsection \label{listoffig}
+\listoffigures
+
+\newpage
+\addcontentsline{toc}{chapter}{List of Tables}
+\phantomsection \label{listoftab}
+\listoftables
+
+\newpage
+\addcontentsline{toc}{chapter}{Nomenclature}
+\phantomsection \label{nomenclature}
+\printnomenclature{}
+
+\newpage
+
+\pagenumbering{arabic}
+
+\input{introduction/introduction}
+
+\input{background/background}
+
+\input{goals_and_requirements/goals_and_requirements}
+
+\input{design/design}
+
+\input{implementation/implementation}
+
+\input{operational_results/operational_results}
+
+\input{future_work/future_work}
+
+\input{conclusion/conclusion}
+
+% References
+
+\bibliographystyle{IEEEtran}
+\clearpage
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliography{reference/datasheets,reference/literature,IEEEfull}
+
+% Appendix
+
+\appendix
+
+\input{appendicies/appendicies}
+
+% Finito
+
+\end{document}

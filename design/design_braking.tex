@@ -1,0 +1,79 @@
+\section{Braking Module Design\label{sec:Braking-Module-Design}}
+
+
+\subsection{Purpose}
+
+Adjust the brake bias position electronically and on-demand from the
+driver.
+
+Provide calibration sequences to allow for mechanical wear.
+
+
+\subsection{Processes}
+
+
+\subsubsection{Brake Bias Calibration}
+
+
+\subsubsection{Brake Bias Adjustment}
+
+
+\subsubsection{Pressure Sensor Calibration}
+
+
+\subsection{Software}
+
+Software overview diagram
+
+
+\subsubsection{Bias Manager}
+
+Handles requests to adjust the brake bias from the network. 
+
+Performs balance bar calibration sequence on demand.
+
+
+\subsubsection{Pressure Manager}
+
+Continuously samples brake pressure.
+
+Performs a pressure calibration sequence on demand.
+
+
+\subsubsection{CAN Interface}
+
+As documented above.
+
+
+\subsubsection{Main Control Loop}
+
+Initializes the system and brings into a known state.
+
+Monitor for system faults and react accordingly.
+
+
+\subsection{Hardware}
+
+
+\subsubsection{Microcontroller}
+
+As mentioned above.
+
+
+\subsubsection{CAN transceiver}
+
+As mentioned above.
+
+
+\subsubsection{Stepper Motor Driver}
+
+Generates signals required to actuate the stepper motor used to adjust
+the balance bar.
+
+
+\subsubsection{Analogue-to-Digital Converter}
+
+Samples both front and rear pressure sensors. Capable of 10-bit resolution.
+
+
+\subsubsection{End-of-Travel Sensing Switches}

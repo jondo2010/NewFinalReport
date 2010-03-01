@@ -1,0 +1,50 @@
+\subsection{Engine and Transmission Module}
+
+<Software interface map>
+
+
+\subsubsection{Transmission Manager}
+
+
+\subsubsection{Intake Manager}
+
+
+\subsubsection{Starter Manager}
+
+
+\subsubsection{Event Scheduler}
+
+
+\subsubsection{CAN Interface}
+
+<Data flow diagram>
+
+
+\subsubsection{PWM Generator}
+
+An efficient method was devised to generate 2 synchronized PWM signals from the L9822E driver chip. The $32\, kHz$ external crystal was used as the input to the 8-bit TIM2 timer periferal on the microcontroller. The input to the timer was first scaled by 8 which provided a timebase:
+\begin{equation}
+TB=\frac{32.768\, kHz}{8}=4.096\, kHz
+\end{equation}
+
+The timebase period is then given by:
+\begin{equation}
+\frac{1}{TB}\approx244\,\mu{S}
+\end{equation}
+
+We then define a constant scaling factor for the PWM generator:
+\begin{equation}
+{PWM\_DUTY\_SCALE}=\frac{T_{PWM}}{TB}\approx205
+\end{equation}
+
+By loading the timers compare register with with a value scaled with the constant scaling factor, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
+
+When generating 2 waveforms with the same timer periferal, 8 combinations of duty cycles of channels A and B were identified, and can be seen in Figure \ref{fig:pwm_cases}.
+
+Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. 2 cases are also apparent when no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
+
+An efficient generating routine was constructed to effect the level transitions and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
+
+\input{implementation/figures/pwm_cases.tex}
+
+\subsubsection{Main Control Loop}

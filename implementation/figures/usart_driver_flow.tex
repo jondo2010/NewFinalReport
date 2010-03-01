@@ -1,0 +1,20 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+  \node [start] (int) {Interrupt};
+  \node [decision, right of=int, right=0cm] (rx) {Rx Byte?};
+  \node [block, below of=rx] (add) {Add to Rx buf.};
+
+  \node [decision, right of=rx, right=0cm] (tx) {Tx Byte?};
+  \node [block, below of=tx, text width=2.5cm, inner xsep=0] (remove) {Remove from Tx buf.};
+  \node [end, right of=tx, right=0cm] (return) {Return};
+
+  \draw [->] (int) -- (rx);
+  \draw [->] (rx) to node [] {yes} (add);
+
+  \draw [->] (rx) -- node [name=mid] {no} (tx);
+  \draw [->] (add) -| (mid);
+
+  \draw [->] (tx) to node [] {yes} (remove);
+  \draw [->] (tx) -- node [name=mid2] {no} (return);
+  \draw [->] (remove) -| (mid2);
+
+\end{tikzpicture}

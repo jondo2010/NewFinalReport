@@ -1,0 +1,80 @@
+%
+%	preamble.tex
+%
+%	Final Report: Document Preamble
+%
+%	John Hughes and Michael Jean
+%	University of Manitoba
+%
+
+\usepackage[T1]{fontenc}
+%\usepackage[latin9]{inputenc}
+\usepackage[utf8x]{inputenc}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\usepackage{array}
+\usepackage{babel}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[letterpaper]{geometry}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{tikz-timing}[2009/05/15]
+%\usetikztiminglibrary{nicetabs}
+%\tikzset{timing/no nice tabs}
+%\tikzset{timing/interval/normal}
+%\tikzset{timing/nodes/old center}
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{flafter,fnpos}
+\usepackage{booktabs}
+\usepackage{supertabular}
+
+\usepackage{nomencl}
+\makenomenclature
+
+% Set Margins
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
+
+%\setlength{\parskip}{12 pt}
+\setlength{\parskip}{\medskipamount}
+\makeatletter
+\pagestyle{fancy}
+
+\fancyhead[LE,LO]{Final Report}
+
+% \fancyfoot[LE,LO]{
+%   \tiny{
+%     John Hughes, john\_hughes@umanitoba.ca\\
+%     Michael Jean, michael.jean@shaw.ca
+%   }
+% }
+
+%\fancyfoot[CE,CO]{\thepage\ of \pageref{LastPage}}
+% \fancyfoot[RE,RO]{
+%   \tiny{
+%     \jobname{.tex}\\
+%     \today
+%   }
+% }
+
+\usetikzlibrary{shapes,arrows,shadows,calc}
+
+\input{tikz_styles}
+
+\usepackage[
+  unicode=true,
+  pdfusetitle,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  bookmarksopen=false,
+  breaklinks=false,
+  pdfborder={0 0 0},
+  backref=false,
+  colorlinks=false
+] {hyperref}

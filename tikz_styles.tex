@@ -1,0 +1,57 @@
+% Tikz styles
+
+% Define the arm and angle options
+\def\myarm{1cm}
+\def\myangle{0}
+\tikzset{
+  arm/.default=1cm,
+  arm/.code={\def\myarm{#1}}, % store value in \myarm
+  angle/.default=0,
+  angle/.code={\def\myangle{#1}} % store value in \myangle
+}
+
+% Define the myncbar to path
+\tikzset{
+    myncbar/.style = {to path={
+        % We need to calculate a couple of coordinates to help us draw
+        % the path. 
+        let
+            % Same as (\tikztotarget)++(\myangle:\myarm)
+            \p1=($(\tikztotarget)+(\myangle:\myarm)$)
+        in
+            -- ++(\myangle:\myarm) coordinate (tmp)
+            % Find the projection of the (tmp) coordinate
+            % on the line from the target to p1
+            -- ($(\tikztotarget)!(tmp)!(\p1)$)
+            -- (\tikztotarget)\tikztonodes
+    }}
+}
+
+\tikzstyle{red shiny} = [draw=red!50!black!50, top color=white,bottom color=red!50!black!20, drop shadow]
+\tikzstyle{blue shiny} = [draw=blue!50!black!50, top color=white,bottom color=blue!50!black!20, drop shadow]
+\tikzstyle{grey shiny} = [draw=gray!50!black!50, top color=white,bottom color=gray!50!black!20, drop shadow]
+
+\tikzstyle{start} = [grey shiny, signal, signal to=east, draw]
+\tikzstyle{end} = [grey shiny, signal, signal from=east, draw]
+\tikzstyle{decision} = [ blue shiny, diamond, text width=1cm, text badly centered, inner sep=0pt]
+
+\tikzstyle{module} = [ blue shiny, rectangle, very thick]
+
+\tikzstyle{block} = [ red shiny, rectangle,
+		      %minimum height=3em,
+		      %minimum width=6em,
+		      %inner sep=0.5em,
+		      text width=2cm,
+		      text centered]
+\tikzstyle{bus} = [coordinate]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+
+\tikzstyle{small block} = [ red shiny,
+		      rectangle,
+		      very thick,
+		      %minimum height=3em,
+		      %minimum width=3em,
+		      inner sep=0.5em,
+		      text width=1cm,
+		      text centered]

@@ -1,0 +1,100 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+%  \draw[help lines] (-3,-5) grid (8,2);
+  
+  % Usart0 section
+  \node [blue shiny, rectangle, minimum width=2cm] (usart0) {UART0};
+  \node [blue shiny, rectangle, above of=usart0, node distance=1cm] (ecu) {ECU};
+
+  \node [red shiny, rectangle, below of=usart0, right=-1cm, node distance=1cm] (usart0_rx) {Rx};
+  \node [red shiny, rectangle, below of=usart0, left=-1cm, node distance=1cm] (usart0_tx) {Tx};
+
+  \draw [<->] (ecu) to (usart0);
+  \draw [<-] (usart0_rx) -- ($(usart0.south west)!(usart0_rx.north)!(usart0.south east)$);
+  \draw [->] (usart0_tx) -- ($(usart0.south west)!(usart0_tx.north)!(usart0.south east)$);
+  
+  % Max3100 section
+  \node [blue shiny, rectangle, minimum width=2cm, right of=usart0, node distance=3cm] (max3100) {MAX3100};
+  \node [blue shiny, rectangle, above of=max3100, node distance=1cm] (xbee) {Xbee};
+  \node [blue shiny, rectangle, below of=max3100, above=-0.3cm, left=0.25cm, node distance=0, font=\tiny, inner sep=0.075cm] (max3100_rx_hw) {Rx};
+
+  \node [red shiny, rectangle, below of=max3100, right=-1cm, node distance=1cm] (max3100_rx) {Rx};
+  \node [red shiny, rectangle, below of=max3100, left=-1cm, node distance=1cm] (max3100_tx) {Tx};
+
+  \draw [<->] (xbee) to (max3100);
+  \draw [<-] (max3100_rx) -- ($(max3100_rx_hw.south west)!(max3100_rx.north)!(max3100_rx_hw.south east)$);
+  \draw [->] (max3100_tx) -- ($(max3100.south west)!(max3100_tx.north)!(max3100.south east)$);
+
+  \node [red shiny, rectangle split, rectangle split parts=3, below of=max3100, text width=1.8cm, font=\scriptsize, text centered,
+	  minimum width=2cm, anchor=base] (xbee_library)
+    {XBee Library
+      \nodepart{second} Packetizer
+      \nodepart{third} Packet Buffer};
+
+  %\node [red shiny, rectangle, below of=packetizer, node distance=1cm, minimum width=2cm,
+%	  text width=1.75cm, font=\scriptsize, text centered] (packet_buf) {Rx Packet Buffer};
+
+  \draw [->] (max3100_rx) -- ($(xbee_library.north west)!(max3100_rx.south)!(xbee_library.north east)$);
+  \draw [<-] (max3100_tx) -- ($(xbee_library.north west)!(max3100_tx.south)!(xbee_library.north east)$);
+
+  % Usart1 section
+  \node [blue shiny, rectangle, minimum width=2cm, right of=max3100, node distance=3cm] (usart1) {UART1};
+  \node [blue shiny, rectangle, above of=usart1, node distance=1cm] (dac) {DAC};
+
+  \node [red shiny, rectangle, below of=usart1, right=-1cm, node distance=1cm] (usart1_rx) {Rx};
+  \node [red shiny, rectangle, below of=usart1, left=-1cm, node distance=1cm, dashed] (usart1_tx) {Tx};
+
+  \draw [<->] (dac) to (usart1);
+  \draw [<-] (usart1_rx) -- ($(usart1.south west)!(usart1_rx.north)!(usart1.south east)$);
+  \draw [->, dashed] (usart1_tx) -- ($(usart1.south west)!(usart1_tx.north)!(usart1.south east)$);
+
+  \node [red shiny, rectangle split, rectangle split parts=4, below of=usart1, text centered, minimum width=2cm, anchor=base, text width=1.85cm, inner xsep=0, font=\scriptsize] (dac_library)
+    {DAC Library
+      \nodepart{second} Buffer
+      \nodepart{third} Decoder
+      \nodepart{fourth} Encoder};
+
+  \draw [->] (usart1_rx) -- ($(dac_library.north west)!(usart1_rx.south)!(dac_library.north east)$);
+  \draw [<-, dashed] (usart1_tx) -- ($(dac_library.north west)!(usart1_tx.south)!(dac_library.north east)$);
+
+  % CAN stuff
+  \node [blue shiny, rectangle, minimum width=2cm, right of=usart1, node distance=3cm] (can) {CAN};
+  \node [red shiny, rectangle, minimum width=2cm, below of=can, node distance=1cm] (can_driver) {Driver};
+
+  \node at (dac_library.third split -| can_driver)
+	    [red shiny, rectangle, minimum width=2cm, text width=1.85cm, font=\scriptsize, text centered] (can_library) {Telemetry CAN Library};
+
+  \draw [<->] (can) -- (can_driver);
+  \draw [<->] (can_driver) -- (can_library);
+
+  \draw [->] (dac_library.third east) -- ($(can_library.north west)!(dac_library.third east)!(can_library.south west)$);
+  \draw [<-] (dac_library.fourth east) -- ($(can_library.north west)!(dac_library.fourth east)!(can_library.south west)$);
+
+  % Now for the rest of the connections
+  \draw [->] (xbee_library.third west) -| (usart0_tx);
+  \draw [<-] (xbee_library.second west) -| (usart0_rx);
+  \draw [->] (dac_library.second west) to node [name=mid1] {} (xbee_library.second east);
+  \draw [->] (dac_library.fourth west) -| (mid1);
+
+  \node [left of=usart0, node distance=3cm, minimum width=3.5cm] (perifs) {Module Periferals};
+  \node [below of=perifs, node distance=1cm, minimum width=3.5cm] (buffers) {Drivers/Buffers};
+  \node [below of=buffers, node distance=1cm, minimum width=3.5cm] (libraries) {Libraries};
+
+  \begin{pgfonlayer}{background}
+    \path (perifs.north west)+(-0.0,0.1) node (a1) {};
+    \path (can.south east)+(+0.1,-0.1) node (b1) {};
+    \path[draw=blue!50!black!50, rounded corners=0.1cm] (a1) rectangle (b1);
+
+    \path (buffers.north west)+(-0.0,0.1) node (a2) {};
+    \path (can_driver.south east)+(0.1,-0.1) node (b2) {};
+    \path [draw=red!50!black!50, rounded corners=0.1cm] (a2) rectangle (b2);
+
+    \path (libraries.north west)+(-0.0,0.1) node (a3) {};
+    \path (can_library.south east)+(0.1,-0.1) node (b3) {};
+    \path [draw=red!50!black!50, rounded corners=0.1cm] (a3) rectangle (b3);
+  \end{pgfonlayer}
+
+  % Guide
+  \node at ($(a3 |- b3)+(0.0,-0.1)$) [anchor=north west, blue shiny, minimum width=2cm] (hardware) {Hardware};
+  \node [red shiny, right of=hardware, node distance=2.2cm, minimum width=2cm] (software) {Software};
+  
+\end{tikzpicture}

@@ -1,0 +1,1182 @@
+%% LyX 1.6.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{scrreprt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\setcounter{secnumdepth}{3}
+\usepackage{babel}
+
+\begin{document}
+\tableofcontents{}
+
+
+\chapter{Introduction}
+
+
+\section{Formula SAE}
+
+
+\section{Motivation}
+
+
+\section{Problem Definition}
+
+
+\section{Strategy}
+
+
+\section{Outline of Thesis}
+
+
+\chapter{Background}
+
+
+\section{Transmission}
+
+
+\subsection{Overview}
+
+Brief {}``what is transmission''
+
+Shifting speed and dexterity required
+
+Stall avoidance
+
+-one chance to restart during race
+
+-sensitivity to stalling
+
+launching the car, etc.
+
+
+\subsection{Mechanical Systems}
+
+Simple descriptions
+
+
+\subsubsection{Clutch}
+
+
+\subsubsection{Gear Selection}
+
+
+\subsection{Previous Implementations and Shortcomings}
+
+How, challenges, etc.
+
+
+\subsubsection{Electropneumatic Actuation}
+
+
+\subsubsection{Gear Position Sensing}
+
+
+\subsubsection{Neutral Sensing}
+
+
+\section{Engine}
+
+
+\subsection{Overview}
+
+brief {}``what is engine'', honda cbr, etc.
+
+maximise power output (performance application)
+
+torque power curve, etc.
+
+
+\subsection{Intake and Exhaust}
+
+Intake background, pressure waves, etc. Torque curve depends on length, 
+
+
+\subsection{Research and Modelling of Variable Length Intake}
+
+present research done by others on team, quantified runner length
+dependence
+
+intake length changes power
+
+quantified length versus power on actual vehicle
+
+chose optimal intake length
+
+proposed variable length intake system for future work
+
+
+\subsection{Starting System}
+
+current requirements, starter motor, etc.
+
+
+\section{Braking}
+
+
+\subsection{Overview}
+
+Idea of braking and force distribution
+
+
+\subsection{Mechanical Systems}
+
+
+\subsubsection{Independant Hydraulic Systems}
+
+
+\subsubsection{Balance Bar}
+
+
+\subsection{Adjustment Difficulties}
+
+Competition problems, manual adjustment difficulty, scope of adjustment,
+tuneability lag
+
+
+\section{Telemetry}
+
+
+\subsection{Overview}
+
+Why is telemetry necessary? Sensors, data, etc.
+
+
+\subsection{ECU}
+
+
+\subsection{DAC}
+
+
+\subsection{Previous Implementations and Shortcomings}
+
+
+\subsubsection{Cellular Link}
+
+
+\subsubsection{Off-the-Shelf XBee Link}
+
+Both of these only worked with one device, weren't reliable, etc.
+
+
+\section{Driver Interface}
+
+
+\subsection{Overview}
+
+Driver and crew needs easy access to data, easy control of on-board
+systems
+
+
+\subsection{Driver Controls}
+
+
+\subsubsection{Transmission Control}
+
+Upshift/Downshift
+
+Activate other trans. control features, neutral find, etc., launch
+
+
+\subsubsection{Engine Control}
+
+
+\subsection{Vehicle Diagnostics}
+
+
+\subsubsection{Critical Indicators}
+
+Overheating, oil pressure, etc.
+
+
+\subsubsection{Supplimentary Indicators}
+
+information about telemetry, shift control, etc.
+
+
+\subsection{Previous Implementations and Shortcomings}
+
+
+\chapter{Goals and Requirements}
+
+
+\section{Transmission}
+
+
+\subsection{Shift Speed}
+
+Improve shift speed and smoothness, 50 ms to upshift, 100 ms to downshift.
+
+
+\subsection{Launch Control}
+
+Provide launch control, decrease launch time and wheel slippage by
+xxx.
+
+
+\subsection{Neutral Find}
+
+Decrease time required to find neutral, worst case is 500 ms.
+
+
+\subsection{Anti-Stall}
+
+Implement anti-stall feature, avoid stalling in any gear in spin-out
+situations etc.
+
+
+\subsection{Electropneumatics}
+
+Reduce air consumption by 50\%, improve reliability. 
+
+
+\section{Intake}
+
+Implement variable-length (2-stage intake) within 150 ms to gain a
+power advantage of xxx ftlbs torque over previous.
+
+Automatically optimize runner length by monitoring throttle position,
+engine RPM data from ECU.
+
+
+\section{Starter}
+
+Implement dual-mode starting system, including manual and one-touch.
+
+Provide at least 5A of current for 30 seconds to starter solenoid.
+
+
+\section{Braking}
+
+
+\subsection{Bias Adjustment}
+
+Eliminate manual adjustment by implementing an electronic adjustment
+capability. 
+
+Actuate a 4-wire stepper motor attached to the brake pedal assembly.
+
+Be able to actuate bias from the cockpit electronically from 30/70
+to 70/30 by steps of 1/2\% in less than one second while vehicle in
+motion.
+
+Lock out bias adjustment while braking.
+
+
+\subsection{Calibration}
+
+Must provide ability to recalibrate adjustment systems to adjust for
+mechanical wear and inconsistency. Calibration routines should take
+no longer than 30 seconds. 
+
+
+\section{Telemetry}
+
+
+\subsection{Data Interfaces}
+
+
+\subsubsection{ECU }
+
+Provide a wireless pseudoserial link between ECU software and the
+ECU module.
+
+Two-way serial link running at 57.6 kbps.
+
+Completely transparent to software.
+
+
+\subsubsection{DAC }
+
+Provide a wireless pseduoserial link between DAC software and the
+DAC module.
+
+One-way serial link running at 38.4 kbps.
+
+Completely transparent to software.
+
+Provide a means of injecting secondary data into the DAC stream, such
+as engine RPM and other parameters, for monitoring by the DAC software.
+
+Provide a means of decoding the DAC stream on the vehicle itself to
+display information to the driver.
+
+
+\subsubsection{Wireless Data Link}
+
+Be able to interface with two laptops with a range of at least one
+kilometre.
+
+Provide on-the-fly resolution of interference conflicts with other
+teams running similar wireless systems.
+
+Provide wireless data health information by indicating wireless signal
+strength as a percentage with resolution of 1\% of maximum signal
+strength, indicating the number of packet errors occured since last
+reset, etc.
+
+
+\section{Driver Interface}
+
+
+\subsection{Driver Controls}
+
+Provide a means of shifting gears with minimum driver effort. (No
+manual timing or clutching)
+
+Provide a means of actuating all the features of the transmission
+system (....)
+
+
+\subsection{Vehicle Dynamic Adjustment}
+
+Provide an easy to use interface to adjust vehicle dynamic parameters.
+
+Allow driver to choose between sets of dynamic vehicle parameters
+or `operating modes'.
+
+Adjustment should be made by a single knob to reduce driver effort
+required.
+
+Adjustment of any vehicle parameters is verboten above 25 km/h.
+
+Tuning of individual dynamic parameters and permanent changing of
+preset modes should be capable through the driver interface itself.
+
+
+\subsection{Diagnostic Information}
+
+Critical warnings (....) must be delivered to the driver on an easy-to-read
+display.
+
+Supplimentary vehicle performance information should be available
+to the driver (engine RPM, fuel, oil pressure, battery voltage, etc.)
+without being a distraction.
+
+
+\subsection{Visually Appealing Interface}
+
+Display startup logo.
+
+Display easy-to-read fonts.
+
+Interface should never be a distraction to the driver.
+
+Visible in full light as well as low light.
+
+Visible through sun visor helmet.
+
+
+\section{Electrical System and Harness}
+
+Minimize wiring, noise resiliance, maximise interconnectivity
+
+power usage
+
+
+\chapter{Design}
+
+
+\section{Architectural Overview}
+
+Picture of the system overview.
+
+Electropneumatic transmission actuators
+
+Engine and transmission module
+
+Braking module
+
+Telemetry module
+
+Driver control module
+
+Located at points closest to the mechanical systems they interact
+with.
+
+Design systems as modularly as possible to reduce development time.
+
+CAN Bus to reduce the number of point-to-point wiring required and
+increase noise resiliancy, and interface with the existing ECU system
+easily.
+
+
+\section{Electropneumatic Transmission Actuation}
+
+
+\subsection{Purpose}
+
+Actuation of the clutch and gear selection levers. 
+
+Be controlled electronically by the transmission control module.
+
+
+\subsection{System Overview}
+
+Show pneumatic diagram.
+
+
+\subsubsection{Air tank }
+
+
+\subsubsection{Regulator }
+
+
+\subsubsection{Valves }
+
+
+\subsubsection{Cylinders }
+
+
+\subsubsection{Mechanical Linkage }
+
+
+\subsubsection{Positional Sensors }
+
+
+\subsection{Valving Design}
+
+Reduces air consumption
+
+Increases controllability
+
+
+\subsection{Modelling}
+
+Entire system modelled in Simulink
+
+
+\section{Engine and Transmission Module}
+
+
+\subsection{Purpose}
+
+Provide intelligent control of the intake runner length and transmission
+system.
+
+Provide the control signals required to actuate the clutch and gear
+position levers with the pneumatic system.
+
+
+\subsection{Processes}
+
+
+\subsubsection{Variable Intake}
+
+
+\subsubsection{Gear Selection}
+
+
+\subsubsection{Advanced Transmission Features}
+
+
+\subsubsection{Engine Starting/Stopping}
+
+
+\subsection{Software}
+
+Software overview diagram
+
+
+\subsubsection{Transmission Manager}
+
+Listens to transmission requests from the driver over the network.
+
+Uses the event scheduler to sequence the complex series of actuation
+vectors required by upshifting and downshifting.
+
+Implement the PID feedback controller used to actuate the pneumatic
+system.
+
+Interacts with the PWM generator to create the control signals required
+to actuate the pneumatic system.
+
+
+\subsubsection{Intake Manager}
+
+Continously monitor engine RPM and throttle position through messages
+from the ECU.
+
+Will adjust intake runner length based on a functional map of RPM
+and throttle position.
+
+Use hysterisis to avoid instability.
+
+Map will be generated through dynometer testing.
+
+
+\subsubsection{Starter Manager}
+
+Listen for driver requests to start the engine.
+
+Provide a means of one-touch starting -- sequences the actual starting
+of the engine through the solenoid driver. 
+
+
+\subsubsection{Event Scheduler}
+
+Allow for complex sequencing of events in time.
+
+Controllers may schedule new events to occur at various points in
+time.
+
+Scheduler will continuously update the schedule and signal the main
+control loop to execute events that are now current.
+
+
+\subsubsection{CAN Interface}
+
+Provide a means of interfacing with the physical bus. 
+
+Allow direction of particular messages to particular modules.
+
+
+\subsubsection{PWM Generator}
+
+Generate PWM signals of at least 20 Hz with a resolution of 1\% duty
+cycle.
+
+Two-channel design
+
+
+\subsubsection{Main Control Loop}
+
+Initializes the system and brings into a known state.
+
+Waits for pending events to be executed and executes them.
+
+Monitor for system faults and react accordingly.
+
+
+\subsection{Hardware}
+
+Show system hardware diagram
+
+
+\subsubsection{Microcontroller}
+
+Execute system control software.
+
+In-circuit programmable and debuggable.
+
+Has built-in CAN controller.
+
+Has built-in RAM and ROM as well as EEPROM for holding configuration
+parameters.
+
+
+\subsubsection{CAN transceiver}
+
+Interface module with the CAN bus.
+
+Be capable of terminating the bus.
+
+
+\subsubsection{High current solenoid drivers}
+
+Controlling pneumatic solenoid valves (4)
+
+Controlling starter solenoid
+
+
+\subsubsection{Bidirectional I/O lines to the ECU}
+
+Bidirectional interface to: launch control, shift cut, traction cut
+percent, traction control on/off, traction control wet/dry.
+
+
+\section{Braking Module Design\label{sec:Braking-Module-Design}}
+
+
+\subsection{Purpose}
+
+Adjust the brake bias position electronically and on-demand from the
+driver.
+
+Provide calibration sequences to allow for mechanical wear.
+
+
+\subsection{Processes}
+
+
+\subsubsection{Brake Bias Calibration}
+
+
+\subsubsection{Brake Bias Adjustment}
+
+
+\subsubsection{Pressure Sensor Calibration}
+
+
+\subsection{Software}
+
+Software overview diagram
+
+
+\subsubsection{Bias Manager}
+
+Handles requests to adjust the brake bias from the network. 
+
+Performs balance bar calibration sequence on demand.
+
+
+\subsubsection{Pressure Manager}
+
+Continuously samples brake pressure.
+
+Performs a pressure calibration sequence on demand.
+
+
+\subsubsection{CAN Interface}
+
+As documented above.
+
+
+\subsubsection{Main Control Loop}
+
+Initializes the system and brings into a known state.
+
+Monitor for system faults and react accordingly.
+
+
+\subsection{Hardware}
+
+
+\subsubsection{Microcontroller}
+
+As mentioned above.
+
+
+\subsubsection{CAN transceiver}
+
+As mentioned above.
+
+
+\subsubsection{Stepper Motor Driver}
+
+Generates signals required to actuate the stepper motor used to adjust
+the balance bar.
+
+
+\subsubsection{Analogue-to-Digital Converter}
+
+Samples both front and rear pressure sensors. Capable of 10-bit resolution.
+
+
+\subsubsection{End-of-Travel Sensing Switches}
+
+
+\section{Telemetry Module Design\label{sec:Telemetry-Module-Design}}
+
+
+\subsection{Purpose}
+
+Provide a multiplexed virtual serial link between the ECU and the
+ECU software, and the DAC and the DAC software. Additionally be able
+to decode the DAC serial data on the car, and inject additional data
+channels into the DAC serial stream.
+
+
+\subsection{Processes}
+
+
+\subsubsection{ECU Transmission Channel}
+
+
+\subsubsection{DAC Transmission Channel}
+
+
+\subsubsection{DAC Packet Capture and Injection}
+
+
+\subsection{Software}
+
+
+\subsubsection{Wireless Interface Manager }
+
+
+\subsubsection{Data Multiplexor}
+
+
+\subsubsection{Data Decoder }
+
+
+\subsubsection{Packet Injector}
+
+
+\subsubsection{CAN Interface}
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Hardware}
+
+
+\subsubsection{Microcontroller}
+
+
+\subsubsection{CAN Transceiver}
+
+
+\subsubsection{High-Speed UART Bank}
+
+
+\subsubsection{Wireless Modem}
+
+
+\section{Driver Interface Module Design\label{sec:Driver-Interface-Module}}
+
+
+\subsection{Purpose}
+
+
+\subsection{Processes}
+
+
+\subsubsection{Driver Controls}
+
+
+\subsubsection{Diagnostic Information}
+
+
+\subsubsection{Vehicle Dynamic Mode}
+
+
+\subsubsection{Parameter Tuning}
+
+
+\subsection{Software}
+
+
+\subsubsection{User Interface Manager}
+
+
+\subsubsection{Driver Control Manager}
+
+
+\subsubsection{Vehicle Diagnostics Manager}
+
+
+\subsubsection{Vehicle Dynamic Mode Manager}
+
+
+\subsubsection{I/O Monitor}
+
+
+\subsubsection{CAN Interface}
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Hardware}
+
+
+\subsubsection{Microcontroller}
+
+
+\subsubsection{CAN Transceiver}
+
+
+\subsubsection{LCD Module}
+
+
+\subsubsection{Input Knobs and Buttons}
+
+
+\subsubsection{Paddle Shifters}
+
+
+\chapter{Implementation\label{cha:Implementation}}
+
+
+\section{Electropneumatic Implementation}
+
+
+\subsection{Methodology}
+
+
+\subsection{Solenoid Valves}
+
+
+\subsection{Pneumatic Actuators}
+
+
+\subsection{Positional Feedback Sensors}
+
+
+\subsection{Mechanical Linkage}
+
+
+\section{Hardware Implementation\label{sec:Hardware-Implementation}}
+
+
+\subsection{Methodology}
+
+Commonality between modules, same life-support system.
+
+
+\subsection{CAD Design}
+
+Schematic capture and PCB layout using EagleCAD.
+
+
+\subsection{Commonalities }
+
+
+\subsubsection{Microcontroller}
+
+
+\subsubsection{CAN Transceiver}
+
+
+\subsubsection{Linear Regulator}
+
+
+\subsubsection{Supervisor}
+
+
+\subsubsection{Wiring Harness}
+
+
+\subsection{Engine and Transmission Module}
+
+<Picture of board>
+
+Overview of physical implementation.
+
+
+\subsubsection{High Current Solenoid Driver}
+
+
+\subsubsection{Input Buffers}
+
+
+\subsection{Braking Module}
+
+<Picture of board>
+
+
+\subsubsection{Stepper Motor Driver}
+
+
+\subsubsection{Analogue-to-Digital Converter}
+
+
+\subsubsection{End-of-Travel Microswitches}
+
+
+\subsection{Telemetry Module}
+
+
+\subsubsection{Wireless Modem}
+
+To meet the range and data throughput requirements for the telemetry
+system, an XBee Pro wireles modem was used. The XBee requires 3.3v
+I/O levels and power supply, and so a second linear voltage regulator
+was used in the design, the LT1521 from Linear Technology. Since the
+AT90CAN129 has only 2 built-in UARTS that were used for the RS232
+interfaces to the ECU and DAQ, an third external UART was added to
+the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep
+FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has
+an active-low IRQ line connected to external interrupt line EXT7 on
+the microcontroller. 
+
+
+\subsubsection{External SPI USART}
+
+
+\subsubsection{Two-Channel ECU and DAC USART}
+
+
+\subsection{Driver Interface Module}
+
+
+\subsubsection{Steering Wheel Unit}
+
+
+\subsubsection{LCD Module Bias Circuit}
+
+
+\subsubsection{LCD Module Data Interface}
+
+
+\subsubsection{Input Knobs and Buttons}
+
+
+\subsubsection{Paddle Shifters}
+
+
+\section{Software Implementation\label{sec:Software-Implementation}}
+
+
+\subsection{Methodology}
+
+
+\subsection{Toolchain}
+
+
+\subsection{Common Low-Level Drivers}
+
+
+\subsubsection{CAN Driver}
+
+
+\subsubsection{EEPROM Driver}
+
+
+\subsubsection{SPI Driver}
+
+
+\subsection{Engine and Transmission Module}
+
+<Software interface map>
+
+
+\subsubsection{Transmission Manager}
+
+
+\subsubsection{Intake Manager}
+
+
+\subsubsection{Starter Manager}
+
+
+\subsubsection{Event Scheduler}
+
+
+\subsubsection{CAN Interface}
+
+<Data flow diagram>
+
+
+\subsubsection{PWM Generator}
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Braking Module}
+
+
+\subsubsection{Bias Library}
+
+
+\paragraph{Bias Position Request}
+
+<Position request flow chart>
+
+
+\paragraph{Bias Calibration}
+
+<Calibration flow chart>
+
+
+\subsubsection{Pressure Library}
+
+
+\paragraph{Periodic Pressure Output}
+
+
+\paragraph{Pressure Calibration}
+
+<Calibration flow chart>
+
+
+\subsubsection{CAN Interface}
+
+<Data flow diagram>
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Telemetry Module}
+
+<Software interface map>
+
+The primary objective of the software running on the Telemetry Module
+is to push data around from various sources to various sinks. It uses
+the interrupt-driven USART drivers written for the on-board USARTs
+of the AT90CAN128, as well as the MAX3100 external USART extensively.
+These USART drivers are discussed in section ?? 
+
+
+\subsubsection{Internal USART Driver}
+
+
+\subsubsection{MAX3100 Driver}
+
+
+\subsubsection{Xbee Library}
+
+
+\subsubsection{DAC Library}
+
+To reduce the implementation work required for us, we asked David
+Schilling, a computer science student on the Formula SAE team, to
+write a software library to read and write the DAC's serial format,
+given the requirements described in Section \ref{sec:Telemetry-Module-Design}.
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Driver Interface Module}
+
+
+\subsubsection{LCD Module Library}
+
+
+\subsubsection{Graphics and Fonts Library}
+
+
+\subsubsection{I/O Library}
+
+
+\subsubsection{Vehicle Diagnostics Library}
+
+
+\subsubsection{Vehicle Parameter Library}
+
+
+\subsubsection{Vehicle Dynamic Mode}
+
+
+\subsubsection{CAN Interface}
+
+
+\subsubsection{Main Control Loop}
+
+
+\section{CAN Snooper and Injector}
+
+
+\subsection{Overview}
+
+<Picture of board>
+
+
+\subsection{Scheduling}
+
+
+\subsection{Injecting}
+
+
+\subsection{Snooping}
+
+
+\chapter{Operational Results}
+
+
+\section{Transmission}
+
+
+\subsection{Shift Speed}
+
+
+\subsection{Launch Control}
+
+
+\subsection{Neutral Find}
+
+
+\subsection{Anti-Stall}
+
+
+\subsection{Electropneumatics}
+
+
+\section{Intake}
+
+
+\section{Starter}
+
+
+\section{Braking}
+
+
+\subsection{Bias Adjustment}
+
+
+\subsection{Calibration}
+
+
+\section{Telemetry}
+
+
+\subsection{Data Interfaces}
+
+
+\subsubsection{ECU }
+
+
+\subsubsection{DAC }
+
+
+\subsubsection{Wireless Data Link}
+
+
+\section{Driver Interface}
+
+
+\subsection{Driver Controls}
+
+
+\subsection{Vehicle Dynamic Adjustment}
+
+
+\subsection{Diagnostic Information}
+
+
+\subsection{Visually Appealing Interface}
+
+
+\section{Electrical System and Harness}
+
+
+
+
+\section{Implementation Issues Encountered}
+
+
+\subsection{Hardware Implementation Issues}
+
+
+\subsubsection{CAN Transciever Schematic Error}
+
+
+\subsubsection{Driver Interface LCD Reset Line}
+
+
+\subsubsection{Telemetry RS-232 Transciever Schematic Error}
+
+
+\subsection{Interrupt Starvation on the Telemetry Module}
+
+
+\subsection{CAN Driver Problems}
+
+
+\chapter{Future Work}
+
+
+
+
+\chapter{Conclusion}
+
+\appendix
+
+\chapter{Description of Attached Materials}
+
+Attached DVD, etc.
+
+
+\chapter{CAN Protocol Specification}
+
+
+\chapter{Hardware Schematics}
+
+
+\chapter{S-Series CAN Stream Specification}
+\end{document}

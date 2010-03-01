@@ -1,0 +1,110 @@
+\section{Driver Interface Module Design\label{sec:Driver-Interface-Module}}
+
+
+\subsection{Purpose}
+
+
+\subsection{Processes}
+
+
+\subsubsection{Driver Controls}
+The driver controls consist of three rotary encoder knobs and three buttons. See table \ref{table:driver_controls} for a description of each.
+
+\begin{table}[H]
+\caption{Available driver controls.\label{table:driver_controls}}
+\centering
+\begin{tabular}{|c|c|p{8 cm}|}
+	\hline 
+	Type & Name & Description \\
+	\hline
+	\hline 
+	Rotary & VDM & Changes the current VDM setting. \\
+	\hline 
+	Rotary & Option & Changes the currently selected menu option. \\
+	\hline
+	Rotary & Adjust & Adjusts the value associated with the currently selected menu option. \\
+	\hline
+	Button & Starter & Engages the automatic start sequence if pressed once, or the manual start sequence if held down.\\
+	\hline
+	Button & Neutral Find & Activates the neutral-find feature. \\
+	\hline
+	Button & Diagnostics/Save & Pages through diagnostic information if pressed once, or saves the current dynamic settings to the selected VDM if held down.\\		
+	\hline 		
+\end{tabular}
+\end{table}
+
+
+\subsubsection{Diagnostic Information}
+
+The interface display panel is a large monochrome \emph{Liquid Crystal Display} (LCD) screen, inset into the steering wheel. The panel provides real-time information to the driver regarding all of the electronic systems in the car. Primary information displayed on the panel includes:
+
+\begin{itemize}
+\item the selected gear;
+\item the active \emph{vehicle dynamics mode} (VDM);
+\item the telemetry signal strength;
+\item the engine RPM;
+\item the vehicle wheel speed; and
+\item the status of the launch control feature.
+\end{itemize}
+
+The list of available options and the current value for the selected option is displayed on screen when the driver rotates the option dial. After a timeout period, normal real-time information display resumes. 
+
+
+
+\subsubsection{Vehicle Dynamics Mode (VDM)}
+\nomenclature{VDM}{Vehicle Dynamics Mode}
+
+The driver interface system provides a method of quickly modifying several dynamic vehicle parameters quickly and easily. For example, an acceleration event calls for launch control, auto-upshift, and a heavy forward brake bias. It is possible to enable all of these features in one step by changing the VDM mode to {}``acceleration''. 
+
+When a new mode is selected, all nodes on the network are notified and synchronized to modify their dynamic parameters in accordance with the specific mode. For example, when the  {}``acceleration'' mode is enabled, the engine module will enable launch control and auto-upshift, and the brake controller will modify the brake bias to a pre-set ratio.
+
+\begin{description}
+  \item [{Pit Mode}] enables soft-launch driving characteristics that mimic a fully automatic transmission. This makes slowly driving the car forward from a stand-still far easier, and only requires the driver to take their left foot off the brake, and slightly apply the throttle.
+  \item [{Acceleration Mode}] puts the vehicle systems into full-performance characteristics. Launch control is activated. The engine module will watch for a launch signal from the driver, and will automatically up-shift based on the engine RPM.
+  \item [{Dynamic Mode}] puts the vehicle systems into a mode that is suitable for the autocross, and the endurance race.
+\end{description}
+
+
+\subsubsection{Parameter Tuning}
+
+
+\subsection{Software}
+
+
+\subsubsection{User Interface Manager}
+
+
+\subsubsection{Driver Control Manager}
+
+
+\subsubsection{Vehicle Diagnostics Manager}
+
+
+\subsubsection{Vehicle Dynamic Mode Manager}
+
+
+\subsubsection{I/O Monitor}
+
+
+\subsubsection{CAN Interface}
+
+
+\subsubsection{Main Control Loop}
+
+
+\subsection{Hardware}
+
+
+\subsubsection{Microcontroller}
+
+
+\subsubsection{CAN Transceiver}
+
+
+\subsubsection{LCD Module}
+
+
+\subsubsection{Input Knobs and Buttons}
+
+
+\subsubsection{Paddle Shifters}

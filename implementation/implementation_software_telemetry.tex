@@ -1,0 +1,36 @@
+\subsection{Telemetry Module}
+
+The primary objective of the software running on the Telemetry Module is to push data around from various sources to various sinks. It uses the interrupt-driven USART drivers written for the on-board USARTs of the AT90CAN128, as well as the MAX3100 external USART extensively. These USART drivers are discussed in section ?? 
+
+\begin{figure}[H]
+\centering
+\input{implementation/figures/telemetry_software_block.tex}
+\caption{Telemetry software overview.}
+\label{fig:telemetry_software_implementation}
+\end{figure}
+
+\subsubsection{Internal USART Driver}
+
+\begin{figure}[]
+\centering
+\input{implementation/figures/usart_driver_flow.tex}
+\caption{Basic USART interrupt flow diagram.}
+\label{fig:usart_driver_flow}
+\end{figure}
+
+
+\subsubsection{MAX3100 Driver}
+
+
+\subsubsection{Xbee Library}
+
+
+\subsubsection{DAC Library}
+
+
+
+To reduce the implementation work required by us, we asked David Schilling, a computer science student on the Formula SAE team, to write the DAC software library to read and write the DAC's serial format, given the requirements described in Section \ref{sec:Telemetry-Module-Design}.
+
+The DAC library maintains it's own buffer of incoming DAC data. We also asked Dave to provide seperate functions for buffering incoming data, and for processing that data. This seperation allowed the library to be easily tied in with the rest of the system software on the telemetry module: adding a data to the DAC buffer occurs whenever the internal USART driver interrupts with a new byte, and processing is called from the mainline loop.
+
+\subsubsection{Main Control Loop}

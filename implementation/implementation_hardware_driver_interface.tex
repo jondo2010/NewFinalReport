@@ -1,0 +1,78 @@
+\subsection{Driver Interface Module}
+
+
+\subsubsection{Steering Wheel Unit}
+
+
+\subsubsection{LCD Module Bias Circuit}
+
+The LCD screen requires a large bias voltage of +22V.
+
+A Linear Technology LT1615 step-up DC/DC converter was chosen as the centre of a boost converter circuit for the LCD.
+
+
+\paragraph{Inductor Selection}
+
+\begin{equation}
+L=\frac{V_{out}-V_{in(min)}+V_{D}}{I_{limit}}\cdot t_{off}\label{IndSel}
+\end{equation}
+
+
+Using (\ref{IndSel}) with $V_{D}=0.4V$, $I_{limit}=350mA$, $t_{off}=400ns$, $V_{out}=+22V$, and $V_{in(min)}=11.5V$ gives $L\approx12.45\mu{H}$. The datasheet however suggests a value slightly smaller than calculated should be suitable with only slight decrease in maximum output current. Since the LCD requires very little current, we used an inductor value of $10\mu H$.
+
+
+\paragraph{Output Voltage}
+
+To obtain a $V_{bias}$ of $+22V$, two resistors in the bias circuit provide a voltage divided feedback path from the output to the FB pin on the LT1615. The eqation relating the output voltage with the resistor values is
+
+\begin{equation}
+R_{1}=R_{2}\cdot\left(\frac{V_{bias}}{1.23}-1\right)
+\end{equation}
+
+ $R_{1}$ was chosen to be $2M\Omega$ to limit current flowing from the output to ground, and a suitable $R_{1}$ of $118k\Omega$ was found.
+
+
+\subsubsection{LCD Module Data Interface}
+
+The LCD's 8-bit interface was suitable to be connected to the AT90's external memory interface. This way the LCD becomes a memory-mapped periferal to the AT90, and all the control signals (Read and Write strobes, etc.), are handled by the memory controller.
+
+The AT90's external memory interface uses Port A pins 0-7 as a multiplexed data and address bus which must be demultiplexed in order to offer seperate address and data busses. In operation, the external memory interface first puts out the address on the combined bus, followed by the data. The ALE (Address Latch Enable) signal signifies the difference \cite{AT90CAN}.
+
+In order to provide seperate address and data busses for the LCD controller, a fast octal D-Type latch from NXP was chosen to latch the address from the AT90. The width of the ALE pulse, $t_{LHLL}$, provided by the AT90, is specified in the datasheet as
+
+\begin{equation}
+t_{LHLL}=t_{CLCL}-15\, ns
+\end{equation}
+
+ where $t_{CLCL}$ is the clock period. With the clock running at $16\, MHz$, $t_{LHLL}=48\, ns$.
+
+The 74LVC373A latch from NXP requires a minimum LE pulse width of $4.5\, ns$, so is suitable as a demultiplexing interface.
+
+The external memory on the AT90CAN128 starts at address 0x1100h, and there are two possible registers to read/write to on the LCD controller. The LCD controller therefore has it's single address select pin connected to the LSB of the address lines output from the latch. Since only two addresses are required, the upper 8 address lines of the external memory interface were not used.
+
+A logical combination of the lower byte address lines will be connected to the CS (Chip Select) line on the LCD controller. Since the external memory controller only outputs control signals when the requested memory operation is in external space, it is safe to ignore the upper byte address lines.
+
+It was chosen to tie the 2nd bit of the address lines to CS, which provides the following table of operations when interacting with the LCD controller:
+
+\begin{table}
+\begin{centering}
+\caption{Memory-mapped LCD Interface}
+
+\par\end{centering}
+
+\centering{}\begin{tabular}{|l|l|l|}
+\hline 
+Address  & Read Function  & Write Function\tabularnewline
+\hline
+\hline 
+0x1102  & Status flag read  & Display data and parameter write\tabularnewline
+\hline 
+0x1103  & Display dada and cursor address read  & Command write\tabularnewline
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Input Knobs and Buttons}
+
+
+\subsubsection{Paddle Shifters}

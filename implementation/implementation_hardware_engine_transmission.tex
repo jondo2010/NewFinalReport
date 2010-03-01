@@ -1,0 +1,28 @@
+\subsection{Engine and Transmission Module}
+
+<Picture of board>
+
+Overview of physical implementation.
+
+
+\subsubsection{High Current Solenoid Driver}
+
+
+\subsubsection{Input Buffers}
+
+
+\subsubsection{Traction Control Analogue Output}
+
+The ECU allows a 0-5v analogue input to modify the allowable traction slip ratio from 0-100\% for the traction control.
+
+The Engine module uses a simple SPI interfaced DAC from Texas Instruments, the TLV5623, to output the 0-5v analogue signal to the ECU.
+
+The output voltage from the DAC is given by
+
+\begin{equation}
+V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,[V]
+\end{equation}
+
+where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value ranging from $0$ to $2^{n-1}$. Since we want to output $5\,[V]$ at fullscale input, \begin{equation} 2\cdot{V_{ref}}\,\frac{2^{7}}{2^{8}}=V_{ref}=5\,[V]\end{equation}.
+
+The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}\approx155k\Omega$. The output current of the DAC therefore will be at most $I_{out}=\frac{5v}{155k}\approx32.26\mu A$.

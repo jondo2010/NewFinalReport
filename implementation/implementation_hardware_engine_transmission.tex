@@ -1,23 +1,45 @@
 \subsection{Engine and Transmission Module}
 
-<Picture of board>
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1]{implementation/figures/engine_transmission_pcb}
+\caption{Populated Engine and Transmission module PCB.}
+\label{fig:engine_transmission_pcb}
+\end{figure}
 
-Overview of physical implementation.
+In addition to the common life-support hardware for the micro-controller (such as the voltage regulator and decoupling capacitors), the engine module includes an SPI capable octal \emph{low-side solenoid driver}. This driver chip switches the low side of the solenoid valves, as well as the starter solenoid. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. 
+
+\begin{table}
+  \caption{Engine and Transmission module components.\label{table:engine_transmission_module_components}}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline 
+    Part & Manufacturer & Part Number\tabularnewline 
+    \hline \hline
+    Solenoid Driver & ST Microelectronics & L9822E \tabularnewline
+    \hline
+    Digital to Analogue Converter & Texas Instruments & TLV5623C \tabularnewline
+    \hline
+    Hex CMOS Buffer & Texas Instruments & 74LVC07A \tabularnewline
+    \hline
+  \end{tabular}
+\end{table}
 
 
 \subsubsection{High Current Solenoid Driver}
 
+In order to meet the requirement of being able to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface for the microcontroller to talk to, and also takes care of possible flyback from the solenoids with built-in clamping diodes.
+
+Using this single component strongly reduces the complexity of the output stage of the circuit, since multiple discrete high-current transistors were not needed.
 
 \subsubsection{Input Buffers}
 
 
 \subsubsection{Traction Control Analogue Output}
 
-The ECU allows a 0-5v analogue input to modify the allowable traction slip ratio from 0-100\% for the traction control.
+In order to generate a 0-5V analogue signal for the ECU's traction slip ratio input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs 0-5V analogue signal that varies with the digital input.
 
-The Engine module uses a simple SPI interfaced DAC from Texas Instruments, the TLV5623, to output the 0-5v analogue signal to the ECU.
-
-The output voltage from the DAC is given by
+The output voltage from the DAC can be determined by the following equation:
 
 \begin{equation}
 V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,[V]

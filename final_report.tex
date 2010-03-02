@@ -29,10 +29,22 @@
 
 \maketitle
 
+\newpage
+\addcontentsline{toc}{chapter}{Visual Abstract}
+\phantomsection \label{visual_abstract}
+Visual Abstract
+
 \begin{abstract}
 \include{abstract}
 \end{abstract}
 
+\chapter*{Contributions}
+Contributions
+
+\chapter*{Acknowledgements}
+Acknowledgements
+
+\renewcommand{\contentsname}{Table of Contents}
 \tableofcontents{}
 
 \newpage
@@ -64,16 +76,18 @@
 
 \input{implementation/implementation}
 
-\input{operational_results/operational_results}
-
-\input{future_work/future_work}
+\input{experimental_results/experimental_results}
 
 \input{conclusion/conclusion}
 
+\input{future_work/future_work}
+
 % References
 
-\bibliographystyle{IEEEtran}
 \clearpage
+\bibliographystyle{IEEEtran}
+%\renewcommand{\referencename}{References}
+\renewcommand{\bibname}{References}
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{reference/datasheets,reference/literature,IEEEfull}
 

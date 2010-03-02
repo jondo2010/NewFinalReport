@@ -1,5 +1,8 @@
 \chapter{Background}
 
+\section{Overview}
+
+<block diagram of vehicle systems>
 
 \section{Transmission}
 
@@ -102,14 +105,9 @@ Idea of braking and force distribution
 Competition problems, manual adjustment difficulty, scope of adjustment,
 tuneability lag
 
+\section{Pre-existing Off-the-shelf Modules}
 
-\section{Telemetry}
-
-
-\subsection{Overview}
-
-Why is telemetry necessary? Sensors, data, etc.
-
+There are two off-the-shelf electronic modules as part of the pre-existing equipment on the car, the ECU and the DAC.
 
 \subsection{ECU}
 
@@ -122,17 +120,24 @@ A specialized third-party component called the \emph{Engine Control Unit} (ECU) 
 \label{fig:s80pro_product}
 \end{figure}
 
-\subsubsection{ECU Data interface}
-\label{sec:ecu_data} 
+\subsubsection{ECU Data interfaces\label{sec:background_ecu_data_interfaces}}
 
-The ECU provides 2 digital communication methods:
+The ECU provides 3 digital communication methods:
 \begin{itemize}
- \item An RS-232 link is used by the software that DTA provides for tuning and controlling the ECU. The serial protocol that the software uses is proprietary and undocumented.
- \item A read-only CAN bus interface that emits ECU data at a fixed frequency. The message format for the CAN data is documented in Appendix \ref{cha:ecu_can_spec}.
+  \item An RS-232 link is used by the software that DTA provides for tuning and controlling the ECU. The serial protocol that the software uses is proprietary and undocumented.
+  \item A read-only CAN bus interface that emits ECU data at a fixed frequency. The message format for the CAN data is documented in Appendix \ref{cha:ecu_can_spec}.
+  \item Several CMOS-level discrete inputs:
+  \begin{itemize}
+    \item Launch Control toggle, which toggles the launch control feature in the ECU,
+    \item Shift cut, which signals the ECU to reduce engine power before a downshift
+    \item Traction control toggle, which toggles the traction control feature in the ECU,
+    \item Traction control wet/dry, which switches between two different sets of traction control parameters in the ECU.
+  \end{itemize}
 \end{itemize}
+
+Detailed descriptions of the ECU's launch control, shift cut, and traction control features can be found in the manual \cite{s80pro}.
  
 \nomenclature{RS-232}{Recommended Standard 232, a byte-oriented serial communications protocol, typically asynchronous.}
-
 
 \subsection{DAC}
 
@@ -140,7 +145,7 @@ Another specialized third-party component called the \emph{Data Acquisition Devi
 
 The particular DAC used is the model DL1 from Race Technology \cite{DL1Dsheet}. The DL1 is an expandable data logger with built-in 20-Hz GPS and 3-axis accelerometer.
 
-\subsubsection{DAC Data Interface}
+\subsubsection{DAC Data Interface\label{sec:background_dac_data_interface}}
 
 Race Technology provides a software suite that communicates with the DAC using a documented serial protocol. Every item that the DAC logs is output to its own channel in real time on the serial port. It is also possible to configure the software to recognize new channels for arbitrary types of data.
 
@@ -151,6 +156,14 @@ Race Technology provides a software suite that communicates with the DAC using a
 \label{fig:dl1_product}
 \end{figure}
 
+
+\section{Telemetry}
+
+\subsection{Overview}
+
+The manufacturers of both the ECU and the DAC provide specialized PC software that communicates with the modules using the serial data interfaces described above. The intended procedure for using these interfaces is by physically connecting a hard serial cable from the modules to a PC running the software. This however limits mobility, and requires the plugging and unplugging of cables.
+
+Why is telemetry necessary? Sensors, data, etc.
 
 \subsection{Previous Implementations and Shortcomings}
 

@@ -35,6 +35,8 @@
 \usepackage{booktabs}
 \usepackage{supertabular}
 
+\usepackage[square,authoryear,sort&compress]{natbib}
+
 \usepackage{nomencl}
 \makenomenclature
 
@@ -46,7 +48,7 @@
 \makeatletter
 \pagestyle{fancy}
 
-\fancyhead[LE,LO]{Final Report}
+\fancyhead[LE,LO]{Distributed Sensor/Actuator Network}
 
 % \fancyfoot[LE,LO]{
 %   \tiny{
@@ -55,13 +57,8 @@
 %   }
 % }
 
-%\fancyfoot[CE,CO]{\thepage\ of \pageref{LastPage}}
-% \fancyfoot[RE,RO]{
-%   \tiny{
-%     \jobname{.tex}\\
-%     \today
-%   }
-% }
+\fancyfoot[CE,CO]{--\hspace{5pt}{\thepage}\hspace{5pt}--}
+\fancyfoot[RE,RO]{\tiny{\jobname{.tex}\\ \today}}
 
 \usetikzlibrary{shapes,arrows,shadows,calc}
 

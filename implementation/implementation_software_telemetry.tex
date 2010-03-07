@@ -33,7 +33,7 @@ In order to facilitate routing data to and from multiple sources and sinks, it w
 
 \begin{enumerate}
 \item to set the modem into API mode operation and manage the modem's operating state;
-\item and to send and receive packetized data from the modem on behalf of the user software as per the XBee's API specification \cite{XBeeManual};
+\item and to send and receive packetized data from the modem on behalf of the user software as per the Xbee's API specification \cite{XBeeManual};
 \end{enumerate}
 
 The Xbee library implements the binary packet protocol described in the XBee manual, and is able to send and receive unicast and multicast packets. The driver is only capable of sending packets to 16-bit addresses. Full 64-bit address mode was not implemented as the address space was not required in our 3 node network. The driver is also capable of sending command-type packets to the modem and reading the response.

@@ -15,7 +15,7 @@
   % Max3100 section
   \node [blue shiny, rectangle, minimum width=2cm, right of=usart0, node distance=3cm] (max3100) {MAX3100};
   \node [blue shiny, rectangle, above of=max3100, node distance=1cm] (xbee) {Xbee};
-  \node [blue shiny, rectangle, below of=max3100, above=-0.3cm, left=0.25cm, node distance=0, font=\tiny, inner sep=0.075cm] (max3100_rx_hw) {Rx};
+  \node [blue shiny, rectangle, below of=max3100, above=-0.3cm, left=0.25cm, node distance=0pt, font=\tiny, inner sep=0.075cm] (max3100_rx_hw) {Rx};
 
   \node [red shiny, rectangle, below of=max3100, right=-1cm, node distance=1cm] (max3100_rx) {Rx};
   \node [red shiny, rectangle, below of=max3100, left=-1cm, node distance=1cm] (max3100_tx) {Tx};
@@ -47,7 +47,7 @@
   \draw [<-] (usart1_rx) -- ($(usart1.south west)!(usart1_rx.north)!(usart1.south east)$);
   \draw [->, dashed] (usart1_tx) -- ($(usart1.south west)!(usart1_tx.north)!(usart1.south east)$);
 
-  \node [red shiny, rectangle split, rectangle split parts=4, below of=usart1, text centered, minimum width=2cm, anchor=base, text width=1.85cm, inner xsep=0, font=\scriptsize] (dac_library)
+  \node [red shiny, rectangle split, rectangle split parts=4, below of=usart1, text centered, minimum width=2cm, anchor=base, text width=1.85cm, inner xsep=0pt, font=\scriptsize] (dac_library)
     {DAC Library
       \nodepart{second} Buffer
       \nodepart{third} Decoder

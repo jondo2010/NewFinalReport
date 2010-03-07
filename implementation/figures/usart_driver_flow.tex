@@ -4,7 +4,7 @@
   \node [block, below of=rx] (add) {Add to Rx buf.};
 
   \node [decision, right of=rx, right=0cm] (tx) {Tx Byte?};
-  \node [block, below of=tx, text width=2.5cm, inner xsep=0] (remove) {Remove from Tx buf.};
+  \node [block, below of=tx, text width=2.5cm, inner xsep=0pt] (remove) {Remove from Tx buf.};
   \node [end, right of=tx, right=0cm] (return) {Return};
 
   \draw [->] (int) -- (rx);

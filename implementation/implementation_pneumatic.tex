@@ -13,7 +13,7 @@ In modelling the electropneumatic system, 3 subsystems were identified and model
 \begin{enumerate}
   \item the PWM generator;
   \item the solenoid valves;
-  \item and the single-acting spring-return cylinder.
+  \item and the pneumatic actuator (single-acting spring-return cylinder).
 \end{enumerate}
 
 \begin{figure}[h]
@@ -27,16 +27,23 @@ In modelling the electropneumatic system, 3 subsystems were identified and model
 
 The PWM generator in Simulink was built using the instantaneous model presented by \citet{valve_models} which compares a generated saw-tooth signal, $V_{saw}$ with a period $T_{saw}$, with the input signal $V_{in}$ to obtain the pulse-width-modulated signal $U$:
 
-%\begin{equation}
-%U\left(t\right) = 
-%\begin{cases}
-%1 & V_{in}\left(t\right) \geq V_{saw}\left(t\right) \\
-%0 & V_{in}\left(t\right) < \left(t\right)
-%\end{cases}
-%\end{equation}
+\begin{equation}
+\label{eq:pwm_generation}
+U\left(t\right) = 
+\begin{cases}
+1 & V_{in}\left(t\right) \geq V_{saw}\left(t\right) \\
+0 & V_{in}\left(t\right) < \left(t\right)
+\end{cases}
+\end{equation}
 
-               voltage saw-tooth signal Vd with period Tp the PWM signal U(t) can be expressed as
-and amplitude Vp.
+The Simulink model which implements Eq. \ref{eq:pwm_generation} can be seen in Fig. \ref{fig:pneumatics_pwm}. The input to the subsystem, shown as \emph{In1}, is $V_{in}$, and the output, shown as \emph{Out1} is the pulse width modulated signal $U$. A Saturation and block was added to limit the input signal $V_{in}$ to the range [0..1]. A dead zone block was added to simulate the effect of dead zone in the response of the solenoid valves to a PWM signal: if the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve at all. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal as
+
+\begin{equation}
+  \label{eq:pwm_duty_min}
+  d_{min}=\left(T_{vr}/T_{PWM}\right)\cdot100\%
+\end{equation}
+
+where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
 
 
 \begin{figure}[h]
@@ -46,6 +53,16 @@ and amplitude Vp.
 \label{fig:pneumatics_pwm}
 \end{figure}
 
+\paragraph{Pneumatic Actuator}
+
+The Simulink subsystem drawn
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1]{implementation/figures/pneumatic_modelling3}
+\caption{Simulink actuator model.}
+\label{fig:pneumatics_pwm}
+\end{figure}
 
 \subsection{Solenoid Valves}
 

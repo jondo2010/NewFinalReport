@@ -35,18 +35,26 @@
 \usepackage{booktabs}
 \usepackage{supertabular}
 
-\usepackage[square,authoryear,sort&compress]{natbib}
+%\usepackage[square,authoryear,sort&compress]{natbib}
+\usepackage[numbers, square, comma, sort&compress]{natbib}
 
 \usepackage{nomencl}
 \makenomenclature
 
 % Set Margins
-\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
+%\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
+%\renewcommand{\hoffset}{0.5in}
+%\renewcommand{\oddsidemargin}{0.5in}
+%\renewcommand{\marginparwidth}{0pt}
+%\renewcommand{\marginparsep}{0pt}
+%\renewcommand{\textwidth}{6.5in}
 
 %\setlength{\parskip}{12 pt}
 \setlength{\parskip}{\medskipamount}
 \makeatletter
 \pagestyle{fancy}
+
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
 
 \fancyhead[LE,LO]{Distributed Sensor/Actuator Network}
 

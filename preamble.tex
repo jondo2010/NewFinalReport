@@ -16,7 +16,6 @@
 
 \usepackage{array}
 \usepackage{babel}
-\usepackage{fancyhdr}
 \usepackage{float}
 \usepackage[letterpaper]{geometry}
 \usepackage{graphicx}
@@ -41,6 +40,15 @@
 \usepackage{nomencl}
 \makenomenclature
 
+%\usepackage[automark,autooneside,markuppercase]{scrpage2}
+%\pagestyle{scrheadings}
+%\lehead{Distributed Sensor/Actuator Network}
+%\lohead{Distributed Sensor/Actuator Network}
+%\ihead{\headmark}
+%\automark[section]{chapter}
+%\setheadsepline{.4pt}
+
+\usepackage{fancyhdr}
 \pagestyle{fancy}
 
 %%% Set Margins
@@ -60,6 +68,9 @@
 
 %%% Renew the chaptermark command to display CH. instead of CHAPTER in the header
 \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{CH. \thechapter. #1}}{}}
+
+%%% Renew the pagemark command to add dashes to either side of the page numbers
+\renewcommand{\pagemark}{--\hspace{5pt}{\thepage}\hspace{5pt}--}
 
 %%% Page numbers and date to the bottom footer
 \fancyfoot[C]{--\hspace{5pt}{\thepage}\hspace{5pt}--}

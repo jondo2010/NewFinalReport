@@ -41,34 +41,32 @@
 \usepackage{nomencl}
 \makenomenclature
 
-% Set Margins
-%\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
-%\renewcommand{\hoffset}{0.5in}
-%\renewcommand{\oddsidemargin}{0.5in}
-%\renewcommand{\marginparwidth}{0pt}
-%\renewcommand{\marginparsep}{0pt}
-%\renewcommand{\textwidth}{6.5in}
+\pagestyle{fancy}
+
+%%% Set Margins
+\setlength{\hoffset}{0.5in}
+\oddsidemargin=0pt
+\setlength{\topmargin}{0pt}
+\setlength{\marginparwidth}{0pt}
+\setlength{\marginparsep}{0pt}
+\setlength{\textwidth}{6in}
 
 %\setlength{\parskip}{12 pt}
 \setlength{\parskip}{\medskipamount}
 \makeatletter
-\pagestyle{fancy}
 
-\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1.5in,rmargin=1in}
+%%% Add the running title to the left side of the header
+\fancyhead[L]{Distributed Sensor/Actuator Network}
 
-\fancyhead[LE,LO]{Distributed Sensor/Actuator Network}
+%%% Renew the chaptermark command to display CH. instead of CHAPTER in the header
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{CH. \thechapter. #1}}{}}
 
-% \fancyfoot[LE,LO]{
-%   \tiny{
-%     John Hughes, john\_hughes@umanitoba.ca\\
-%     Michael Jean, michael.jean@shaw.ca
-%   }
-% }
+%%% Page numbers and date to the bottom footer
+\fancyfoot[C]{--\hspace{5pt}{\thepage}\hspace{5pt}--}
+\fancyfoot[R]{\tiny{\jobname{.tex}\\ \today}}
 
-\fancyfoot[CE,CO]{--\hspace{5pt}{\thepage}\hspace{5pt}--}
-\fancyfoot[RE,RO]{\tiny{\jobname{.tex}\\ \today}}
-
-\usetikzlibrary{shapes,arrows,shadows,calc}
+%%% Shorten the TOC depth
+\setcounter{tocdepth}{2}
 
 \input{tikz_styles}
 

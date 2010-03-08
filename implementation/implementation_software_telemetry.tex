@@ -23,9 +23,9 @@ The primary objective of the software running on the Telemetry Module is to push
 
 An interrupt-driven driver was written to interface with the MAX3100 uart chip which allows asynchronous serial communication with the XBee modem on the Telemetry Module. The same circular buffer approach as with the internal USART drivers was taken, and in fact the drivers use very similar buffering code. Additionally, the software interfaces to the drivers were made as close as possible to allow interchangability by the main module software.
 
-The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=238\, ns$, which results in a maximum frequency of approximately $4.2\, MHz$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $4\, MHz$.
+The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $\unit{4}{\mega\hertz}$.
 
-The MAX3100 was configured to operate at 115,200 kBaud, which was matched with the XBee modem's interface rate. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the driver's software transmit buffer. A fixed-length 32 byte buffer was never overrun with this test, and an actual data throughput of $8.251\, kB/s$ was observed with a logic analyser.
+The MAX3100 was configured to operate at \unit{115,200}{\kilo\bit\per\second}, which was matched with the XBee modem's interface rate. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the driver's software transmit buffer. A fixed-length 32 byte buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyser.
 
 \subsubsection{Xbee Library}
 

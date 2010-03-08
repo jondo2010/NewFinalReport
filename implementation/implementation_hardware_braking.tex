@@ -27,7 +27,7 @@ Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module 
 
 In order to meet the design goal of having the implementation be flexible in terms of which stepper motor would be used in the system, a current-sensing stepper motor controller/driver component was used in the circuit design. The current sense capability allows us to fix the input voltage in the circuit design, and afterwards adjust the current drive by changing resistor values in the current-sense feedback loop. 
 
-The A3967 "Microstepping Driver with Translator" was chosen to drive the stepper motor for several reasons. The A3967 integrates a microstepping controller with dual H-Bridge output stages into one package. This simplified the potential circuit design. The H-Bridge output transistors can supply up to $\pm750$ mA of current at up to 30 V \cite{A3967}. This flexibility was desirable.
+The A3967 "Microstepping Driver with Translator" was chosen to drive the stepper motor for several reasons. The A3967 integrates a microstepping controller with dual H-Bridge output stages into one package. This simplified the potential circuit design. The H-Bridge output transistors can supply up to $\pm\unit{750}{\milli\ampere}$ of current at up to \unit{30}{\volt} \cite{A3967}. This flexibility was desirable.
 
 \paragraph{Current Control}
 \nomenclature{$R_{sense}$}{Value of the current sense resistors in the Braking Module's stepper motor circuit.}

@@ -8,7 +8,6 @@
 %
 
 \usepackage[T1]{fontenc}
-%\usepackage[latin9]{inputenc}
 \usepackage[utf8x]{inputenc}
 
 \setcounter{secnumdepth}{3}
@@ -23,10 +22,6 @@
 \usepackage{lastpage}
 \usepackage{tikz}
 \usepackage{tikz-timing}[2009/05/15]
-%\usetikztiminglibrary{nicetabs}
-%\tikzset{timing/no nice tabs}
-%\tikzset{timing/interval/normal}
-%\tikzset{timing/nodes/old center}
 \usepackage{subfigure}
 \usepackage{tabularx}
 \usepackage{array}
@@ -34,19 +29,13 @@
 \usepackage{booktabs}
 \usepackage{supertabular}
 
+\usepackage[binary]{SIunits}
+
 %\usepackage[square,authoryear,sort&compress]{natbib}
 \usepackage[numbers, square, comma, sort&compress]{natbib}
 
 \usepackage{nomencl}
 \makenomenclature
-
-%\usepackage[automark,autooneside,markuppercase]{scrpage2}
-%\pagestyle{scrheadings}
-%\lehead{Distributed Sensor/Actuator Network}
-%\lohead{Distributed Sensor/Actuator Network}
-%\ihead{\headmark}
-%\automark[section]{chapter}
-%\setheadsepline{.4pt}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -58,8 +47,10 @@
 \setlength{\marginparwidth}{0pt}
 \setlength{\marginparsep}{0pt}
 \setlength{\textwidth}{6in}
+\setlength{\textheight}{600pt}
+\setlength{\footskip}{20pt}
+\setlength{\headsep}{15pt}
 
-%\setlength{\parskip}{12 pt}
 \setlength{\parskip}{\medskipamount}
 \makeatletter
 

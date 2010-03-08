@@ -37,14 +37,18 @@ Using this single component strongly reduces the complexity of the output stage 
 
 \subsubsection{Traction Control Analogue Output}
 
-In order to generate a 0-5V analogue signal for the ECU's traction slip ratio input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs 0-5V analogue signal that varies with the digital input.
+In order to generate a 0-5V analogue signal for the ECU's traction slip ratio input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs \unit{0-5}{\volt} analogue signal that varies with the digital input.
 
 The output voltage from the DAC can be determined by the following equation:
 
 \begin{equation}
-V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,[V]
+V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,\volt
 \end{equation}
 
-where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value ranging from $0$ to $2^{n-1}$. Since we want to output $5\,[V]$ at fullscale input, \begin{equation} 2\cdot{V_{ref}}\,\frac{2^{7}}{2^{8}}=V_{ref}=5\,[V]\end{equation}.
+where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at fullscale input,
 
-The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}\approx155k\Omega$. The output current of the DAC therefore will be at most $I_{out}=\frac{5v}{155k}\approx32.26\mu A$.
+\begin{equation}
+2\cdot{V_{ref}}\,\frac{2^{7}}{2^{8}}=V_{ref}=\unit{5}{\volt}
+\end{equation}.
+
+The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}\approx\unit{155}{\kilo\ohm}$. The output current of the DAC therefore will be at most $I_{out}=\frac{5v}{155k}\approx\unit{32.26}{\micro\ampere}$.

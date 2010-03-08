@@ -3,6 +3,13 @@
 
 \section{Transmission}
 
+For successful clutch operations, \citet{clutch_control} quantify two requirements to be satisfied by any clutch controller:
+\begin{itemize}
+  \item a \emph{no-kill} condition, whereby the engine speed must remain above a certain value, $\omega_e^{min}$, and
+  \item a no-lurch condition which states that the derivative of the clutch slip $\dot{\omega}_{s1}=\dot{\omega}_e-\dot{\omega}_c$ at the moment of full engagement is near zero. This means the car doesn't jerk or lurch forward, and is a more important requirement when crawling than launching.
+\end{itemize}
+
+
 
 \subsection{Shift Speed}
 

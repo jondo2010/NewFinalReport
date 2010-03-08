@@ -1,35 +1,35 @@
 \section{Transmission and drivetrain}
 
-For successful clutch operations, \citet{clutch_control} quantify two requirements to be satisfied by any clutch controller:
+The overall goal for the transmission and drivetrain was to improve over the work done in previous years. A first step was to refine and better understand the requirements of the current system, and then target improvements for the new one.
+
+For successful transmission operations, \citet{clutch_control} quantify two requirements to be satisfied by any controller:
 \begin{itemize}
-  \item a \emph{no-kill} condition, whereby the engine speed must remain above a certain value, $\omega_e^{min}$, and
-  \item a \emph{no-lurch} condition which states that the derivative of the clutch slip $\dot{\omega}_{s1}=\dot{\omega}_e-\dot{\omega}_c$ at the moment of full engagement is near zero. This means the car doesn't jerk or lurch forward, and is a more important requirement when crawling than launching.
+  \item a \emph{no-kill} condition, whereby the engine speed must remain above a certain value $\omega_e^{min}$ and
+  \item a \emph{no-lurch} condition which states that the derivative of the clutch slip $\dot{\omega}_{sl}=\dot{\omega}_e-\dot{\omega}_c$ at the moment of full engagement is near zero. This means the car doesn't jerk or lurch forward, and is a more important requirement when crawling than launching.
 \end{itemize}
 
+\nomenclature{$\omega_e^{min}$}{Minimum engine speed before a stall is likely.}
+\nomenclature{$\omega_{sl}$}{The clutch slip, defined as the difference in speed between the engine and the clutch plates.}
 
+\subsection{Shifting}
 
-\subsection{Shift Speed}
+The electropneumatic subsystem should decrease shift timing to below \unit{100}{\milli\second} by incorporating a gear position sensor into the transmission, allowing the controller to sense exactly when a shift has completed. Shifting should also use less air, since the valves will be open for less time, and be mechanically less straining on the transmission.
 
-Improve shift speed and smoothness, 50 ms to upshift, 100 ms to downshift.
+The average force required to actuate the shift lever on the CBR600f4i was measured using a fish scale to be \unit{5.42}{\newton\metre}, including a factor of safety. Any actuation method designed will need to be able to produce this torque.
 
+\subsection{Clutch control}
 
-\subsection{Launch Control}
+The electropneumatic subsystem should completely automate all clutching operations. For this, the pneumatic system will have to be tweaked, and the controller will need to incorporate several layers of feedback, including clutch position and various parameters from the ECU.
 
-Provide launch control, decrease launch time and wheel slippage by
-xxx.
+The transmission controller should be able to perform the following operations:
+\begin{enumerate}
+  \item Launch the car from a standstill by interacting with the ECU to enable the ECU's launch control feature, and engage the clutch in such a way that meets the \emph{no-kill} and to a lesser extent the \emph{no-lurch} conditions.
+  \item Crawl the car from a standstill under \unit{25}{\kilo\metre\per\hour}, as well as be able to transition to regular driving, and back to a standstill while meeting the \emph{no-kill} and \emph{no-lurch} conditions.
+  \item Implement a \emph{Neutral Find} feature that will automatically downshift from the current gear to neutral in the shortest amount of time.
+  \item Implement an anti-stall feature that fulfills the \emph{no-kill} condition in the event of a spin-out by activating the Neutral Find.
+  \item Implement an auto-upshift feature that will upshift the transmission without driver intervention to obtain the best possible acceleration.
+\end{enumerate}
 
+Additionally, all of these features should be tunable at run time. It should be possible to turn individual features on and off, and the controller should integrate with the networks VDM system.
 
-\subsection{Neutral Find}
-
-Decrease time required to find neutral, worst case is 500 ms.
-
-
-\subsection{Anti-Stall}
-
-Implement anti-stall feature, avoid stalling in any gear in spin-out
-situations etc.
-
-
-\subsection{Electropneumatics}
-
-Reduce air consumption by 50\%, improve reliability. 
+The average force required to actuate the clutch lever on the CBR600f4i was measured using a torque wrench to be \unit{7.34}{\newton\metre}, including a factor of safety. Any actuation method designed will need to be able to produce this torque.

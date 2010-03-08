@@ -11,7 +11,7 @@ The stock CBR600f4i engine is fitted with a simple 1-wire sensor which is connec
 
 \subsection{Gear Position Sensing}
 
-The stock transmission has no means of determining what gear the transmission is in; it can only determine when the transmission is in neutral using the aforementioned neutral sense wire. The ECU has provisions for sensing gear position by reading a geared potentiometer that can be attached to the shift drum, however this requires mechanical modification of the shift drum itself.
+The stock transmission has no means of determining what gear the transmission is in; it can only determine when the transmission is in neutral using the aforementioned neutral sense wire. The ECU has provisions for reading a gear position potentiometer that can be attached to the shift drum, however this requires mechanical modification of the shift drum itself.
 
 \subsection{Clutch}
 
@@ -71,8 +71,16 @@ Downshifting the transmission (changing from a higher gear to a lower gear) requ
 
 There are several disadvantages to a manually actuated transmission: it requires a great deal of dexterity and effort on behalf of the driver, shifting time is relatively slow (around \unit{1}{\second}) compared to an estimated theoretical minimum shift time ($<\unit{100}{\milli\second}$), and a mechanical linkage must be designed and packaged into the car.
 
-For these reasons, Formula SAE vehicles have used an electropneumatic actuation system since 2008. This implementation replaces a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. Driver control is achieved with a set of electronic paddle switches located on the steering wheel: an up-shift paddle and a down-shift paddle.
+For these reasons, Formula SAE vechicles have used electro-pneumatic actuation systems since 2008. This implementation replaced a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. Driver control was achieved with a set of electronic paddle switches located on the steering wheel: an up-shift paddle and a down-shift paddle. A compressed air cylinder is used to feed air to linear pneumatic actuators (cylinders), which apply force to the levers on the clutch and shift levers. Binary 3-way solenoid valves apply pressure to either side of the cylinders.
+
+In 2007, electronic signalling of the solenoid valves was done with a set of switches on the steering wheel, which switched the low-current side of a set of relays. This in turn fed current to the solenoid valves. In this system, the timing of the mechanical interaction with the transmission was entirely dependent on how long the driver held down the paddles. This still required a lot of effort from the driver, and often resulted in missed shifts. It also caused heavy mechanical stress on the transmission as the actuators pressed hard on the shift levers.
+
+The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relays with high-current solid state drivers. The timing signals to the solenoid valves were precisely controlled with an ARM7 micro-controller. Shift timing could be programmed, and no longer depended on how long the paddles were held. This  reduced the effort required from the driver and also reduced possible driver error.
+
+Although an improvement from previous years, several inherent drawbacks to the 2008/2009 shift system exist. The system uses a lot of air, and the air cylinder must be regularly refilled, which is a recurring expense.
 
 The electropneumatic system relieves the driver from the burden of manually engaging the clutch. It also reduces shift-time by a factor of nearly ten. However, the system makes use of binary pneumatic valves which reduce the smoothness of the clutch engagement. The rate of engagement is limited by the air flow rate of the valve itself, resulting in a rough shifting sequence that is mechanically hard on the transmission. 
 
-Another limitation is posed by the lack of gear position sensing in the stock transmission. Although the system is able to determine when the transmission was in neutral, there is no way to determine if the gears have meshed after up- or down-shifting. To do so would require modifying the shift drum to incorporate a gear-sensing potentiometer. This leads to situations where the transmission controller becomes confused as to which gear the transmission is in, and requires driver intervention to resynchronize the controller with the transmission.
+The most serious drawback of the system is that the position of the actuators was only binary (or trinary in the case of upshift/rest/downshift). It was only possible to engage or disengage the clutch at a constant rate, determined by the pressure in the system, the flow rate coefficient through the valves, and the diameter of the cylinder. Since launching the car requires careful modulation of the clutch position, which was not possible with a binary pneumatic system, launching the car still required a hand-lever.
+
+Another limitation was posed by the lack of gear position sensing in the stock transmission. Although the system was able to determine when the transmission was in neutral, there was no way to determine if the gears had meshed after up- or down-shifting, and the signals sent to the actuator were therefore controlled open-loop with static timing tables.

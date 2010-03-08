@@ -21,6 +21,23 @@ position levers with the pneumatic system.
 
 \subsubsection{Advanced Transmission Features}
 
+\begin{description}
+
+\item[Auto Upshift Feature]
+
+This feature of the engine module is aimed primarily at improving performance in the acceleration event. Based on known torque curves, a table of optimal shift points in the RPM range is developed. As the engine reaches the top RPM for a given gear, the engine module will automatically upshift to the next gear, without any driver input. All the driver needs to do is maintain full throttle, and hold on.
+
+\item[Launch]
+Full-throttle launch uses an important feature of the ECU called launch control. From a stand-still, the slip ratio of the driven wheels to the non-driven wheels is monitored, and the engine output power is reduced until the ratio reaches 1:1. Drivers use this feature by maintaining full-throttle at the starting line while holding the brake pedal. As soon as the brake pedal is released, the the engine module will release the clutch in a controlled manner in an attempt to get the best possible acceleration.
+
+\item[Crawl]
+Part-throttle launch is a feature designed to mimic an automatic transmission. By controlling the clutch position, and thereby modulating the amount of torque transferred to the wheels for a short period of time, the car can be made to creep slowly from a standstill. This will be used when driving up to the starting line of various dynamic events.
+
+\item[Neutral Find]
+As drivers come in to the pits from driving the course, a useful feature is the ability for the car to shift the transmission back into neutral to avoid stalling the car. The neutral find feature will automatically downshift the transmission repeatedly until it finds neutral.
+
+\end{description}
+
 
 \subsubsection{Engine Starting/Stopping}
 

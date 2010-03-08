@@ -5,11 +5,11 @@
 
 The Formula SAE 2010 vehicle uses a 6-speed manual sequential transmission to transmit power from the engine to the drive train. As in other types of manual transmissions, the sequential transmission works by engaging and disengaging several sets of gears with shift forks to obtain different gear ratios. A cast steel drum inside the transmission, called the \emph{shift drum}, has a series of complex grooves machined into it, in which the shift forks ride. Rotating the drum causes the forks to engage one gear and disengage the other. A ratcheting mechanism allows a single external lever, called the \emph{shift lever}, to rotate the drum forward and back by a discrete amount. Each full movement of the lever forwards or backwards causes a gear change up or down, respectively \cite{HowtoManualTransmission, cbr600}.
 
-\subsubsection{Neutral Sensing}
+\subsection{Neutral Sensing}
 
 The stock CBR600f4i engine is fitted with a simple 1-wire sensor which is connected to ground when the transmission is in neutral. The wire is left floating when the vehicle is in gear.
 
-\subsubsection{Gear Position Sensing}
+\subsection{Gear Position Sensing}
 
 The stock transmission has no means of determining what gear the transmission is in; it can only determine when the transmission is in neutral using the aforementioned neutral sense wire. The ECU has provisions for sensing gear position by reading a geared potentiometer that can be attached to the shift drum, however this requires mechanical modification of the shift drum itself.
 
@@ -67,7 +67,7 @@ With purely manual clutch control (i.e., with a clutch lever), skillful completi
 
 Downshifting the transmission (changing from a higher gear to a lower gear) requires that the clutch be fully disengaged. In the fully manual operation, the driver must disengage the clutch, shift the transmission, blip the throttle\footnote{``Blipping'' the throttle is a short increase in throttle used to increase the engine RPM in order to match it closer to the clutch plate RPM}, and then re-engage the clutch. This is required since the torque transmitted by the clutch (Eq. \ref{eq:clutch_slip}) can be in the reverse direction, from the wheels to the engine.
 
-\subsection{Previous Implementations and Shortcomings}
+\subsection{Previous Electropneumatic Implementation}
 
 There are several disadvantages to a manually actuated transmission: it requires a great deal of dexterity and effort on behalf of the driver, shifting time is relatively slow (around \unit{1}{\second}) compared to an estimated theoretical minimum shift time ($<\unit{100}{\milli\second}$), and a mechanical linkage must be designed and packaged into the car.
 

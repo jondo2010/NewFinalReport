@@ -1,20 +1,11 @@
 \section{Transmission}
+\label{sec:background_transmission}
 
 \subsection{Overview}
 
-This section aims to provide background information on
-\begin{itemize}
-  \item the transmission and clutch used on current Formula SAE vehicles,
-  \item the dynamics of the clutch system,
-  \item the operational usage of the clutch and transmission, and
-  \item prior work done on control and automation of the clutch and transmission system.
-\end{itemize}
-
-\subsection{Transmission}
-
 The Formula SAE 2010 vehicle uses a 6-speed manual sequential transmission to transmit power from the engine to the drive train. As in other types of manual transmissions, the sequential transmission works by engaging and disengaging several sets of gears with shift forks to obtain different gear ratios. A cast steel drum inside the transmission, called the \emph{shift drum}, has a series of complex grooves machined into it, in which the shift forks ride. Rotating the drum causes the forks to engage one gear and disengage the other. A ratcheting mechanism allows a single external lever, called the \emph{shift lever}, to rotate the drum forward and back by a discrete amount. Each full movement of the lever forwards or backwards causes a gear change up or down, respectively \cite{HowtoManualTransmission, cbr600}.
 
-\subsubsection{Sensing transmission state}
+\subsubsection{Neutral Sensing}
 
 The stock CBR600f4i engine is fitted with a simple 1-wire sensor which is connected to ground when the transmission is in neutral. The wire is left floating when the vehicle is in gear.
 
@@ -22,9 +13,9 @@ The stock transmission has no means of determining what gear the transmission is
 
 \subsection{Clutch}
 
-The CBR600f4i is equipped with a multi-plate clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are seperated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand lever via cable.
+The CBR600f4i is equipped with a multi-plate clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are separated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand lever via cable.
 
-\subsubsection{Equations of motion}
+\subsubsection{Equations of Motion}
 
 Equations of motion governing the clutch dynamics are:
 
@@ -36,7 +27,7 @@ Equations of motion governing the clutch dynamics are:
   \dot{T}_d=k\left(\phi_d\right)\cdot\left(\omega_c-\omega_t\right),
 \end{equation}
 
-where $J_c$ is the interia of the clutch plates, $T_c$ the torque transmitted through the clutch, $b_c$ the clutch damping rate, and $\omega_c$ and $\omega_t$ are speeds of the clutch plates and transmission respectively \cite{clutch_control}.
+where $J_c$ is the inertia of the clutch plates, $T_c$ the torque transmitted through the clutch, $b_c$ the clutch damping rate, and $\omega_c$ and $\omega_t$ are speeds of the clutch plates and transmission respectively \cite{clutch_control}.
 
 A major point of interest in the operation of the clutch is the transition from fully disengaged to fully engaged, and vice-versa. In this state the clutch plates slip against each other as one rotates faster. \Citet{clutch_control} describe the torque transmitted through the clutch in slipping, $T_c{slip}$, as
 
@@ -52,15 +43,15 @@ The second state of interested, as described by \cite{clutch_control}, is when t
   J_e\dot{\omega}_e=T_e-T_c.
 \end{equation}
 
-In the fully engaged state, $\omega_e=\omega_c=\omega$, a degree of fredom is removed, and by combining \eqref{eq:clutch_dynamics_a} and \eqref{eq:engine_motion} we obtain:
+In the fully engaged state, $\omega_e=\omega_c=\omega$, a degree of freedom is removed, and by combining \eqref{eq:clutch_dynamics_a} and \eqref{eq:engine_motion} we obtain:
 
 \begin{equation}
   \left(J_e+J_c\right)\dot{\omega}=T_e-Td-b_c\cdot\left(\omega\right),
 \end{equation}
 
-which shows that the system torque acts on the combined intertia of the plates as a single unit as the engine and transmission rotate at the same speed.
+which shows that the system torque acts on the combined inertia of the plates as a single unit as the engine and transmission rotate at the same speed.
 
-\subsubsection{Clutch operation}
+\subsubsection{Operation}
 
 In normal operation of the car, the clutch is used in two specific cases\footnote{Use of the clutch is not required for upshifting, only a small reduction in engine torque.}:
 \begin{enumerate}
@@ -68,16 +59,15 @@ In normal operation of the car, the clutch is used in two specific cases\footnot
   \item Downshifting the transmission.
 \end{enumerate}
 
-When accelerating the car from a stand-still, two further subcases need to be considered: accelerating at the beginning of a race, or \emph{launching}, and moving the car forward in a slow, controlled, manner, which we have called \emph{crawling}. In launching the car, the goal is to gain as much momentum as possible by transmitting as much torque from the engine to the wheels as possible without breaking the tires loose. The goal of crawling the car is to accelerate slightly in a slow, completely controlled manner to under \unit{25}{\kilo\metre\per\hour}.
+When accelerating the car from a stand-still, two further sub-cases need to be considered: accelerating at the beginning of a race, or \emph{launching}, and moving the car forward in a slow, controlled, manner, which we have called \emph{crawling}. In launching the car, the goal is to gain as much momentum as possible by transmitting as much torque from the engine to the wheels as possible without breaking the tires loose. The goal of crawling the car is to accelerate slightly in a slow, completely controlled manner to under \unit{25}{\kilo\metre\per\hour}.
 
 With purely manual clutch control (i.e., with a clutch lever), skillful completion of both of these operations requires a significant amount of skill on the part of the driver. To launch the car with minimal tire slip, the driver must modulate the throttle as well as the clutch position (allowing a certain amount of slip). Crawling a Formula SAE car is a similar operation, however due to the low torque output at low RPM of the engine, it is very easy to stall the engine by engaging the clutch too quickly. Additionally, it is often desirable to move the car slower than would be obtained by driving in first gear with the clutch fully engaged. This must be done by never fully engaging the clutch: the clutch state is alternated between slipping and fully disengaged.
 
-Downshifting the transmission (changing from a higher gear to a lower gear) requires that the clutch be fully disengaged. In the fully manual operation, the driver must disengage the clutch, shift the transmission, blip the throttle\footnote{``Blipping'' the throttle is a short increase in throtttle used to increase the engine RPM in order to match it closer to the clutch plate RPM}, and then re-engage the clutch. This is required since the torque transmitted by the clutch (Eq. \ref{eq:clutch_slip}) can be in the reverse direction, from the wheels to the engine.
-
+Downshifting the transmission (changing from a higher gear to a lower gear) requires that the clutch be fully disengaged. In the fully manual operation, the driver must disengage the clutch, shift the transmission, blip the throttle\footnote{``Blipping'' the throttle is a short increase in throttle used to increase the engine RPM in order to match it closer to the clutch plate RPM}, and then re-engage the clutch. This is required since the torque transmitted by the clutch (Eq. \ref{eq:clutch_slip}) can be in the reverse direction, from the wheels to the engine.
 
 \subsection{Previous Implementations and Shortcomings}
 
-There are several disadvantages to a manually actuated transmission: it requires a great deal of dexterity and effort on behalf of the driver, shifting time is relatively slow (around \unit{1}{\second}) compared to an estimated theoretical minimum shift time ($<\unit{100}{\milli\second}$), and a mechanical linkage must be desiged and packaged into the car.
+There are several disadvantages to a manually actuated transmission: it requires a great deal of dexterity and effort on behalf of the driver, shifting time is relatively slow (around \unit{1}{\second}) compared to an estimated theoretical minimum shift time ($<\unit{100}{\milli\second}$), and a mechanical linkage must be designed and packaged into the car.
 
 For these reasons, Formula SAE vechicles have used electro-pneumatic actuation systems since 2008. This implementation replaced a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. Driver control was achieved with a set of electronic paddle switches located on the steering wheel: an up-shift paddle and a down-shift paddle. A compressed air cylinder is used to feed air to linear pneumatic actuators (cylinders), which apply force to the levers on the clutch and shift levers. Binary 3-way solenoid valves apply pressure to either side of the cylinders.
 
@@ -87,7 +77,7 @@ The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relay
 
 Although an improvement from previous years, several inherent drawbacks to the 2008/2009 shift system exist. The system uses a lot of air, and the air cylinder must be regularly refilled, which is a recurring expense.
 
-The electropneumatic system relieved the driver from the burden of manually engaging the clutch. It also reduced shift-time by a factor of nearly ten. However, the system made use of binary pneumatic valves which reduced the ability to engage the clutch smoothly. The rate at which the clutch was engaged was limited by the air flow rate of the valve itself, resulting in a rough shifting sequence that was mechanically hard on the transmission. 
+The electropneumatic system relieves the driver from the burden of manually engaging the clutch. It also reduces shift-time by a factor of nearly ten. However, the system makes use of binary pneumatic valves which reduce the smoothness of the clutch engagement. The rate of engagement is limited by the air flow rate of the valve itself, resulting in a rough shifting sequence that is mechanically hard on the transmission. 
 
 The most serious drawback of the system is that the position of the actuators was only binary (or trinary in the case of upshift/rest/downshift). It was only possible to engage or disengage the clutch at a constant rate, determined by the pressure in the system, the flow rate coefficient through the valves, and the diameter of the cylinder. Since launching the car requires careful modulation of the clutch position, which was not possible with a binary pneumatic system, launching the car still required a hand-lever.
 

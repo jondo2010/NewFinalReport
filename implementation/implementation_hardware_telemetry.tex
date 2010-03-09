@@ -1,15 +1,50 @@
 \subsection{Telemetry Module}
 
+\begin{figure}[H]
+\centering
+\input{implementation/figures/telemetry_hardware_block}
+\caption{Block Diagram, Wireless Telemetry Module.\label{fig:tele_tx_overview}}
+\end{figure}
 
-\subsubsection{Wireless Modem}
+The telemetry module is implemented on a custom PCB with the same AT90CAN128 micro-controller common to the other modules. In addition to the common life-support hardware, the telemetry module includes a dual RS-232 transceiver chip and two DE-9 connectors. 
 
-To meet the range and data throughput requirements for the telemetry system, an XBee Pro wireles modem was used. The XBee requires \unit{3.3}{\volt} I/O levels and power supply, and so a second linear voltage regulator was used in the design, the LT1521 from Linear Technology. Since the AT90CAN129 has only 2 built-in UARTS that were used for the RS232 interfaces to the ECU and DAQ, an third external UART was added to the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has an active-low IRQ line connected to external interrupt line EXT7 on the microcontroller. 
+The ECU and the DAQ connect to the telemetry board with specialized cables that connect to the wiring harness. The ECU and DAQ interface with two built-in USART ports on the micro-controller. A third, SPI-based UART interfaces with the wireless transmitter.
+
+\begin{table}[H]
+  \caption{Wireless Telemetry Module Components\label{tab:telmetry_module_components}}
+  \centering
+    \begin{tabular}{|c|c|c|}
+      \hline 
+      Part & Manufacturer & Part Number\tabularnewline
+      \hline
+      \hline
+      XBee-PRO OEM Module & Digi International & XBee-PRO\tabularnewline
+      \hline 
+      Dual RS-232 Transceiver & Maxim Electronics & MAX232\tabularnewline
+      \hline 
+      SPI-capable UART chip & Maxim Electronics & MAX3100\tabularnewline
+      \hline 
+      300mA Low Dropout Regulator & Linear Technology & LT1521\tabularnewline
+      \hline
+      8-bit dual-supply level translator & ST Microelectronics & ST2378E\tabularnewline
+      \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{XBee-PRO Wireless Modem}
+
+To meet the range and data throughput requirements for the telemetry system, an XBee-PRO wireles modem was used. The XBee requires \unit{3.3}{\volt} I/O levels and power supply, and so a second linear voltage regulator was used in the design, the LT1521 from Linear Technology. Since the AT90CAN129 has only 2 built-in UARTS that were used for the RS232 interfaces to the ECU and DAQ, an third external UART was added to the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has an active-low IRQ line connected to external interrupt line EXT7 on the microcontroller. 
 
 The wireless transmitter is an XBee Pro Modem from Digi International. The modem is in a package designed for mounting on a printed circuit board, and is attached to the telemetry module directly. This modems requires a 3.3V power supply. and consumes at most 215mA of current during transmit. Since the common module hardware only provides power for 5V devices, the telemetry module has a second LDO regulator providing 3.3V. A separate antenna port is connected to the modem and mounted in the side of the module enclosure.
 
+\subsubsection{Dual RS-232 Transceiver}
 
+A MAX232 dual RS-232 trasceiver chip was used in the design to interface the built-in UARTS on the AT90CAN128 with the line levels expected by the serial ports on the ECU and DAQ.
 
 \subsubsection{External SPI USART}
+
+A third UART was needed in the design to interface with the XBee-PRO modem, since the AT90CAN128 only provides 2. A MAX3100 SPI-capable external UART was chosen
 
 
 \subsubsection{Two-Channel ECU and DAC USART}

@@ -1,0 +1,31 @@
+\section{Telemetry}
+
+The main goal of the telemetry system is to provide a reliable wireless connection between the two data-gathering devices on the vehicle (the ECU and DAC) and their respective software packages running on a pit crew laptop some distance away from the vehicle. Requirements for these goals are elaborated on in the following sections.
+
+\subsection{Engine Control Unit (ECU)}
+
+\begin{itemize}
+\item Provide a wireless bi-directional serial link between the ECU software and module.
+\item The link must operate at 57.6 KBps, 8 data bits, no parity bit, and 1 stop bit.
+\item The link must be completely transparent to the software.
+\end{itemize}
+
+\subsection{Data Acquisition Unit (DAC)}
+
+\begin{itemize}
+\item Provide a wireless uni-directional serial link between the DAC software and module.
+\item The link must operate at 38.4 KBps, 8 data bits, no parity bit, and 1 stop bit.
+\item The link must be completely transparent to the software.
+\item Provide a means of injecting secondary data into the DAC stream, such as engine RPM and other parameters, for monitoring by the DAC software.
+\item Provide a means of decoding the DAC stream on the vehicle itself to display information to the driver.
+\end{itemize}
+
+\subsection{Wireless Data Link}
+
+\begin{itemize}
+
+\item Be able to interface with two laptops with a range of at least one kilometre.
+\item Provide on-the-fly resolution of interference conflicts with other teams running similar wireless systems.
+\item Indicate wireless signal strength to the driver and pit crew as a percentage with resolution of 1\% of maximum signal
+strength. 
+\end{itemize}

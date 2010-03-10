@@ -4,11 +4,9 @@
 
 \nomenclature{DOHC}{Dual Overhead Camshafts}
 
-The Formula 2010 vehicle uses a stock \emph{Honda CBR600F4i} motorcycle engine, as pictured in Fig. \ref{fig:cbr600f4i_engine}. It is a \unit{600}{\centi\cubic\metre} super-sport class engine with an internal 6-speed chain driven transmission. The engine utilizes an inline four cylinder configuration. The engine also has \emph{Dual Overhead Camshafts} (DOHC) to allow for four valves per cylinder: two for intake and two for exhaust.
+The Formula SAE 2010 vehicle uses a \emph{Honda CBR600F4i} motorcycle engine, as pictured in Fig. \ref{fig:cbr600f4i_engine}. It is a \unit{600}{\centi\cubic\metre} super-sport class engine with an internal 6-speed transmission. The engine utilizes an inline four cylinder configuration. The engine also has \emph{Dual Overhead Camshafts} (DOHC) to allow for four valves per cylinder: two for intake and two for exhaust.
 
-The engine is connected to an \emph{intake system} that directs air to the cylinders, an \emph{engine control unit} for regulating the combustion timing of the engine, and a \emph{starting system} that uses a small electric motor to start the engine from a dead stop. 
-
-The rules for the Formula SAE competitions forbid \emph{drive-by-wire}, meaning that throttle control must be purely mechanical \cite{2010fsaerules}.
+The engine is connected to an \emph{intake system} that directs air to the cylinders, an \emph{engine control unit} for regulating the combustion timing of the engine, and a \emph{starting system} that uses a small electric motor to start the engine from a dead stop.
 
 \begin{figure}[H]
 	\centering
@@ -19,15 +17,17 @@ The rules for the Formula SAE competitions forbid \emph{drive-by-wire}, meaning 
 
 \subsection{Intake System}
 
-The intake system consists of several parts, including the \emph{throttle-body}, \emph{restrictor}, \emph{intake plenum}, \emph{intake runners}, and \emph{intake valves}. The throttle-body is a valve that controls the amount of air entering the intake system. It is followed by a restrictor, which restricts the maximum air flow into the engine. Use of a restrictor is mandated Formula SAE rules. After the restrictor, the air flows into a large intake plenum. From the plenum, four intake runners lead to each cylinder head, where the intake valves are located.
+The intake system consists of several parts, including the \emph{throttle-body}, \emph{restrictor}, \emph{intake plenum}, \emph{intake runners}, and \emph{intake valves}. The throttle-body is a valve that controls the amount of air entering the intake system, opening in relation to the throttle pedal. It is followed by a restrictor, which restricts the maximum air flow into the engine. Use of a restrictor is mandated Formula SAE rules. After the restrictor, the air flows into a large intake plenum. From the plenum, four intake runners lead to each cylinder head, where the intake valves are located.
+
+The size of the restrictor is dictated by the Formula SAE rules, which also forbid \emph{drive-by-wire}, meaning that throttle control must be purely mechanical \cite{2010fsaerules}.
 
 As the intake valves on the engine open, they generate negative pressure waves that travel the length of the intake runners and back into the intake plenum. There, they reflect and travel back towards the intake valve. This reflection towards the intake valves can act to increase pressure at the valve and increase power.
 
 \nomenclature{RPM}{Revolutions per Minute}
 
-A fair amount of research has been done in previous years on the intake and exhaust design for the Formula SAE car. Former UMSAE engine section head Lucas Groening wrote an undergraduate thesis on modelling of the engine package for the 2008 Formula car. One important dynamic aspect of the engine design that he describes is the effect of the intake runner length on the torque output of the engine at different \emph{Revolutions Per Minute} (RPM) \cite{LucasIntake}. 
+A fair amount of research has been done in previous years on the intake and exhaust design for the Formula SAE car. Former UMSAE engine section head Lucas Groening wrote an undergraduate thesis on modelling of the engine package for the 2008 Formula car. One important dynamic aspect of the intake design that he describes is the effect of the intake runner length on the torque output of the engine at different \emph{Revolutions Per Minute} (RPM) \cite{LucasIntake}. 
 
-Figure \ref{fig:irl_effect} shows a comparison between various intake runner lengths and torque output over the RPM operating range of the engine. Different plenum lengths cause the two torque peaks to occur at different RPMs. Groening proposed that an electronic means of modulating the length of the runners to maximize engine torque could dramatically improve engine performance \cite{LucasIntake}.
+Figure \ref{fig:irl_effect} shows a comparison between various intake runner lengths and torque output over the RPM operating range of the engine. Different plenum lengths cause the two torque peaks to occur at different RPMs. Current Formula SAE team members have proposed that an electronic means of modulating the length of the runners depending on the current RPM could significantly improve engine performance over the RPM range.
 
 \begin{figure}[H]
 	\centering

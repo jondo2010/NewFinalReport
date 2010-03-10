@@ -4,19 +4,19 @@
 
 \section{Intake}
 
-Implement variable-length (2-stage intake) within 150 ms to gain a
-power advantage of xxx ftlbs torque over previous.
+The goal of the intake subsystem is to implement an electronic controller for a variable-length (2-stage intake) intake plenum that will be actuated with a light-weight RC servomotor.
 
-Automatically optimize runner length by monitoring throttle position,
-engine RPM data from ECU.
+The controller must be able to react to changes in engine RPM, and select the best runner length for that RPM range.
 
+Engine RPM ramp-rates under expected loading conditions were estimated with the engine on a dynamometer by the Formula SAE engine team. They have given us a timing requirement that the controller and actuator must be able to switch runner length configurations in approximately \unit{150}{\milli\second}.
+
+The intake controller designed must be able to receive RPM data from the ECU over CANBus, and should be able to control an RC-Servomotor.
 
 \section{Starter}
 
-Implement dual-mode starting system, including manual and one-touch.
+The goal of the starter subsystem is to ease control of the engine starting operation on the driver.
 
-Provide at least 5A of current for 30 seconds to starter solenoid.
-
+The starter subsystem will implement a dual-mode starting sequence, including manual and one-touch.
 
 \section{Braking}
 
@@ -75,12 +75,9 @@ preset modes should be capable through the driver interface itself.
 
 \subsection{Diagnostic Information}
 
-Critical warnings (....) must be delivered to the driver on an easy-to-read
-display.
+Critical warnings, such as engine overheating, low oil pressure, low battery, and other subsystem errors should be displayed to the user in a manner that will attract their attention.
 
-Supplimentary vehicle performance information should be available
-to the driver (engine RPM, fuel, oil pressure, battery voltage, etc.)
-without being a distraction.
+Supplimentary vehicle performance information should be available to the driver (engine RPM, fuel, oil pressure, battery voltage, etc.) without being a distraction.
 
 
 \subsection{Visually Appealing Interface}

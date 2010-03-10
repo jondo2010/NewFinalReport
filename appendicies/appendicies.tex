@@ -10,3 +10,39 @@ Attached DVD, etc.
 
 
 \chapter{S-Series CAN Stream Specification}
+
+\chapter{Analysis of Clutch Operation\label{cha:clutch_analysis}}
+
+Equations of motion governing the clutch dynamics are:
+
+\begin{equation}\label{eq:clutch_dynamics_a}
+  J_c\dot{\omega}_c=T_c-T_d-b_c\cdot\left(\omega_c-\omega_t\right)
+\end{equation}
+
+\begin{equation}\label{eq:clutch_dynamics_b}
+  \dot{T}_d=k\left(\phi_d\right)\cdot\left(\omega_c-\omega_t\right),
+\end{equation}
+
+where $J_c$ is the inertia of the clutch plates, $T_c$ the torque transmitted through the clutch, $b_c$ the clutch damping rate, and $\omega_c$ and $\omega_t$ are speeds of the clutch plates and transmission respectively \cite{clutch_control}.
+
+A major point of interest in the operation of the clutch is the transition from fully disengaged to fully engaged, and vice-versa. In this state the clutch plates slip against each other as one rotates faster. \Citet{clutch_control} describe the torque transmitted through the clutch in slipping, $T_c{slip}$, as
+
+\begin{equation}\label{eq:clutch_slip}
+  T_c{slip}=F_n\mu R_a \cdot sgn\left(\omega_e-\omega_c\right),
+\end{equation}
+
+where $F_n$ is the normal force on the clutch plates, $\mu$ the coefficient of friction on the plate surfaces, and $R_a$ the radius of the plates, and $\omega_e$ and $\omega_c$ are the rotational velocities of the engine, and clutch discs, respectively. This shows that the amount of torque transmitted depends dynamically on the normal force $F_n$, which is proportional to the spring force pushing the plates together.
+
+The second state of interested, as described by \cite{clutch_control}, is when the clutch is fully engaged and the plates are locked rotating at the same speed. The equation of motion for the engine, where the engine inertia $J_e$ is driven by the engine torque $T_e$ is given by:
+
+\begin{equation}\label{eq:engine_motion}
+  J_e\dot{\omega}_e=T_e-T_c.
+\end{equation}
+
+In the fully engaged state, $\omega_e=\omega_c=\omega$, a degree of freedom is removed, and by combining \eqref{eq:clutch_dynamics_a} and \eqref{eq:engine_motion} we obtain:
+
+\begin{equation}
+  \left(J_e+J_c\right)\dot{\omega}=T_e-Td-b_c\cdot\left(\omega\right),
+\end{equation}
+
+which shows that the system torque acts on the combined inertia of the plates as a single unit as the engine and transmission rotate at the same speed.

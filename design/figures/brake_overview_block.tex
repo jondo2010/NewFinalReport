@@ -22,4 +22,19 @@
 
   \draw [->, thick, dashed] (bias) -| (eot1);
   \draw [->, thick, dashed] (bias) -| (eot2);
+
+  %%% CAN Bus
+
+  \node [bus, name=can1, right of=module, label={[rotate=90, left=0.75cm]below right:CAN Bus}, node distance=3.5cm] {CAN Bus};
+  \node [bus, name=can2, below of=can1, node distance=1cm] {};
+  \node [bus, name=can3, above of=can1, node distance=1cm] {};
+
+  \draw [<->, thick] (module) to (can1);
+  \draw [-, line width=3pt] (can1) -- (can2);
+  \draw [-, line width=3pt] (can1) -- (can3);
+
+  %%% Legend
+
+  \draw [->, thick] ($(eot2.east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Electrical}] {} -- ++(0.5cm,0);
+  \draw [->, thick, dashed] ($(eot2.south east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Mechanical}] {} -- ++ (0.5cm,0);
 \end{tikzpicture}

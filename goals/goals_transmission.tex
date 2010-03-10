@@ -1,0 +1,34 @@
+\section{Transmission and Drivetrain}
+
+The overall goal for the transmission and drivetrain systems is to improve shift time and accuracy while reducing the effort required by the driver. To achieve this goal requires modifying and improving the existing electro-pneumatic system by improving both the pneumatics and the electronic transmission control system. 
+
+\subsection{Shifting}
+
+\begin{itemize}
+\item Reduce the time to change gears to less than \unit{100}{\milli\second}. 
+\item Implement a neutral-finding feature that will automatically downshift from the current gear to neutral in the shortest amount of time.
+\item Implement an automatic up-shift feature that will up-shift the transmission without driver intervention to obtain the best possible acceleration.
+\item Provide the ability to enable or disable the neutral-finding and automatic up-shifting features from the cockpit.
+\end{itemize}
+
+The average force required to actuate the shift lever on the CBR600f4i was measured using a fish scale to be \unit{5.42}{\newton\metre}. Any actuation method designed will need to be able to produce this torque, plus a factor of safety to account for wear and inconsistency.
+
+\begin{itemize}
+\item The shift lever actuator must be able to apply a minimum of \unit{6.00}{\newton\metre} of torque.
+\end{itemize}
+
+\subsection{Clutch Control}
+
+\begin{itemize}
+\item Completely automate all clutching operations, so that the driver never need modulate the clutch on their own.
+\item Provide the ability to launch the car from a standstill by utilizing the ECU's launch control feature and engaging the clutch in such a way that prevents stalling and lurching.
+\item Provide the ability to crawl the car from a standstill under \unit{25}{\kilo\metre\per\hour}, as well as be able to transition to regular driving, and back to a standstill without stalling or lurching.
+\item Implement an anti-stall feature that protects the engine from stalling in the event of a spin-out by automatically shifting the transmission into neutral.
+\item Provide the ability to enable or disable the launch, crawl, and anti-stall features from the cockpit.
+\end{itemize}
+  
+The average force required to actuate the clutch lever on the CBR600f4i was measured using a torque wrench to be \unit{7.34}{\newton\metre}. Any actuation method designed will need to be able to produce this torque, plus a factor of safety to account for wear and inconsistency.
+
+\begin{itemize}
+\item The clutch lever actuator must be able to apply a minimum of \unit{8.00}{\newton\metre} of torque.
+\end{itemize}  

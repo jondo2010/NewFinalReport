@@ -47,20 +47,32 @@ To meet the requirements of the project, a networked 4-module architecture was c
 \item the driver interface module.
 \end{itemize}
 
-The components selected should not aversely affect the weight of the vehicle or dramatically increase the complexity of the mechanical systems, rather they should only require minimal mechanical adaptations to achieve the tuneability and performance goals outlined. As the team receives funding exclusively through 3rd-party sponsorship, the components selected should not dramatically increase the overall cost of the vehicle.
-
 Additionally, to facilitate testing of the network, a CAN testing module will be developed, consisting of an off-the-shelf AT90CAN128 development board, and custom software.
 
-The design and implementation of each module required several steps. 
+The design and implementation of each module require several steps:
 
-Absolute requirements and specifications for system parameters were first estabilshed. The electromechanical interface linking the control systems and mechanical systems were decided between our group and the mechanical engineers responsible for each respective system. The measurement requirements from the mechanical systems were be established and the appropriate sensors chosen.
+\begin{itemize}
 
-Appropriate components for the electronic modules were chosen, and circuits designed. The schematic of each module was designed and an appropriate printed circuit board layed out. The boards were manufactured and populated with components. Each board must be tested to ensure all wiring is correct and the functionality of all the components is correct.
+\item Absolute requirements and specifications for system parameters are first estabilshed. The electromechanical interface linking the control systems and mechanical systems are decided between our group and the mechanical engineers responsible for each respective system. The measurement requirements from the mechanical systems are established and the appropriate sensors are chosen.
 
-Firmware for each module must be implemented once the hardware design is finished. Software libraries for various components must be written and tested. The libraries must be combined with a high-level control algorithm for each module.
+\item Appropriate components for the electronic modules are chosen, and the circuits are designed. The schematic of each module is designed and an appropriate printed circuit board is laid out. The boards are manufactured and populated with components. Each board must be tested to ensure all wiring is correct and the functionality of all the components is correct.
+
+\item Firmware for each module must be implemented once the hardware design is finished. Software libraries for various components are written and tested. The libraries are combined with a high-level control algorithm for each module.
  
-Each module must be tested in isolation to ensure proper functionality. The modules must then be interconnected and tested again.
+\item Each module is tested in isolation to ensure proper functionality. 
+
+\item The modules are then interconnected and tested again.
+
+\end{itemize}
 
 \section{Outline of Thesis}
 
-This thesis is organized into 8 chapters. After this introductory chapter, Ch. \ref{cha:background} provides background information describing the vehicle systems we will interact with, the problems associated with these systems we are attempting to solve, and a description of previous efforts to solve these problems. In Ch. \ref{cha:goals_and_requirements} the goals and requirements of the design work will be specified for each of the areas described in Ch. \ref{cha:background}. Chapter \ref{cha:design} describes our design to meet these requirements. Chapter \ref{cha:implementation} describes our implementation of the design.
+This thesis is organized into 8 chapters:
+
+After this introductory chapter, Ch. \ref{cha:background} provides background information describing the vehicle systems we will interact with, the problems associated with these systems we are attempting to solve, and a description of previous efforts to solve these problems. 
+
+In Ch. \ref{cha:goals_and_requirements} the goals and requirements of the design work will be specified for each of the areas described in Ch. \ref{cha:background}. 
+
+Chapter \ref{cha:design} describes our design to meet these requirements. 
+
+Chapter \ref{cha:implementation} describes our implementation of the design.

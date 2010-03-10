@@ -1,0 +1,37 @@
+\tikzstyle{big arrow} = [>=latex, line width=4pt, gray]
+
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+  \node [block, minimum width=2cm, inner xsep=0] (stepper) {Stepper Interface};
+  \node [block, minimum width=2cm, inner xsep=0, right of=stepper, node distance=3cm] (io) {I/O Interface};
+
+  \node [block, grey shiny, minimum width=5cm, inner xsep=0, below of=stepper, right=-1cm, text width=5cm, node distance=2cm] (bias_manager) {Bias Manager};
+
+  \node [block, minimum width=2cm, inner xsep=0, below of=stepper, node distance=4cm] (can) {CAN Interface};
+  \node [block, minimum width=2.2cm, inner xsep=0, below of=io, node distance=4cm] (nv) {NV Storage Interface};
+  \node [block, blue shiny, minimum width=2.5cm, text width=2.2cm, inner xsep=0, right of=nv, node distance=3cm] (coordinator) {Module Coordinator};
+  \node [block, minimum width=2cm, inner xsep=0, left of=can, node distance=3cm] (adc) {ADC Interface};
+
+  \node [block, grey shiny, minimum width=5cm, inner xsep=0, below of=can, right=-1cm, text width=5cm, node distance=2cm] (pressure_manager) {Pressure Manager};
+
+  \draw [<-, big arrow] (stepper.south) -- ($(bias_manager.north west)!(stepper.south)!(bias_manager.north east)$);
+  \draw [->, big arrow] (io.south) -- ($(bias_manager.north west)!(io.south)!(bias_manager.north east)$);
+
+  \draw [<->, big arrow] (can.north) -- ($(bias_manager.south west)!(can.north)!(bias_manager.south east)$);
+  \draw [<->, big arrow] (nv.north) -- ($(bias_manager.south west)!(nv.north)!(bias_manager.south east)$);
+
+  \draw [<->, big arrow] (can.south) -- ($(pressure_manager.north west)!(can.south)!(pressure_manager.north east)$);
+  \draw [<->, big arrow] (nv.south) -- ($(pressure_manager.north west)!(nv.south)!(pressure_manager.north east)$);
+
+  \draw [<->, big arrow] (bias_manager) -| (coordinator);
+  \draw [<->, big arrow] (pressure_manager) -| (coordinator);
+  \draw [->, big arrow] (adc) |- (pressure_manager);
+
+  \draw [-, thick] ($(coordinator.south)!0.5!(coordinator.south west)$) |- ($(nv.south)!0.5!(nv.south east)+(0,-0.6cm)$) node [name=x, inner sep=0]{};
+  \draw [->, thick] (x) -- ($(nv.south)!0.5!(nv.south east)$);
+  \draw [->, thick] (x) -| ($(can.south)!0.5!(can.south east)$);
+
+  \draw [-, thick] (adc.east) -| ($(stepper.south west)+(-0.5cm,-0.6cm)$) node [name=x2, inner sep=0]{};
+  \draw [->, thick] (x2) -| ($(stepper.south)!0.5!(stepper.south east)$);
+  \draw [->, thick] (x2) -| ($(io.south)!0.5!(io.south east)$);
+  
+\end{tikzpicture}

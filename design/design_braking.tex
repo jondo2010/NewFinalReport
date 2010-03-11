@@ -1,31 +1,42 @@
 \section{Braking Module Design\label{sec:Braking-Module-Design}}
 
+\subsection{Overview}
 
-\subsection{Purpose}
+The braking module adjusts the brake bias electronically when requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar.
 
-Adjust the brake bias position electronically and on-demand from the driver.
+Figure \ref{fig:design-braking-overview} shows an overview of the braking module and it's interactions with the environment. 
 
-Provide calibration sequences to allow for mechanical wear.
+A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor must be bi-directional and have enough steps per revolution to provide the resolution required to allow a 0.5\% bias ratio adjustment.
 
-The member of the Formula SAE team responsible for the mechanical design of the brake pedal box and bias system was not able to meet our time constraints in providing us with the torque requirements for the bias bar actuation. It was therefore decided at design-time that the implementation should be flexible with regards to which stepper motor will actually be chosen.
+Two \emph{end-of-travel switches} are used to determine when the balance bar is at it's end of travel. These are required to calibrate the system. 
 
+\emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. This is critical for safety, as we cannot rotate the balance bar when the brakes are engaged. As noted in \ref{sec:background_braking}, pressure in the braking systems can reach upwards of \unit{7000}{\kilo\pascal}. The pressure sensors chosen for the implementation must be capable of reading such pressures.
 
 \subsection{Processes}
 
-
 \subsubsection{Brake Bias Calibration}
 
+A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:design-braking-bias-calibration}. By recording the number of steps it takes to rotate the balance bar from it's leftmost extreme to it's rightmost extreme, we can determine the correct centre point for the bias bar. 
+
+The first step in calibrating the brake bias is to rotate the balance bar to it's leftmost point of travel. when the bar reaches this point, it pushes on the left end-of-travel switch, which signals the module that the balance bar is at it's leftmost extreme. 
+
+The next step is to rotate the balance bar to it's rightmost point of travel. The module counts each step taken until the balance bar reaches it's rightmost extreme and pushes on the right end-of-travel switch.
+
+At this point, the module is now aware of how many steps are required to move from left to right and thus can re-centre the bar. The module saves the number of steps required to travel between the two extremes in some non-volatile parameter storage to be specified later, and adjusts the bias ratio to the last set point before calibration.
 
 \subsubsection{Brake Bias Adjustment}
 
+The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. 
+
+When a request to adjust the bias is relayed to the module, the desired bias ratio is validated to ensure an adjustment that is out of range of the balance bar is not attempted. 
+
+Once validated, the module calculates the number of steps required to move from the current position to the desired offset. It then signals the motor to advance this many steps in the correct direction.
 
 \subsubsection{Pressure Sensor Calibration}
-
 
 \subsection{Software}
 
 Software overview diagram
-
 
 \subsubsection{Bias Manager}
 

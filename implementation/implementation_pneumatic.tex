@@ -7,7 +7,7 @@ Several steps were taken in the implementation of the pneumatic system in order 
 
 A Simulink model was developed of the electropneumatic actuation system in order to verify that fundamental design would work and to gain further insight into the operation of the pneumatic system.
 
-The top level of the Simulink model is shown in \ref{fig:pneumatics_top_level}: A PID controller block is used with closed-loop feedback, and the response to a fixed step input is displayed on the scope block.
+The top level of the Simulink model is shown in \ref{fig:pneumatics_top_level}: A PID controller block is used in a closed-loop configuration, and the response to a fixed step input is displayed on the scope block.
 
 In modelling the electropneumatic system, 3 subsystems were identified and modelled independently:
 
@@ -49,10 +49,12 @@ where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1]{implementation/figures/pneumatic_modelling2.eps}
+\includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling2.eps}
 \caption{Simulink PWM Generator model.}
 \label{fig:pneumatics_pwm}
 \end{figure}
+
+The signal generator block in Fig. \ref{fig:pneumatics_pwm} outputs a triangle wave with peak-to-peak amplitude 1, which is then offset by 0.5. The relational operator block then compares this with the input signal, and outputs either a 1 or a 0.
 
 \paragraph{Solenoid Valves}
 
@@ -62,28 +64,30 @@ where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
 
 The Simulink pneumatic actuator subsystem can be seen in Fig. \ref{fig:pneumatics_actuator}. In order to save time, pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. Physical port 1 (denoted by the octagonal port symbol) in \ref{fig:pneumatics_actuator} is the air inlet. Physical ports 2 and 3 are the displacement ports of the cylinder, and regular port 1 is used to display the displacement on a scope.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[scale=1]{implementation/figures/pneumatic_modelling3}
+\includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling3}
 \caption{Simulink actuator model.}
 \label{fig:pneumatics_actuator}
 \end{figure}
 
 \paragraph{Overall Electropneumatic Simulink Model}
 
-\begin{figure}[h]
+The complete open-loop actuator model can be seen in Fig. \ref{fig:pneumatics_model_full}. The absolute value of the real-valued input $u$ is first fed to the PWM block. This signal is then converted into seperate signals for each of the two solenoid valves in a way similar to the first PWM pulsing scheme presented by \citet{accurate_position}. The input to the subsystem $u$ is expected to range from -1 to 1. When $u\geq0$, the input to valve A is  the pulse width modulated signal $U$, and the input to valve B is 0. When $u<0$, the opposite occurs.
+
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling4}
-\caption{Simulink electropneumatic model.}
-\label{fig:pneumatics_model}
+\caption{Overall electropneumatic model.}
+\label{fig:pneumatics_model_full}
 \end{figure}
 
 \subsection{Solenoid Valves}
 
-Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. 
+Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation is a \emph{VQZ115}-series, as shown in Fig. \ref{fig:smc_solenoid_valve}. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. Particularly of interest was a valve with a high flow coefficient, or $C_v$, which is an industry standard measure of the fluid flow efficiency of the valve.
 
 \begin{table}[H]
-  \caption{Solenoid valve specifications.\label{tab:xbee_commands}}
+  \caption{Solenoid valve specifications.\label{tab:solenoid_specs}}
   \centering
 
   \begin{tabular}{|l|l|}
@@ -102,6 +106,16 @@ Solenoid valves and cylinders from SMC corp were chosen for a physical implement
   \hline
   \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+\centering
+
+\includegraphics[scale=0.5]{implementation/figures/solenoid_valve.eps}
+\caption{SMC solenoid valve.}
+\label{fig:smc_solenoid_valve}
+\end{figure}
+
+
 
 \subsection{Pneumatic Actuators}
 

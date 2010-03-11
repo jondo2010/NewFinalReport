@@ -1,10 +1,11 @@
 \section{Electropneumatic Implementation}
 
-
-\subsection{Methodology}
+\subsection{Simulation}
 
 The physical behaviour 
 Several steps were taken in the implementation of the pneumatic system in order to facilitate
+
+A Simulink model was developed of the electropneumatic actuation system in order to verify that fundamental design would work and to gain further insight into the operation of the pneumatic system.
 
 The top level of the Simulink model is shown in \ref{fig:pneumatics_top_level}: A PID controller block is used with closed-loop feedback, and the response to a fixed step input is displayed on the scope block.
 
@@ -53,19 +54,54 @@ where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
 \label{fig:pneumatics_pwm}
 \end{figure}
 
+\paragraph{Solenoid Valves}
+
+
+
 \paragraph{Pneumatic Actuator}
 
-The Simulink subsystem drawn
+The Simulink pneumatic actuator subsystem can be seen in Fig. \ref{fig:pneumatics_actuator}. In order to save time, pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. Physical port 1 (denoted by the octagonal port symbol) in \ref{fig:pneumatics_actuator} is the air inlet. Physical ports 2 and 3 are the displacement ports of the cylinder, and regular port 1 is used to display the displacement on a scope.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{implementation/figures/pneumatic_modelling3}
 \caption{Simulink actuator model.}
-\label{fig:pneumatics_pwm}
+\label{fig:pneumatics_actuator}
+\end{figure}
+
+\paragraph{Overall Electropneumatic Simulink Model}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling4}
+\caption{Simulink electropneumatic model.}
+\label{fig:pneumatics_model}
 \end{figure}
 
 \subsection{Solenoid Valves}
 
+Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. 
+
+\begin{table}[H]
+  \caption{Solenoid valve specifications.\label{tab:xbee_commands}}
+  \centering
+
+  \begin{tabular}{|l|l|}
+  \hline
+  Part & VQZ115-6L1-N1-PR \tabularnewline
+  \hline
+  Coil Voltage & \unit{12}{\volt} \tabularnewline
+  \hline
+  Configuration & 3-port normally closed \tabularnewline
+  \hline
+  Flow coefficient & $C_v=\unit{0.23}{}$ \tabularnewline
+  \hline
+  Max. Operating Frequency & \unit{20}{\hertz} \tabularnewline
+  \hline
+  Max. Pressure & \unit{0.7}{\mega\pascal} \tabularnewline
+  \hline
+  \end{tabular}
+\end{table}
 
 \subsection{Pneumatic Actuators}
 

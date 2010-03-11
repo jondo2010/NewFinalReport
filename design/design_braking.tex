@@ -2,6 +2,13 @@
 
 \subsection{Overview}
 
+\begin{figure}[H]
+\centering
+\input{design/figures/brake_overview_block}
+\caption{Braking module overview block diagram.}
+\label{fig:pneumatics_design}
+\end{figure}
+
 The braking module adjusts the brake bias electronically when requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar.
 
 Figure \ref{fig:design-braking-overview} shows an overview of the braking module and it's interactions with the environment. 
@@ -24,6 +31,13 @@ The next step is to rotate the balance bar to it's rightmost point of travel. Th
 
 At this point, the module is now aware of how many steps are required to move from left to right and thus can re-centre the bar. The module saves the number of steps required to travel between the two extremes in some non-volatile parameter storage to be specified later, and adjusts the bias ratio to the last set point before calibration.
 
+\begin{figure}
+\centering
+\input{design/figures/brake_bias_calibration_flow}
+\caption{Brake bias calibration sequence.}
+\label{fig:pneumatics_design}
+\end{figure}
+
 \subsubsection{Brake Bias Adjustment}
 
 The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. 
@@ -34,9 +48,21 @@ Once validated, the module calculates the number of steps required to move from 
 
 \subsubsection{Pressure Sensor Calibration}
 
+\begin{figure}
+\centering
+\input{design/figures/brake_pressure_calibration_flow}
+\caption{Brake pressure calibration sequence.}
+\label{fig:pneumatics_design}
+\end{figure}
+
 \subsection{Software}
 
-Software overview diagram
+\begin{figure}
+\centering
+\input{design/figures/brake_software_design_block}
+\caption{Brake module software block diagram.}
+\label{fig:pneumatics_design}
+\end{figure}
 
 \subsubsection{Bias Manager}
 
@@ -65,6 +91,13 @@ Monitor for system faults and react accordingly.
 
 
 \subsection{Hardware}
+
+\begin{figure}
+\centering
+\input{design/figures/brake_hardware_design_block}
+\caption{Brake module hardware block diagram.}
+\label{fig:pneumatics_design}
+\end{figure}
 
 
 \subsubsection{Microcontroller}

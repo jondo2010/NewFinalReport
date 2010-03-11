@@ -1,0 +1,28 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node [start] (start) {Start};
+  \node [decision, right of=start, right=0cm, text width=1.4cm, inner sep=0pt] (min) {Min Applied?};
+  \node [block, right of=min, text width=2cm, inner xsep=0pt, node distance=3cm] (sample1) {Sample Pressures};
+  \node [decision, right of=sample1, right=0cm, text width=1.4cm, inner sep=0pt] (max) {Max Applied?};
+  \node [block, right of=max, text width=2cm, inner xsep=0pt, node distance=3cm] (sample2) {Sample Pressures};
+
+  \node [decision, below of=sample2, text width=1.4cm, inner sep=0pt, node distance=2.5cm] (valid) {Valid samples?};
+  \node [block, left of=valid, text width=1.5cm, inner xsep=2pt, node distance=3cm] (save) {Save Calibration};
+
+  \node [end, below of=save] (success) {Success};
+  \node [end, below of=valid] (fail) {Fail};
+
+  \draw [->, thick] (start) -- ($(start.east)!0.5!(min.west)$) node[name=x1,coordinate]{} -- (min);
+  \draw [->, thick] (min.south) -- ++(0,-0.25cm) node[below]{no} -| (x1);
+  \draw [->, thick] (min) to node [] {yes} (sample1);
+
+  \draw [->, thick] (sample1) to node [name=x2]{} (max);
+  \draw [->, thick] (max.south) -- ++(0,-0.25cm) node[below]{no} -| (x2);
+  \draw [->, thick] (max) to node [] {yes} (sample2);
+
+  \draw [->, thick] (sample2) to (valid);
+  \draw [->, thick] (valid) to node [above] {yes} (save);
+
+  \draw [->, thick] (save) to (success);
+  \draw [->, thick] (valid.south) to node [] {no} (fail);
+
+\end{tikzpicture}

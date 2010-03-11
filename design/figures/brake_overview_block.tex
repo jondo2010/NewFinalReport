@@ -1,0 +1,40 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\footnotesize]
+  \node [block, minimum width=2cm, inner xsep=0] (pressure1) {Front Pressure Sensor};
+  \node [block, minimum width=2cm, inner xsep=0, right of=pressure1, node distance=4cm] (pressure2) {Front Pressure Sensor};
+
+  \node [block, blue shiny, minimum width=6cm, text width=4cm, below of=pressure1, right=-1cm, node distance=1.5cm] (module) {Braking Module};
+
+  \node [block, below of=pressure1, right=-1cm, node distance=3cm, text width=1.1cm] (eot1) {Left EOT Switch};
+  \node [block, below of=pressure2, left=-1cm, node distance=3cm, text width=1.1cm] (eot2) {Right EOT Switch};
+
+  \node at ($(eot1)!0.5!(eot2)$) [red shiny, circle, label={[text width=1.5cm, rotate=90, below=5pt, left=10pt]below right:Stepper Motor}] (motor) {M};
+
+  \node [rectangle, below of=motor, minimum width=2cm, label=below:Bias Bar, pattern=north east lines, node distance=1cm] (bias) {};
+
+  \draw [->, thick] (pressure1.south) to ($(module.north west)!(pressure1.south)!(module.north east)$);
+  \draw [->, thick] (pressure2.south) to ($(module.north west)!(pressure2.south)!(module.north east)$);
+
+  \draw [->, thick] (eot1.north) to ($(module.south west)!(eot1.north)!(module.south east)$);
+  \draw [->, thick] (eot2.north) to ($(module.south west)!(eot2.north)!(module.south east)$);
+
+  \draw [<-, thick] (motor.north) to ($(module.south west)!(motor.north)!(module.south east)$);
+  \draw [->, thick, dashed] (motor.south) to ($(bias.north west)!(motor.south)!(bias.north east)$);
+
+  \draw [->, thick, dashed] (bias) -| (eot1);
+  \draw [->, thick, dashed] (bias) -| (eot2);
+
+  %%% CAN Bus
+
+  \node [bus, name=can1, right of=module, label={[rotate=90, left=0.75cm]below right:CAN Bus}, node distance=3.5cm] {CAN Bus};
+  \node [bus, name=can2, below of=can1, node distance=1cm] {};
+  \node [bus, name=can3, above of=can1, node distance=1cm] {};
+
+  \draw [<->, thick] (module) to (can1);
+  \draw [-, line width=3pt] (can1) -- (can2);
+  \draw [-, line width=3pt] (can1) -- (can3);
+
+  %%% Legend
+
+  \draw [->, thick] ($(eot2.east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Electrical}] {} -- ++(0.5cm,0);
+  \draw [->, thick, dashed] ($(eot2.south east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Mechanical}] {} -- ++ (0.5cm,0);
+\end{tikzpicture}

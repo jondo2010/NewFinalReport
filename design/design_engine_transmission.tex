@@ -3,11 +3,9 @@
 
 \subsection{Purpose}
 
-Provide intelligent control of the intake runner length and transmission
-system.
+Provide intelligent control of the intake runner length and transmission system.
 
-Provide the control signals required to actuate the clutch and gear
-position levers with the pneumatic system.
+Provide the control signals required to actuate the clutch and gear position levers with the pneumatic system.
 
 
 \subsection{Processes}
@@ -39,21 +37,6 @@ As drivers come in to the pits from driving the course, a useful feature is the 
 \end{description}
 
 
-\subsubsection{Engine Starting/Stopping}
-
-The starter solenoid is energized by signals from the engine controller. The driver may choose between an \emph{automatic} or \emph{manual} starting sequence. The \emph{driver interface module} (described in section \ref{sec:driver_interface_system}) relays the particular starting sequence command to the engine controller through the CAN bus.
-
-\begin{figure}[H]
-\centering
-%\input{Figures/starter_system_overview}
-\caption{Starter system overview.}
-\label{fig:starter_system_overview}
-\end{figure}
-
-The \emph{automatic} starting sequence powers the starter solenoid until either the engine starts or a timeout elapses. In this case, the timeout is five seconds. The \emph{manual} starting sequence will engage the starter for as long as the driver demands, much like holding the key in the start position in a standard consumer automobile ignition system. 
-
-The starter feature is disabled while the engine is running to avoid damaging the vehicle. The engine state is determined by monitoring the current RPM.
-
 \subsection{Software}
 
 Software overview diagram
@@ -63,23 +46,18 @@ Software overview diagram
 
 Listens to transmission requests from the driver over the network.
 
-Uses the event scheduler to sequence the complex series of actuation
-vectors required by upshifting and downshifting.
+Uses the event scheduler to sequence the complex series of actuation vectors required by upshifting and downshifting.
 
-Implement the PID feedback controller used to actuate the pneumatic
-system.
+Implement the PID feedback controller used to actuate the pneumatic system.
 
-Interacts with the PWM generator to create the control signals required
-to actuate the pneumatic system.
+Interacts with the PWM generator to create the control signals required to actuate the pneumatic system.
 
 
 \subsubsection{Intake Manager}
 
-Continously monitor engine RPM and throttle position through messages
-from the ECU.
+Continously monitor engine RPM and throttle position through messages from the ECU.
 
-Will adjust intake runner length based on a functional map of RPM
-and throttle position.
+Will adjust intake runner length based on a functional map of RPM and throttle position.
 
 Use hysterisis to avoid instability.
 
@@ -90,19 +68,16 @@ Map will be generated through dynometer testing.
 
 Listen for driver requests to start the engine.
 
-Provide a means of one-touch starting -- sequences the actual starting
-of the engine through the solenoid driver. 
+Provide a means of one-touch starting -- sequences the actual starting of the engine through the solenoid driver. 
 
 
 \subsubsection{Event Scheduler}
 
 Allow for complex sequencing of events in time.
 
-Controllers may schedule new events to occur at various points in
-time.
+Controllers may schedule new events to occur at various points in time.
 
-Scheduler will continuously update the schedule and signal the main
-control loop to execute events that are now current.
+Scheduler will continuously update the schedule and signal the main control loop to execute events that are now current.
 
 
 \subsubsection{CAN Interface}
@@ -142,8 +117,7 @@ In-circuit programmable and debuggable.
 
 Has built-in CAN controller.
 
-Has built-in RAM and ROM as well as EEPROM for holding configuration
-parameters.
+Has built-in RAM and ROM as well as EEPROM for holding configuration parameters.
 
 
 \subsubsection{CAN transceiver}
@@ -162,5 +136,4 @@ Controlling starter solenoid
 
 \subsubsection{Bidirectional I/O lines to the ECU}
 
-Bidirectional interface to: launch control, shift cut, traction cut
-percent, traction control on/off, traction control wet/dry.
+Bidirectional interface to: launch control, shift cut, traction cut percent, traction control on/off, traction control wet/dry.

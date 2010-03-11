@@ -1,0 +1,26 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node [start] (start) {Start};
+
+  \node [block, right of=start, text width=1cm, inner xsep=0pt] (step_left) {Step Left};
+  \node [decision, right of=step_left, text width=1.0cm, inner sep=0pt] (at_left) {At leftend?};
+
+  \node [block, right of=at_left, text width=1cm, inner xsep=0pt] (step_right) {Step Right};
+  \node [block, right of=step_right, text width=1cm, inner xsep=2pt] (count) {Add to count};
+  \node [decision, right of=count, text width=1cm, inner sep=0pt] (at_right) {At rightend?};
+
+  \node [block, below of=at_right, text width=2cm, inner xsep=2pt, node distance=2.5cm] (adjust) {Adjust bias to old value};
+  \node [block, left of=adjust, text width=1.5cm, inner xsep=2pt, node distance=3cm] (store) {Store calibration};
+  \node [end, left of=store, node distance=7cm] (end) {Done};
+
+  \draw [->, thick] (start) to node[coordinate, name=x1]{} (step_left);
+  \draw [->, thick] (step_left) to (at_left);
+  \draw [->, thick] (at_left.south) -- ++(0,-0.25) node[below]{no} -| (x1);
+  \draw [->, thick] (at_left.east) to node[name=x2]{yes} (step_right);
+  \draw [->, thick] (step_right) to (count);
+  \draw [->, thick] (count) to (at_right);
+  \draw [->, thick] (at_right.south) -- ++(0,-0.25) node[below]{no} -| (x2);
+
+  \draw [->, thick] (at_right.east) -- ++(0.5,0) node[above]{yes} |- (adjust);
+  \draw [->, thick] (adjust) to (store);
+  \draw [->, thick] (store) to (end);
+\end{tikzpicture}

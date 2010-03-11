@@ -27,13 +27,13 @@ As the intake valves on the engine open, they generate negative pressure waves t
 
 A fair amount of research has been done in previous years on the intake and exhaust design for the Formula SAE car. Former UMSAE engine section head Lucas Groening wrote an undergraduate thesis on modelling of the engine package for the 2008 Formula car. One important dynamic aspect of the intake design that he describes is the effect of the intake runner length on the torque output of the engine at different \emph{Revolutions Per Minute} (RPM) \cite{LucasIntake}. 
 
-Figure \ref{fig:irl_effect} shows a comparison between various intake runner lengths and torque output over the RPM operating range of the engine. Different plenum lengths cause the two torque peaks to occur at different RPMs. Current Formula SAE team members have proposed that an electronic means of modulating the length of the runners depending on the current RPM could significantly improve engine performance over the RPM range.
+Figure \ref{fig:irl_effect} shows a simulated comparison between two intake runner lengths (5`` and 9'') and torque output over the RPM operating range of the engine. Different plenum lengths cause the two torque curves to peak at different RPMs. Current Formula SAE team members have proposed that an electronic means of modulating the length of the runners depending on the current RPM could significantly improve engine performance over the RPM range. By switching runner lengths as the RPM crosses 8500 (indicated with a dashed, vertical line in Fig. \ref{fig:irl_effect}) the effective torque curve will be the envelope of the two.
 
 \begin{figure}[H]
-	\centering
-	 	\includegraphics[scale=0.35]{background/figures/irl_effect.eps}
-    \caption{The effect of intake runner length on torque for various RPM.}
-    \label{fig:irl_effect}
+\centering
+\includegraphics[width=6in,keepaspectratio]{background/figures/irl_effect2.eps}
+\caption{Simulated torque output Vs. RPM for two runner lengths.}
+\label{fig:irl_effect}
 \end{figure}
 
 \subsection{Engine Control Unit}

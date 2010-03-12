@@ -1,0 +1,66 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+
+  \node [block, font=\scriptsize, text width=1.5cm, inner xsep=0, minimum height=1cm] (intake) {Intake};
+  \node [red shiny, circle, below of=intake, node distance=1.15cm, inner sep=1pt, label=right:Servo] (servo) {M};
+
+  \draw [->, dashed, thick] (servo) -- (intake);
+
+  %%% Balance bar and EOT switches
+  \node [block, right of=intake, font=\scriptsize, text width=1.5cm, node distance=3cm, inner xsep=0, minimum height=1cm] (clutch) {Clutch Actuator};
+  \node [block, right of=clutch, font=\scriptsize, text width=1.35cm, inner xsep=0, minimum height=1cm] (clutch_solenoids) {Clutch Solenoids};
+  \node [block, right of=clutch_solenoids, font=\scriptsize, text width=1.35cm, inner xsep=0, minimum height=1cm] (shift_solenoids) {Shift Solenoids};
+  \node [block, right of=shift_solenoids, font=\scriptsize, text width=1.5cm, inner xsep=0, minimum height=1cm] (shifter) {Shift Actuator};
+
+  \node at ($(clutch_solenoids)!0.5!(shift_solenoids)+(0,-2cm)$)
+    [block, node distance=1cm, text width=2.5cm, font=\scriptsize, minimum width=3cm] (driver) {Solenoid Drivers};
+
+  \node [block, right of=shifter, font=\scriptsize, text width=1.5cm, inner xsep=0, minimum height=1cm, node distance=3cm] (ecu) {ECU};
+
+  \draw [<-, thick] (clutch_solenoids) -- ($(driver.north west)!(clutch_solenoids.south)!(driver.north east)$);
+  \draw [<-, thick] (shift_solenoids) -- ($(driver.north west)!(shift_solenoids.south)!(driver.north east)$);
+  \draw [->, dashed, thick] (clutch_solenoids) to (clutch);
+  \draw [->, dashed, thick] (shift_solenoids) to (shifter);
+
+  \draw [->, thick] (shifter) to (ecu);
+
+  \node [block, below of=clutch, text width=1.5cm] (adc) {ADC};
+  \draw [->, thick] (clutch) to (adc);
+
+  %%% Microcontroller block
+  \path ($(intake.south west |- adc.south west) + (0,-1cm)$) node (mu1) {};
+  \path ($(shifter.south east |- driver.south east) + (0,-1cm)$) node (mu2) {};
+
+  \node [block, fit=(mu1) (mu2), inner xsep=0, minimum height=1cm] (micro) {Microcontroller};
+
+   \draw [<-, thick] (servo.south) -- ($(micro.north west)!(servo.south)!(micro.north east)$);
+   \draw [->, thick] (adc.south) -- ($(micro.north west)!(adc.south)!(micro.north east)$);
+   \draw [<-, thick] (driver.south) -- ($(micro.north west)!(driver.south)!(micro.north east)$);
+
+% 
+%   \draw [->, thick] (eot1.south) -- ($(micro.north west)!(eot1.south)!(micro.north east)$);
+%   \draw [->, thick] (eot2.south) -- ($(micro.north west)!(eot2.south)!(micro.north east)$);
+% 
+%   \draw [<-, thick] (driver.south) -- ($(micro.north west)!(driver.south)!(micro.north east)$);
+
+  \draw [<-, thick] (ecu.south) |- ($(shifter.south) + (0,-0.5cm)$) node[name=t]{} -- ($(micro.north west)!(t)!(micro.north east)$);
+
+  %%% CAN Bus
+
+  \node at ($(micro.east)+(1.5cm,0)$) [block, name=can, inner xsep=2pt] {CAN Transceiver};
+  \draw [<->, thick] (micro) to (can);
+  \draw [-, line width=3pt] (ecu.east) -- ++(0.5cm,0) |- node[name=can1,coordinate,label={[rotate=90]below:CAN Bus}]{} (can);
+  \draw [-, line width=3pt] (can1) -- ++(0,-1cm);
+
+  %%% Background
+
+   \begin{pgfonlayer}{background}
+     \path (intake.south west |- adc.north west)+(-0.3,0.3) node (a) {};
+     \path (can.south east)+(+0.2,-0.2) node (b) {};
+     \path[module] (a) rectangle (b);
+   \end{pgfonlayer}
+
+  %%% Legend
+
+  \draw [->, thick] ($(micro.south west)+(0.5cm,-0.5cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Electrical}] {} -- ++(0.5cm,0);
+  \draw [->, thick, dashed] ($(micro.south west)+(2cm,-0.5cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Mechanical}] {} -- ++ (0.5cm,0);
+\end{tikzpicture}

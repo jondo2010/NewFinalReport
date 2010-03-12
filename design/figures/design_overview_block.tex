@@ -1,0 +1,45 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+  \node [bus] (bus1) {};
+  \node [bus, below of=bus1] (bus2) {};
+  \node [bus, below of=bus2, label={[rotate=-90]below:CAN Bus}] (bus3) {};
+
+  \draw [-, line width=3pt] ($(bus1)+(0,1cm)$) -- (bus1) -- (bus2) -- (bus3) -- ++(0,-1cm);
+
+  \node [block, right of=bus2, minimum width=2cm] (ecu) {ECU};
+  \node [block, right of=ecu, font=\scriptsize, node distance=3cm] (engine) {Engine};
+  \draw [<->, thick] (ecu) -- (bus2);
+  \draw [<->, thick, dashed] (engine) -- (ecu);
+
+  \node [block, blue shiny, right of=bus1, text width=1.7cm] (telemetry_module) {Telemetry Module};
+  \node [block, right of=telemetry_module, text width=1.5cm, node distance=3cm] (dac) {DAC};
+  \draw [<->, thick] (telemetry_module) -- (bus1);
+  \draw [<-, thick] (telemetry_module) -- (dac);
+  \draw [->, thick] (ecu) -- (telemetry_module);
+  \draw [-, thick] (telemetry_module.north) \antenna;
+
+  \node [block, blue shiny, left of=bus1, text width=1.5cm] (brake_module) {Brake Module};
+  \node [block, left of=brake_module, font=\scriptsize, text width=1.5cm, node distance=3cm] (brakes) {Braking System};
+  \draw [<->, thick] (brake_module) -- (bus1);
+  \draw [<->, thick, dashed] (brake_module) -- (brakes);
+  
+  \node [block, blue shiny, left of=bus2, text width=1.6cm] (engine_module) {Eng. \& Trans. Module};
+  \node [block, left of=engine_module, font=\scriptsize, node distance=3cm] (intake) {Intake};
+  \node [block, below of=engine_module, text width=2cm] (pneumatics) {Electro-pneumatics};
+  \node [block, left of=pneumatics, font=\scriptsize, node distance=3cm] (transmission) {Transmission};
+  \draw [<->, thick] (engine_module) -- (bus2);
+  \draw [<->, thick, dashed] (engine_module) -- (intake);
+  \draw [->, thick] (engine_module) -- (pneumatics);
+  \draw [<->, thick, dashed] (pneumatics) -- (transmission);
+  \draw [->, thick] (transmission) -- (engine_module);
+
+  \node [block, blue shiny, right of=bus3, text width=1.6cm] (driver_interface) {Driver Interface Module};
+  \node [block, right of=driver_interface, node distance=3cm, text width=1.25cm, font=\scriptsize] (controls) {Steering wheel controls};
+  \draw [<->, thick] (driver_interface) -- (bus3);
+  \draw [->, thick] (controls) -- (driver_interface);
+
+  %%% Legend
+
+  \draw [->, thick] ($(transmission.south west)+(0.5cm,-0.85cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Electrical}] {} -- ++(0.5cm,0);
+  \draw [->, thick, dashed] ($(transmission.south west)+(2cm,-0.85cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Mechanical}] {} -- ++ (0.5cm,0);
+  
+\end{tikzpicture}

@@ -1,0 +1,24 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node[start, text width=1.4cm] (start) {Downshift Request};
+  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (in_neutral) {In neutral?};
+  \node [end, below of=in_neutral] (done) {Done};
+  \node [block, right of=in_neutral, text width=1.5cm, node distance=2.5cm] (clutchin) {Disengage clutch};
+
+  \node [block, right of=clutchin, text width=1.5cm, node distance=2.5cm] (downshift) {Engage downshift solenoid};
+  \node [block, right of=downshift, text width=1.5cm, node distance=2.5cm] (wait_downshift) {Wait for shift feedback};
+  \node [block, right of=wait_downshift, text width=1.5cm, node distance=2.5cm] (downshift_off) {Disengage downshift solenoid};
+  \node [block, below of=downshift_off, text width=1.5cm] (wait_clutchin) {Wait for clutch-in request};
+  \node [block, left of=wait_clutchin, text width=1.5cm, node distance=2.5cm] (clutchout) {Engage clutch};
+
+  \draw [->, thick] (start) -- (in_neutral);
+  \draw [->, thick] (in_neutral) -- node[]{yes} (done);
+  \draw [->, thick] (in_neutral) -- node[]{no} (clutchin);
+
+  \draw [->, thick] (clutchin) -- (downshift);
+  \draw [->, thick] (downshift) -- (wait_downshift);
+  \draw [->, thick] (wait_downshift) -- (downshift_off);
+  \draw [->, thick] (downshift_off) -- (wait_clutchin);
+  \draw [->, thick] (wait_clutchin) -- (clutchout);
+
+  \draw [->, thick] (clutchout) -- (done);
+\end{tikzpicture}

@@ -18,6 +18,44 @@ Provide the control signals required to actuate the clutch and gear position lev
 
 \subsection{Processes}
 
+The major processes of the engine and transmission module, \emph{upshift}, \emph{downshift}, and \emph{neutral find}, are described at a high level using flow charts.
+
+\subsubsection{Upshift}
+
+When the Transmission Manager receives an upshift request over the network, it creates asynchronous events in the Event Scheduler to respond to the request, as shown in Fig. \ref{fig:transmission_upshift_flow}. The upshift process depends upon feedback from the ECU of engine RPM and gear position. Shift cut is enabled on the ECU to drop the engine RPM by a slight amount $RPM^{TH}_{cut}$ (the exact amount is a tuned parameter.) When the RPM has dropped, the upshift solenoid is engaged, actuating the pneumatics to push the shift lever. When the module receives notification that the current gear has incremented, the pneumatics are relaxed, and shift cut is disabled.
+
+\nomenclature{$RPM^{TH}_{cut}$}{The threshold RPM is expected to drop when shiftcut is enabled for no-lift upshifting.}
+
+\begin{figure}[H]
+\centering
+\input{design/figures/transmission_upshift_flow}
+\caption{Transmission upshift procedure.}
+\label{fig:transmission_upshift_flow}
+\end{figure}
+
+The asynchronous wait operations that depend on external feedback all have built-in timeout mechanisms that prevent deadlock in the event of a problem in the actuation or feedback path.
+
+\subsubsection{Downshift}
+
+When the Transmission Manager receives a downshift request over the network, similar to the upshift request handling, it creates asynchronous events in the Event Scheduler to respond to the request. Figure \ref{fig:transmission_downshift_flow} shows the flow chart of the downshift procedure. Clutch engagement and disengagement is handled asynchronously by the Clutch Controller. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch, as well as two asynchronous incoming events from the driver:
+
+\begin{enumerate}
+  \item The original downshift request, when the driver pulls and holds the downshift paddle on the steering wheel, and
+  \item a clutch engagement request, issued when the driver releases the downshift paddle.
+\end{enumerate}
+
+Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage (this was explained in Sec. \ref{sec:background_transmission}.)
+
+Additionally, a minimum clutch disengagement time $t^{clutch}_{min}$ is observed (another tunable parameter) in the event the driver pulls the paddle and releases it without any delay.
+
+\nomenclature{$t^{clutch}_{min}$}{Minimum clutch disengagement time during a downshift request.}
+
+\begin{figure}[H]
+\centering
+\input{design/figures/transmission_downshift_flow}
+\caption{Transmission downshift procedure.}
+\label{fig:transmission_downshift_flow}
+\end{figure}
 
 \subsubsection{Variable Intake}
 

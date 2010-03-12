@@ -1,0 +1,23 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node[start, text width=1.2cm] (start) {Upshift Request};
+  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (at_top) {At top gear?};
+  \node [end, below of=at_top] (done) {Done};
+  \node [block, right of=at_top, text width=1.5cm, node distance=2.5cm] (shiftcut) {Enable shiftcut};
+
+  \node [block, right of=shiftcut, text width=1.5cm, node distance=2.5cm] (wait_shiftcut) {Wait for RPM drop below $RPM^{TH}_{cut}$};
+  \node [block, right of=wait_shiftcut, text width=1.5cm, node distance=2.5cm] (upshift) {Engage upshift solenoid};
+  \node [block, right of=upshift, text width=1.5cm, node distance=2.5cm] (wait_upshift) {Wait for shift feedback};
+  \node [block, below of=wait_upshift, text width=1.5cm] (upshift_off) {Disengage upshift solenoid};
+  \node [block, left of=upshift_off, text width=1.5cm, node distance=2.5cm] (shiftcut_off) {Disable shiftcut};
+
+  \draw [->, thick] (start) -- (at_top);
+  \draw [->, thick] (at_top) -- node[]{yes} (done);
+  \draw [->, thick] (at_top) -- node[]{no} (shiftcut);
+
+  \draw [->, thick] (shiftcut) -- (wait_shiftcut);
+  \draw [->, thick] (wait_shiftcut) -- (upshift);
+  \draw [->, thick] (upshift) -- (wait_upshift);
+  \draw [->, thick] (wait_upshift) -- (upshift_off);
+  \draw [->, thick] (upshift_off) -- (shiftcut_off);
+  \draw [->, thick] (shiftcut_off) -- (done);
+\end{tikzpicture}

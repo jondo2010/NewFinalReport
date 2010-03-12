@@ -1,13 +1,10 @@
 \section{Telemetry}
 
-\subsection{Overview}
-\label{sec:bg_telemetry_overview}
-
-The Formula SAE 2010 vehicle utilizes several sensors for monitoring key elements of the engine and drivetrain. As mentioned previously in Sec. \ref{sec:ECU}, the ECU uses these sensor readings to adjust the fuel injector and spark coil timings. However, the data gathered from these sensors can be very useful to determining the overall performance and health of the vehicle. 
+The Formula SAE 2010 vehicle utilizes several \emph{sensors} for monitoring key elements of the engine and drivetrain. As mentioned previously in Sec. \ref{sec:ECU}, the ECU uses these sensor readings to adjust the fuel injector and spark coil timings. However, the data gathered from these sensors can be very useful to determining the overall performance and health of the vehicle. 
 
 Longitudinal and strain data are also important, as they can be used to track driver performance and to prevent mechanical fatigue and failure. Several sensors have been introduced in previous years to accomplish this, but the ECU makes no provisions for handling data that is not engine-related. A secondary device known as the \emph{Data Acquisition Device} (DAC) was introduced to record and broadcast secondary sensor data.
 
-Both the ECU and the DAC interface with proprietary software over hard-wired serial links. It was recognized in previous years that a wireless serial link would be required to gather data in real-time while the vehicle was actually performing in the field. Several solutions were proposed and introduced, but none of them have performed satisfactorily.
+Both the ECU and the DAC interface with proprietary software over hard-wired serial links. It was recognized in previous years that a wireless serial link would be required to gather data in real-time while the vehicle was actually performing in the field. Several solutions were introduced, including a \emph{cellular link} and a \emph{point-to-point XBee link}, but none of them have performed satisfactorily.
 
 \subsection{Sensors}
 
@@ -45,16 +42,9 @@ Motional and strain data are also important and require logging and analysis. Se
 
 \subsection{Data Acquisition Device}
 
-The \emph{Data Acquisition Device} (DAC) is required to convert the locational and strain sensor data into digital signals that can be transmitted  the DAC used is the model DL1 from Race Technology \cite{DL1Dsheet}, as seen in Fig. \ref{fig:dl1_product}. The DL1 is an expandable data logger with built-in \unit{20}{\hertz} GPS and 3-axis accelerometer. 
+The \emph{Data Acquisition Device} (DAC) is required to convert the locational and strain sensor data into digital signals that can be transmitted  the DAC used is the model DL1 from Race Technology \cite{DL1Dsheet}. The DL1 is an expandable data logger with built-in \unit{20}{\hertz} GPS and 3-axis accelerometer. 
 
 Race Technology provides a software suite that communicates with the DAC using a documented serial protocol. Everything the DAC logs is output over it's serial channel in real-time.
-
-\begin{figure}[H]
-	\centering
-		\includegraphics[scale=0.5]{background/figures/dl1.eps}
-	\caption{The Race Systems DL1 data acquisition device.}
-	\label{fig:dl1_product}
-\end{figure}
 
 \subsection{Cellular Link}
 
@@ -66,7 +56,7 @@ This scheme created three very prominent disadvantages:
 
 \item Expensive wireless data and roaming charges were incurred while the team competed in the United States. 
 
-\item There was a massive amount of lag introduced as the data travelled through the American and Candian cellular networks only to be received a few hundred metres away from the vehicle.
+\item There was a massive amount of lag introduced as the data travelled through the American and Canadian cellular networks only to be received a few hundred metres away from the vehicle.
 
 \item Only one device (the ECU) was able to be monitored in real-time. DAC data had to be logged on the device itself and downloaded later.
 
@@ -74,7 +64,7 @@ This scheme created three very prominent disadvantages:
 
 \subsection{Point-to-Point XBee Link}
 
-From 2007 onward, the Formula team utilized a pair of off-the-shelf XBee Pro modems to wirelessly transmit information from the ECU to the pit crew. The XBee Pro modems estabilshed a transparent wireless link between the ECU and a pit-crew laptop. The ECU serial cable was plugged into a serial port located on a modem attached to the vehicle. An external antenna was run from the vehicle modem to the highest point of elevation on the vehicle, above the driver. The modem's twin was located in the pit, and attached to the pit crew laptop over another serial cable.
+From 2007 onward, the Formula team utilized a pair of off-the-shelf XBee Pro modems to wirelessly transmit information from the ECU to the pit crew. The XBee Pro modems established a transparent wireless link between the ECU and a pit-crew laptop. The ECU serial cable was plugged into a serial port located on a modem attached to the vehicle. An external antenna was run from the vehicle modem to the highest point of elevation on the vehicle, above the driver. The modem's twin was located in the pit, and attached to the pit crew laptop over another serial cable.
 
 This scheme eliminated the need for a costly cellular solution and reduced transport lag, but was still far from optimal:
 

@@ -1,5 +1,7 @@
 \chapter{Introduction\label{cha:introduction}}
 
+The purpose of this chapter is to provide a broad introduction to the project by first introducing our student group, our motivations for undertaking the project, the scope and definition of the problems we would like to solve, and the strategy undertaken to solve these problems. We will also close with a brief outline of each section in this report.
+
 \section{Formula SAE}
 
 Formula SAE\nomenclature{SAE}{Society of Automotive Engineers} is an engineering student design competition organized by the Society of Automotive Engineers dating back to 1978 \cite{fsaehistory}. Students from the University of Manitoba have participated in the competition almost every year since 1985. The competition consists of designing and constructing a small, open-wheeled, formula-style race car.
@@ -8,7 +10,7 @@ The Formula SAE vehicle is a performance car built with the primary goal of doin
 
 \section{Motivation}
 
-Many of the issues that directly affect the teams' performance at competition relate to driver training, feedback, and the tuneability of the car. Most of the mechanical systems on the car must currently be imprecisely hand-tuned, and are packaged in hard to reach places, and require body panels or the seat to be removed for access.
+Many of the issues that directly affect the teams' performance at competition relate to driver training, feedback, and the tunability of the car. Most of the mechanical systems on the car must currently be imprecisely hand-tuned, and are packaged in hard to reach places, and require body panels or the seat to be removed for access.
 
 Our overall goal is thus to improve the precision, adjustability, and repeatability of adjustment, of various important mechanical systems in the car, and to improve the efficiency of testing. Highly desirable is a shorter driver-feedback-tuning loop in order to eliminate overshoot and undershoot in tuning, and to avoid other external disturbances.
 
@@ -16,29 +18,29 @@ A second major goal is to improve upon the transmission control systems of previ
 
 \section{Problem Definition}
 
-The goal of this work is to tackle several distinct issues on the 2010 Formula SAE Vehicle:
+The goal of this work is to tackle several distinct issues on the 2010 Formula SAE Vehicle, specifically:
 
 \begin{itemize}
- \item electronic control of the transmission is to be improved over previous years' control;
- \item engine output power will be increased under specific conditions by dynamically varying the intake geometery;
- \item the front-to-back brake bias will be electronically adjustable;
- \item data from on-board systems will be accessible wirelessly;
- \item an easy to use yet powerful user interface will allow the driver to control on-board systems and provide feedback of critical vehicle parameters.
+ \item to improve the electronic control of the transmission;
+ \item to introduce an automatically-adjusting variable-length air intake;
+ \item to make the brake bias adjustable electronically;
+ \item to broadcast telemetry data from on-board systems to the pit crew; and
+ \item to create an easy-to-use driver interface.
 \end{itemize}
 
-Improving electronic control of the transmission should result in decreased gear shift times, improved mechanical reliability of the transmission, decreased driver effort, and the elimination of any manual mechanical interaction with the transmission by the driver.
+Improving the electronic control of the transmission will decrease the time required to change gears, improve the mechanical reliability of the transmission, and decrease the effort required by the driver to change gears. 
 
-Successful introduction of variable intake geometery will widen the peak torque output from the engine, improving acceleration.
+Introducing an automatically adjusting variable-length air intake will widen the peak torque output from the engine. This will improve engine responsiveness and vehicle acceleration.
+ 
+Making the brake bias adjustable electronically will allow on-the-fly bias adjustment, even while the vehicle is in motion. This will eliminate the need for manual adjustment and calibration.
+ 
+Broadcasting telemetry data to the pit crew will allow the team to make decisions regarding the dynamic parameters of the vehicle. This will optimize vehicle performance and provide feedback to the crew regarding the quality of any parameter tuning.
 
-Electronically adjustable brake bias will improve tuneability by allowing the brake bias to be adjusted on the fly, even while the vehicle is in motion. It should reduce the need for manual adjustment and calibration.
-
-Wireless telemetry data will improve vehicle performance and reliability by relaying critical vehicle operation data from various sensors to the pit crew, who can then make decisions regarding the various vechile parameters. The module should be able to broadcast to the pit area while the vehicle is competing in all of the dynamic events. It must operate with a minimum of data loss despite the distance and motion of the vehicle relative to the pit crew.
-
-The driver interface should reduce driver effort and improve vehicle performance by allowing the driver to manage all the tuneable vehicle parameters from a simple interface located on the steering wheel, and by providing the driver with real-time feedback from the various vehicle sensors in an easy-to-read format.
-
+Creating an easy-to-use driver interface will allow the driver to tune the dynamic parameters of the vehicle from a simple interface located on the steering wheel, and will also provide the driver with real-time feedback from the various vehicle sensors. This will allow the driver to optimize the vehicle's dynamic parameters for their own driving style, and keep the driver informed of the vehicle's state without being distracting.
+ 
 \section{Strategy}
 
-To meet the requirements of the project, a networked 4-module architecture was chosen. The architecture will be described in further detail in Chapter \ref{ch:design}, however to aide the reader in understanding the scope of the project, the modules will be introduced here. These 4 modules are:
+Four networked electronic modules and an electro-pneumatic actuation system will be created to meet the goals outlined in the problem definition. The four modules are:
 
 \begin{itemize}
 \item the transmission and engine control module;
@@ -47,13 +49,11 @@ To meet the requirements of the project, a networked 4-module architecture was c
 \item the driver interface module.
 \end{itemize}
 
-Additionally, to facilitate testing of the network, a CAN testing module will be developed, consisting of an off-the-shelf AT90CAN128 development board, and custom software.
+The transmission and engine control module will interface with the electro-pneumatic actuation system to control the transmission. The design and implementation of the system requires several steps:
 
-The design and implementation of each module require several steps:
+\begin{enumerate}
 
-\begin{itemize}
-
-\item Absolute requirements and specifications for system parameters are first estabilshed. The electromechanical interface linking the control systems and mechanical systems are decided between our group and the mechanical engineers responsible for each respective system. The measurement requirements from the mechanical systems are established and the appropriate sensors are chosen.
+\item Absolute requirements and specifications for system parameters are first established. The electromechanical interface linking the control systems and mechanical systems are decided between our group and the mechanical engineers responsible for each respective system. The measurement requirements from the mechanical systems are established and the appropriate sensors are chosen.
 
 \item Appropriate components for the electronic modules are chosen, and the circuits are designed. The schematic of each module is designed and an appropriate printed circuit board is laid out. The boards are manufactured and populated with components. Each board must be tested to ensure all wiring is correct and the functionality of all the components is correct.
 
@@ -63,7 +63,7 @@ The design and implementation of each module require several steps:
 
 \item The modules are then interconnected and tested again.
 
-\end{itemize}
+\end{enumerate}
 
 \section{Outline of Thesis}
 

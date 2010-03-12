@@ -1,6 +1,10 @@
 \section{Engine and Transmission Module}
 
-The goal of this section is to describe the design of the engine and transmission module designed to meet the electronic control requirements outlined in Sec. \ref{sec:goals_transmission}. The background of the transmission control system used in the 2009 Formula SAE vehicle was discussed in Sec. \ref{sec:background_transmission}. The new design for this project improves upon this previous generation by targetting several of the noted deficiencies, while reusing specific portions that worked well.
+The engine and transmission module is designed to meet the engine and transmission goals outlined in Secs. \ref{sec:goals_engine} and \ref{goals_transmission}, namely to provide optimized selection of the variable-length intake, to change gears at the driver's request without requiring manual clutching, and to implement transmission features that make driving easier. 
+
+\subsection{Overview}
+
+Figure \ref{fig:design_engine_overview} shows an overview of the engine and transmission controller and it's interactions with the environment.
 
 \begin{figure}[H]
 \centering
@@ -9,12 +13,8 @@ The goal of this section is to describe the design of the engine and transmissio
 \label{fig:design_engine_hardware_block}
 \end{figure}
 
-\subsection{Purpose}
-
 Provide intelligent control of the intake runner length and transmission system.
-
 Provide the control signals required to actuate the clutch and gear position levers with the pneumatic system.
-
 
 \subsection{Processes}
 

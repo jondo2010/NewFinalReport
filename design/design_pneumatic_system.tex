@@ -1,12 +1,14 @@
-\section{Pneumatic System}
+\section{Electro-pneumatic System}
 
-The goal of this section is to describe the design of the pneumatic actuation system intended to meet the goals outlined in Sec. \ref{sec:goals_transmission}. The background of the transmission and transmission control system used in the 2009 Formula SAE vehicle was discussed in Sec. \ref{sec:background_transmission}. The new design for this project improves upon this previous generation by targetting several of the noted deficiencies, while reusing specific portions that worked well.
+The goal of this section is to describe the design of the pneumatic actuation system intended to meet the requirements outlined in Sec. \ref{sec:goals_transmission}. The background of the pneumatic actuation system used in the 2009 Formula SAE vehicle was discussed in Sec. \ref{sec:background_transmission}. The new design for this project improves upon this previous generation by targetting several of the noted deficiencies, while reusing specific portions that worked well.
 
 The possibility of using a fully electronic actuation system, with geared DC motors, was carefully considered: the control of such a system would be far simpler, as linear approximate models of DC motors are readily available. Reasonably priced gearhead motors from several suppliers were investigated. It was determined however that to meet the torque and duty-cycle requirements of transmission actuation, any suitable fully electronic system would be far heavier than the pneumatic equivalent.
 
 After deciding to keep a pneumatic actuation system, an improved valving scheme was proposed for the clutch, and sources of feedback were determined so that a closed-loop controller could be designed. Several academic papers were sourced that describe successuful methods of pneumatic actuator control. \Citet{pneumatic_actuator} and \citet{adaptive_pneumatic} both use an electronically adjustable proportioning valve and a dual-acting cylinder. Proportioning valves are expensive (approximately \$300 from local suppliers) in comparison with binary solenoid valves (under \$50.)
 
 Another approach by \citet{accurate_position} uses PWM signalled 3-way solenoid valves to control the air in and out of both sides of a dual-acting cylinder. By varying the duty cycle of the input signals, they were able to modulate the effective mass air flow rate through the cylinder ports: with the valve open, air would tend to flow from the high-pressure source into the cylinder, and with the valve closed, air would flow from the pressurized cylinder out through the exhaust port of the valve. This valving scheme allowed for a high degree of positional accuracy, however a large amount of air would be consumed during operation, as air is constantly being exhausted.
+
+The dimensions of the pneumatic cylinders used in any implementation of this design should be the same as those used in the previous designs. For this reason they will not be specified here.
 
 \subsection{Subsystem Overview}
 

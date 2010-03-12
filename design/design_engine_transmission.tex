@@ -1,5 +1,6 @@
 \section{Engine and Transmission Module}
 
+The goal of this section is to describe the design of the engine and transmission module designed to meet the electronic control requirements outlined in Sec. \ref{sec:goals_transmission}. The background of the transmission control system used in the 2009 Formula SAE vehicle was discussed in Sec. \ref{sec:background_transmission}. The new design for this project improves upon this previous generation by targetting several of the noted deficiencies, while reusing specific portions that worked well.
 
 \subsection{Purpose}
 
@@ -134,6 +135,16 @@ Controlling pneumatic solenoid valves (4)
 Controlling starter solenoid
 
 
-\subsubsection{Bidirectional I/O lines to the ECU}
+\subsubsection{I/O lines to the ECU}
 
-Bidirectional interface to: launch control, shift cut, traction cut percent, traction control on/off, traction control wet/dry.
+The engine and transmission module has a several CMOS-level outputs to discrete control pins on the ECU:
+
+\begin{itemize}
+  \item A line to the launch control pin, which when toggled enables and disables the launch control feature,
+  \item A line to the shift cut pin, which when held high enables shift cut, decreasing engine power to allow for an upshift,
+  \item A line to the traction cut percent pin, which is a \unit{0-5}{\volt} level signalled input changing the amount of acceptable wheel slip before traction control cuts in.
+  \item A line to the traction control on/off pin, which toggles the traction control feature,
+  \item A line to the traction control wet/dry pin, which swaps between two traction control presets.
+\end{itemize}
+
+The output of these lines to the ECU is controllable in the system software through the event scheduler. 

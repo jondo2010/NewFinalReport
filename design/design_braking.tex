@@ -2,16 +2,16 @@
 
 \subsection{Overview}
 
+The braking module adjusts the brake bias electronically when requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. 
+
+Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
+
 \begin{figure}[H]
-\centering
-\input{design/figures/brake_overview_block}
-\caption{Braking module overview block diagram.}
-\label{fig:pneumatics_design}
+	\centering
+	\input{design/figures/brake_overview_block}
+	\caption{Braking module overview block diagram.}
+	\label{fig:design_brake_overview_block}
 \end{figure}
-
-The braking module adjusts the brake bias electronically when requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar.
-
-Figure \ref{fig:design-braking-overview} shows an overview of the braking module and it's interactions with the environment. 
 
 A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor must be bi-directional and have enough steps per revolution to provide the resolution required to allow a 0.5\% bias ratio adjustment.
 
@@ -23,20 +23,20 @@ Two \emph{end-of-travel switches} are used to determine when the balance bar is 
 
 \subsubsection{Brake Bias Calibration}
 
-A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:design-braking-bias-calibration}. By recording the number of steps it takes to rotate the balance bar from it's leftmost extreme to it's rightmost extreme, we can determine the correct centre point for the bias bar. 
+A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from it's leftmost extreme to it's rightmost extreme, we can determine the correct centre point for the bias bar. 
+
+\begin{figure}[H]
+\centering
+\input{design/figures/brake_bias_calibration_flow}
+\caption{Brake bias calibration sequence.}
+\label{fig:brake_bias_calibration_flow}
+\end{figure}
 
 The first step in calibrating the brake bias is to rotate the balance bar to it's leftmost point of travel. when the bar reaches this point, it pushes on the left end-of-travel switch, which signals the module that the balance bar is at it's leftmost extreme. 
 
 The next step is to rotate the balance bar to it's rightmost point of travel. The module counts each step taken until the balance bar reaches it's rightmost extreme and pushes on the right end-of-travel switch.
 
 At this point, the module is now aware of how many steps are required to move from left to right and thus can re-centre the bar. The module saves the number of steps required to travel between the two extremes in some non-volatile parameter storage to be specified later, and adjusts the bias ratio to the last set point before calibration.
-
-\begin{figure}
-\centering
-\input{design/figures/brake_bias_calibration_flow}
-\caption{Brake bias calibration sequence.}
-\label{fig:pneumatics_design}
-\end{figure}
 
 \subsubsection{Brake Bias Adjustment}
 
@@ -52,7 +52,7 @@ Once validated, the module calculates the number of steps required to move from 
 \centering
 \input{design/figures/brake_pressure_calibration_flow}
 \caption{Brake pressure calibration sequence.}
-\label{fig:pneumatics_design}
+\label{fig:design_brake_pressure_calibration_flow}
 \end{figure}
 
 \subsection{Software}
@@ -62,7 +62,7 @@ Once validated, the module calculates the number of steps required to move from 
 \input{design/figures/brake_software_design_block}
 \caption{Brake module software block diagram.}
 \label{fig:pneumatics_design}
-\end{figure}
+	\end{figure}
 
 \subsubsection{Bias Manager}
 

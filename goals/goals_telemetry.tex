@@ -1,26 +1,36 @@
 \section{Telemetry}
 
-The main goal of the telemetry system is to provide a reliable wireless connection between the two data-gathering devices on the vehicle (the ECU and DAC) and their respective software packages running on a pit crew laptop some distance away from the vehicle. Requirements for these goals are elaborated on in the following sections.
+The main goal of the telemetry system is to provide a reliable wireless connection between the two data-gathering devices on the vehicle (the ECU and DAC) and their respective software packages running on a pit crew laptop some distance away from the vehicle. 
 
 \subsection{Engine Control Unit (ECU)}
 
+The settings for the ECU link are fixed by the manufacturer, so our design must adapt to their demands. The software only operates with a serial link connected to the target computer, so the connection must be transparent to the software and the unit itself.
+
 \begin{itemize}
+
 \item Provide a wireless bi-directional serial link between the ECU software and module.
 \item The link must operate at 57.6 KBps, 8 data bits, no parity bit, and 1 stop bit.
 \item The link must be completely transparent to the software.
+
 \end{itemize}
 
 \subsection{Data Acquisition Unit (DAC)}
 
+The settings for the DAC link are not fixed by the manufacturer, but a minimum throughput is required to transmit all of the data being logged. Like the ECU, the software expects a serial link connected to the target computer, so the connection must also be transparent to the software and the DAC.
+
 \begin{itemize}
+
 \item Provide a wireless uni-directional serial link between the DAC software and module.
 \item The link must operate at 38.4 KBps, 8 data bits, no parity bit, and 1 stop bit.
 \item The link must be completely transparent to the software.
 \item Provide a means of injecting secondary data into the DAC stream, such as engine RPM and other parameters, for monitoring by the DAC software.
 \item Provide a means of decoding the DAC stream on the vehicle itself to display information to the driver.
+
 \end{itemize}
 
 \subsection{Wireless Data Link}
+
+The crew will be stationed in the pit area while the vehicle is engaged in it's dynamic events at competition. The wireless link will need to be able to reach these laptops at all times. Most of the vehicles at competition will be using their own wireless telemetry systems. The possibility of interference requires a means of adjusting the broadcast channel while the vehicle is in motion. 
 
 \begin{itemize}
 
@@ -28,4 +38,5 @@ The main goal of the telemetry system is to provide a reliable wireless connecti
 \item Provide on-the-fly resolution of interference conflicts with other teams running similar wireless systems.
 \item Indicate wireless signal strength to the driver and pit crew as a percentage with resolution of 1\% of maximum signal
 strength. 
+
 \end{itemize}

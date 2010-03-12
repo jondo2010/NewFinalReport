@@ -1,8 +1,10 @@
 \section{Driver Interface}
 
-The driver interface targets several major goals, such as providing access to critical features with a minimal amount of effort, providing visual feedback of the state of the vehicle without distracting the driver, and allowing the driver and pit crew to adjust the vehicle dynamic parameters as quickly and easily as possible. This is accomplished with the introduction of a driver display, integrated into the steering wheel.
+The driver interface targets several major goals: providing access to critical features with a minimal amount of effort, providing visual feedback of the state of the vehicle without distracting the driver, and allowing the driver and pit crew to adjust the vehicle dynamic parameters as quickly and easily as possible. This is accomplished with the introduction of a driver display integrated into the steering wheel, and the ability to choose a set of vehicle parameters on the fly.
 
 \subsection{Driver Controls}
+
+Changing gears and accessing the automatic features of the transmission should be easy for the driver and require minimal effort. The driver also needs a means of actually starting the motor.
 
 \begin{itemize}
 \item Provide a means of shifting gears without manual timing or clutching.
@@ -10,17 +12,9 @@ The driver interface targets several major goals, such as providing access to cr
 \item Provide the driver with a button to start or stop the engine. 
 \end{itemize}
 
-\subsection{Vehicle Dynamic Adjustment}
-
-\begin{itemize}
-\item Provide an easy to use interface graphical interface to adjust vehicle dynamic parameters.
-\item Allow the driver to choose between sets of dynamic vehicle parameters or `operating modes'.
-\item Selecting an operating mode should be accomplished with a single knob.
-\item Adjusting vehicle parameters should be disabled above speeds of \unit{25}{\kilo\metre\per\hour}.
-\item The driver should be able to tune individual dynamic parameters and overwrite preset operating modes.
-\end{itemize}
-
 \subsection{Diagnostic Information}
+
+The driver can maximize their performance when they are fully aware of the vehicle's state, and they can also avoid engine damage by knowing when it is reaching it's operating limits. Diagnostic information can provide this to the driver, but it must be presented in a way that avoids distracting or overburdening the driver. Only critical features should have prominence on the display.
 
 \begin{itemize}
 \item Critical warnings regarding oil pressure and engine temperature must be delivered to the driver on an easy-to-read display.
@@ -29,10 +23,14 @@ The driver interface targets several major goals, such as providing access to cr
 \item The wireless telemetry link status should be displayed at all times.
 \end{itemize}
 
-\subsection{Visually Appealing Interface}
+\subsection{Vehicle Dynamic Adjustment}
+
+Allowing the driver to adjust the electronically tunable parameters of the vehicle on the fly means the driver can optimize performance of the vehicle for particular events at competition. Incorporating the ability to save the settings allows different drivers to setup the vehicle to their liking and dial-up the settings whenever they get behind the wheel.
 
 \begin{itemize}
-\item On-screen fonts must be easy-to-read.
-\item The display should be readable in full light as well as low light.
-\item The display should be readable through sun visor helmet.
+\item Provide an easy to use interface graphical interface to adjust vehicle dynamic parameters.
+\item Allow the driver to choose between sets of dynamic vehicle parameters or `operating modes'.
+\item Selecting an operating mode should be accomplished with a single knob.
+\item Adjusting vehicle parameters should be disabled above speeds of \unit{25}{\kilo\metre\per\hour}.
+\item The driver should be able to tune individual dynamic parameters and overwrite preset operating modes.
 \end{itemize}

@@ -14,7 +14,7 @@
   \draw [->, thick] (in_neutral1) -- node[]{no} (clutchin);
   \draw [->, thick] (clutchin) -- node[coordinate](x1){} (downshift);
   \draw [->, thick] (downshift) -- (in_neutral2);
-  \draw [->, thick] (in_neutral2.north) -- node[above]{no} ++(0,0.25cm) -| (x1);
+  \draw [->, thick] (in_neutral2.north) -- node[above=3pt]{no} ++(0,0.25cm) -| (x1);
 
   \draw [->, thick] (in_neutral2.south) |- node[]{yes} (clutchout);
   \draw [->, thick] (clutchout) -- (done);

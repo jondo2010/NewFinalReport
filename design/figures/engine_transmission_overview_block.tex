@@ -1,0 +1,35 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\footnotesize]
+  \node [block, blue shiny, minimum width=4cm, text width=4cm, right=-1cm, node distance=1.5cm] (module) {Braking Module};
+
+  \node at ($(module.east)+(1cm,0)$) [block, text width=0.8cm] (ecu) {ECU};
+
+  \node [bus, above of=module, node distance=1cm] (bus1) {};
+  \node [bus, above of=ecu, node distance=1cm] (bus2) {};
+
+  \draw [<->, thick] (ecu) to (module);
+
+  \draw [-, line width=3pt] (bus1) --  ++(-1cm,0);
+  \draw [-, line width=3pt] (bus1) -- node[label=above:CAN Bus]{} (bus2) -- ++(1cm, 0);
+  \draw [<->, thick] (module) -- (bus1);
+  \draw [<->, thick] (ecu) -- (bus2);
+
+  \node at ($(module.west)!0.5!(module.south)+(0,-1.25cm)$) [red shiny, circle, label={[text width=1.5cm, rotate=90, below=5pt, left=10pt]below right:Servo}] (motor) {M};
+  \node [block, left of=motor, node distance=1.5cm, text width=1cm] (intake) {Intake};
+
+  \draw [<-, thick] (intake) -- (motor);
+  \draw [<-, thick] (motor) -- ($(module.south west)!(motor.north)!(module.south)$);
+
+  \node [block, below of=module, inner xsep=0pt, right=0cm, node distance=1.5cm] (pneumatics) {Electro-pneumatic system};
+  \draw [<-, thick] (pneumatics) -- ($(module.south west)!(pneumatics.north)!(module.south)$);
+
+  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, above=0.25cm] (shift) {Shift lever};
+  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, below=0.25cm] (clutch) {Clutch lever};
+
+  \draw [<-, thick, dashed] (clutch) -- ($(pneumatics.north east)!(clutch.west)!(pneumatics.south east)$);
+  \draw [<-, thick, dashed] (shift) -- ($(pneumatics.north east)!(shift.west)!(pneumatics.south east)$);
+
+  %%% Legend
+
+  \draw [->, thick] ($(shift.east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Electrical}] {} -- ++(0.5cm,0);
+  \draw [->, thick, dashed] ($(clutch.east)+(2cm,0cm)$) -- ++(0.5cm,0) node [label={[font=\tiny]below:Mechanical}] {} -- ++ (0.5cm,0);
+\end{tikzpicture}

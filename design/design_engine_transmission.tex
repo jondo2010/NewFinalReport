@@ -15,7 +15,7 @@ The intake runner position is mechanically actuated with a \emph{servo motor}. T
 
 The major processes of the engine and transmission module are \emph{up-shifting}, \emph{down-shifting}, and \emph{neutral find}. They are described at a high level using flow charts. Requests to perform these processes are broadcast over the network from the driver interface. The module listens for these requests and executes the correct process accordingly.
 
-\subsubsection{Up-shifting}
+\subsubsection{Up-Shifting}
 
 The up-shift procedure is described in \ref{fig:transmission_upshift_flow}. Up-shifting does not require disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
 
@@ -30,7 +30,7 @@ The up-shift process depends upon engine RPM and gear position, both of which ar
 
 \nomenclature{$RPM^{TH}_{cut}$}{The threshold RPM is expected to drop when shift-cut is engaged for no-lift up-shifting.}
 
-\subsubsection{Down-shifting}
+\subsubsection{Down-Shifting}
 
 The down-shift procedure is described in \ref{fig:transmission_downshift_flow}. Unlike up-shifting, down-shifting requires disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
 
@@ -57,7 +57,6 @@ Additionally, a minimum clutch disengagement time $t^{clutch}_{min}$ is observed
 \subsubsection{Variable Intake}
 
 \subsubsection{Gear Selection \label{sec:design_engine_transmission_gear_selection}}
-
 
 \subsubsection{Advanced Transmission Features}
 
@@ -173,7 +172,7 @@ Be capable of terminating the bus.
 
 
 Controlling pneumatic solenoid valves (4)
-
+  
 Controlling starter solenoid
 
 

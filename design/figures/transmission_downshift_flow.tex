@@ -1,6 +1,6 @@
 \begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
   \node[start, text width=1.4cm] (start) {Downshift Request};
-  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (in_neutral) {In neutral?};
+  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (in_neutral) {Neutral?};
   \node [end, below of=in_neutral] (done) {Done};
   \node [block, right of=in_neutral, text width=1.5cm, node distance=2.5cm] (clutchin) {Disengage clutch};
 

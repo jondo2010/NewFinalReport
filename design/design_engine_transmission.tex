@@ -1,17 +1,17 @@
-\section{Engine and Transmission Module\label{sec:engine_transmission_design}}
+\section{Engine and Transmission Module}
 
 The engine and transmission module provides optimized selection of the variable-length intake, changes gears at the driver's request without requiring manual clutching, and provides transmission features that make driving easier. Figure \ref{fig:design_engine_overview} shows an overview of the engine and transmission module and it's interactions with the environment.
 
 \begin{figure}[H]
 	\centering
-	\input{design/figures/engine_overview_block}
+% 	\input{design/figures/engine_overview_block}
 	\caption{An overview of the engine and transmission module and it's environmental interactions.}
 	\label{fig:design_engine_overview_block}
 \end{figure}
 
 The intake runner position is mechanically actuated with a \emph{servo motor}. The module generates the control signals required by electro-pneumatic system to actuate both the clutch and shift levers. The ECU interfaces with the module both directly through discrete inputs and through the CAN bus.
 
-\subsection{Processes}
+\subsection{Driver-Initiated Processes}
 
 The major processes of the engine and transmission module are \emph{up-shifting}, \emph{down-shifting}, and \emph{neutral find}. They are described at a high level using flow charts. Requests to perform these processes are broadcast over the network from the driver interface. The module listens for these requests and executes the correct process accordingly.
 
@@ -32,33 +32,35 @@ The up-shift process depends upon engine RPM and gear position, both of which ar
 
 \subsubsection{Down-Shifting}
 
-The down-shift procedure is described in \ref{fig:transmission_downshift_flow}. Unlike up-shifting, down-shifting requires disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
+The down-shift procedure is described in \ref{fig:transmission_downshift_flow}. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch. 
 
-When the Transmission Manager receives a down-shift request over the network, similar to the up-shift request handling, it creates asynchronous events in the Event Scheduler to respond to the request. Figure \ref{fig:transmission_downshift_flow} shows the flow chart of the downshift procedure. Clutch engagement and disengagement is handled asynchronously by the Clutch Controller. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch, as well as two asynchronous incoming events from the driver:
+\begin{figure}[H]
+	\centering
+	\input{design/figures/transmission_downshift_flow}
+	\caption{Transmission downshift procedure.}
+	\label{fig:transmission_downshift_flow}
+\end{figure}
+
+From the drivers perspective, down-shifting is a two-stage process:
 
 \begin{enumerate}
-  \item The original downshift request, when the driver pulls and holds the downshift paddle on the steering wheel, and
-  \item a clutch engagement request, issued when the driver releases the downshift paddle.
+  \item The driver pulls and holds the downs-hift paddle on the steering wheel to request the gear change; and
+  \item The driver releases the down-shift paddle to requests the clutch re-engage.
 \end{enumerate}
 
-Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage (this was explained in Sec. \ref{sec:background_transmission}.)
+Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage\footnote{This was explained in Sec. \ref{sec:background_transmission}.}. 
 
-Additionally, a minimum clutch disengagement time $t^{clutch}_{min}$ is observed (another tunable parameter) in the event the driver pulls the paddle and releases it without any delay.
+Once the driver requests a down-shift, the clutch is disengaged and the downshift solenoid is engaged to change gears. Once the correct gear has engaged, the solenoid is disengaged and the controller waits for the driver to release the down-shift paddle. When the paddle is released, the clutch is re-engaged. A minimum clutch disengagement time $t_{clutch_{min}}$ is observed in the event the driver pulls the paddle and releases it without any delay. This parameter is tunable.
 
 \nomenclature{$t^{clutch}_{min}$}{Minimum clutch disengagement time during a downshift request.}
 
-\begin{figure}[H]
-\centering
-\input{design/figures/transmission_downshift_flow}
-\caption{Transmission downshift procedure.}
-\label{fig:transmission_downshift_flow}
-\end{figure}
+\subsubsection{Neutral Find}
 
-\subsubsection{Variable Intake}
 
-\subsubsection{Gear Selection \label{sec:design_engine_transmission_gear_selection}}
 
-\subsubsection{Advanced Transmission Features}
+\subsection{Variable Intake}
+
+\subsection{Advanced Transmission Features}
 
 \begin{description}
 
@@ -77,11 +79,54 @@ As drivers come in to the pits from driving the course, a useful feature is the 
 
 \end{description}
 
+\subsection{Hardware}
+
+Show system hardware diagram
+
+
+\subsubsection{Microcontroller}
+
+Execute system control software.
+
+In-circuit programmable and debuggable.
+
+Has built-in CAN controller.
+
+Has built-in RAM and ROM as well as EEPROM for holding configuration parameters.
+
+
+\subsubsection{CAN transceiver}
+
+Interface module with the CAN bus.
+
+Be capable of terminating the bus.
+
+
+\subsubsection{High current solenoid drivers}
+
+
+Controlling pneumatic solenoid valves (4)
+  
+Controlling starter solenoid
+
+
+\subsubsection{I/O lines to the ECU}
+
+The engine and transmission module has a several CMOS-level outputs to discrete control pins on the ECU:
+
+\begin{itemize}
+  \item A line to the launch control pin, which when toggled enables and disables the launch control feature,
+  \item A line to the shift cut pin, which when held high enables shift cut, decreasing engine power to allow for an upshift,
+  \item A line to the traction cut percent pin, which is a \unit{0-5}{\volt} level signalled input changing the amount of acceptable wheel slip before traction control cuts in.
+  \item A line to the traction control on/off pin, which toggles the traction control feature,
+  \item A line to the traction control wet/dry pin, which swaps between two traction control presets.
+\end{itemize}
+
+The outputs of these lines are controlled in the system software through the event scheduler. 
 
 \subsection{Software}
 
 Software overview diagram
-
 
 \subsubsection{Transmission Manager}
 
@@ -144,48 +189,3 @@ Waits for pending events to be executed and executes them.
 
 Monitor for system faults and react accordingly.
 
-
-\subsection{Hardware}
-
-Show system hardware diagram
-
-
-\subsubsection{Microcontroller}
-
-Execute system control software.
-
-In-circuit programmable and debuggable.
-
-Has built-in CAN controller.
-
-Has built-in RAM and ROM as well as EEPROM for holding configuration parameters.
-
-
-\subsubsection{CAN transceiver}
-
-Interface module with the CAN bus.
-
-Be capable of terminating the bus.
-
-
-\subsubsection{High current solenoid drivers}
-
-
-Controlling pneumatic solenoid valves (4)
-  
-Controlling starter solenoid
-
-
-\subsubsection{I/O lines to the ECU}
-
-The engine and transmission module has a several CMOS-level outputs to discrete control pins on the ECU:
-
-\begin{itemize}
-  \item A line to the launch control pin, which when toggled enables and disables the launch control feature,
-  \item A line to the shift cut pin, which when held high enables shift cut, decreasing engine power to allow for an upshift,
-  \item A line to the traction cut percent pin, which is a \unit{0-5}{\volt} level signalled input changing the amount of acceptable wheel slip before traction control cuts in.
-  \item A line to the traction control on/off pin, which toggles the traction control feature,
-  \item A line to the traction control wet/dry pin, which swaps between two traction control presets.
-\end{itemize}
-
-The outputs of these lines are controlled in the system software through the event scheduler. 

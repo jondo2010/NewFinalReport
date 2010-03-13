@@ -11,7 +11,7 @@ The braking module adjusts the brake bias electronically as requested by the dri
 
 A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor is bi-directional and can provide the resolution required to allow a 0.5\% bias ratio adjustment. Two \emph{end-of-travel switches} are used to determine when the balance bar is at it's end of travel. \emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. These components were chosen as part of the mechanical design of the brake pedal assembly by another team member. The actual choice of stepper motor has yet to be determined.
 
-\subsection{Processes \label{sec:braking_processes}}
+\subsection{Driver-Initiated Processes \label{sec:braking_processes}}
 
 The major processes of the braking module are \emph{brake bias adjustment}, \emph{brake bias calibration}, and \emph{pressure calibration}. Requests to perform either of the processes are broadcast over the network from the driver interface. The module listens for these requests and executes the correct process accordingly. 
 

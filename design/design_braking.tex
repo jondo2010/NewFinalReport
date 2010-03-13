@@ -56,16 +56,16 @@ The first step of pressure calibration is to ask the driver to apply minimum pre
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in figure \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. The module communicates over the bus using a CAN transceiver. 
+A high-level overview of the module's hardware design is shown in figure \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_hardware_design_block}
-\caption{Brake module hardware block diagram.}
+\caption{A block diagram of brake module hardware.}
 \label{fig:brake_hardware_design_block}
 \end{figure}
 
-Unique to the brake module are a pair of \emph{analog-to-digital converters} (ADC) that sample the brake pressure sensors, and a \emph{stepper motor driver} that provides the signals necessary to drive the stepper motor connected to the balance bar. The micro-controller  interfaces to the end-of-travel switches without any extra hardware.
+The module communicates over the bus using a CAN transceiver. A pair of analog-to-digital converters (similar to those used in the engine and transmission module) sample the brake pressure sensors. Unique to the brake module is a \emph{stepper motor driver} that provides the signals necessary to drive the stepper motor connected to the balance bar. The micro-controller interfaces to the end-of-travel switches without any extra hardware.
 
 \subsubsection{Stepper Motor Driver}
 
@@ -73,21 +73,20 @@ The stepper motor driver generates the signals required to drive the stepper mot
 
 \subsubsection{Analogue-to-Digital Converters}
 
-The analogue-to-digital converters sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}.
+The analogue-to-digital converters sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}. To achieve resolution of \unit{10}{\kilo\pascal}, a 10-bit ADC is sufficient. The pressure values are sampled at \unit{10}{\hertz}.
 
 \subsubsection{End-of-Travel Sensing Switches}
-\nomenclature{GPIO}{General Purpose Input-Output}
 
-Two end-of-travel switches are tripped whenever the balance bar reaches it's leftmost or rightmost extremes. The switches are normally high-impedance, and become switched to ground. The micro-controller should have \emph{general purpose input-output} (GPIO) pins with weak internal pull-up resistors to detect the state of the switches.
+Two end-of-travel switches are tripped whenever the balance bar reaches it's leftmost or rightmost extremes. The switches are normally high-impedance, and become switched to ground. The micro-controller should have GPIO pins with weak internal pull-up resistors to detect the state of the switches.
 
 \subsection{Software}
 
-A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_software_design_block}. The functionality of the system is separated into a \emph{bias manager} and a \emph{pressure manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. The entire process is overseen by a \emph{module coordinator}.
+A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_software_design_block}. The functionality of the system is separated into a \emph{bias manager} and a \emph{pressure manager}. Like the engine and transmission module, the managers interact with a set of hardware abstraction interfaces to perform their tasks, and the entire process is overseen by a \emph{module coordinator}.
 
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_software_design_block}
-	\caption{Brake module software block diagram.}
+	\caption{The brake module software block diagram.}
 	\label{fig:brake_software_design_block}
 \end{figure}
 
@@ -95,19 +94,15 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_
 
 \subsubsection{Hardware Abstraction Interfaces}
 
-Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. These interfaces include a \emph{CAN interface}, \emph{stepper interface}, an \emph{input-output (I/O) interface}, an \emph{analog-to-digital (ADC) interface} and a \emph{non-volatile storage interface}.
+Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. All of the interfaces are re-used from the engine and transmission module, except for the \emph{stepper interface}. These abstraction interfaces are utilized as follows:
 
 \begin{itemize}
 
-\item The CAN interface, common to each module, enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager.
+\item The stepper interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
 
-\item The stepper interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps.
+\item The GPIO interface monitors the state of the end-of-travel buttons and asynchronously interrupts the program when a change of state occurs. 
 
-\item The input-output (I/O) interface monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs.
-
-\item The analog-to-digital (ADC) interface communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either input channel and then return the results to the program for further processing.
-
-\item The non-volatile storage interface can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration and calibration parameters to be stored and read even if the module loses power or is reset.
+\item The analog-to-digital (ADC) interface initiates a sampling cycle on either pressure sensor channel and then return the results to the program for further processing. 
 
 \end{itemize}
 
@@ -129,5 +124,5 @@ The pressure manager communicates with the driver interface through the CAN inte
 
 \subsubsection{Module Coordinator}
 
-Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to adjust the brake bias, are handled by the managers themselves. The module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time.  
+Like the module coordinator for the engine and transmission module, the braking module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. 
 

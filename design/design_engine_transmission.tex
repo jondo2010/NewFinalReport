@@ -60,7 +60,7 @@ Neutral find can be used by the driver to quickly shift into neutral when enteri
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/transmission_downshift_flow}
+	\input{design/figures/transmission_neutralfind_flow}
 	\caption{The transmission neutral find procedure.}
 	\label{fig:transmission_neutralfind_flow}
 \end{figure}
@@ -69,10 +69,10 @@ When the driver engages the neutral find feature, the transmission controller di
 
 \subsection{Variable Intake}
 
-The length of the intake runners is modulated automatically to provide the optimal torque output for the current engine RPM. The control flow chart is shown in Fig. \ref{engine_varintake_flow}. 
+The length of the intake runners is modulated automatically to provide the optimal torque output for the current engine RPM. The control flow chart is shown in Fig. \ref{fig:engine_varintake_flow}. 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/transmission_downshift_flow}
+	\input{design/figures/intake_adjustment_flow}
 	\caption{The variable intake adjustment flow.}
 	\label{fig:engine_varintake_flow}
 \end{figure}
@@ -94,8 +94,6 @@ Full-throttle launch uses an important feature of the ECU called launch control.
 \subsubsection{Crawl}
 
 Part-throttle launch is a feature designed to mimic an automatic transmission. By controlling the clutch position, and thereby modulating the amount of torque transferred to the wheels for a short period of time, the car can be made to creep slowly from a stand-still. This will be used when driving up to the starting line of various dynamic events.
-
-\end{description}
 
 \subsection{Hardware}
 

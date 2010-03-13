@@ -22,7 +22,7 @@ The major processes of the engine and transmission module, \emph{upshift}, \emph
 
 \subsubsection{Upshift}
 
-When the Transmission Manager receives an upshift request over the network, it creates asynchronous events in the Event Scheduler to respond to the request, as shown in Fig. \ref{fig:transmission_upshift_flow}. The upshift process depends upon feedback from the ECU of engine RPM and gear position. Shift cut is enabled on the ECU to drop the engine RPM by a slight amount $RPM^{TH}_{cut}$ (the exact amount is a tuned parameter.) When the RPM has dropped, the upshift solenoid is engaged, actuating the pneumatics to push the shift lever. When the module receives notification that the current gear has incremented, the pneumatics are relaxed, and shift cut is disabled.
+When the Transmission Manager receives an upshift request over the network, it creates asynchronous events in the Event Scheduler to respond to the request, as shown in Fig.\ \ref{fig:transmission_upshift_flow}. The upshift process depends upon feedback from the ECU of engine RPM and gear position. Shift cut is enabled on the ECU to drop the engine RPM by a slight amount $RPM^{TH}_{cut}$ (the exact amount is a tuned parameter.) When the RPM has dropped, the upshift solenoid is engaged, actuating the pneumatics to push the shift lever. When the module receives notification that the current gear has incremented, the pneumatics are relaxed, and shift cut is disabled.
 
 \nomenclature{$RPM^{TH}_{cut}$}{The threshold RPM is expected to drop when shiftcut is enabled for no-lift upshifting.}
 
@@ -177,7 +177,7 @@ Be capable of terminating the bus.
 
 
 Controlling pneumatic solenoid valves (4)
-
+  
 Controlling starter solenoid
 
 

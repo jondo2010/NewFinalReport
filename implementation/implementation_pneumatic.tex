@@ -1,11 +1,8 @@
 \section{Electro-pneumatic Implementation\label{sec:electropneumatic_implementation}}
 
+Several steps were taken in the implementation phase with the pneumatic system to facilitate further understanding of the subsystems' dynamics, and to provide data and models that could be used in the implementation of controller software. A Simulink model was developed of the electro-pneumatic actuation system in order to verify that fundamental design would work and to gain further insight into the operation of the pneumatic system. A simple PID controller block was used to show that the closed-loop system was inherently stable.
+
 \subsection{Simulation}
-
-The physical behaviour 
-Several steps were taken in the implementation of the pneumatic system in order to facilitate
-
-A Simulink model was developed of the electropneumatic actuation system in order to verify that fundamental design would work and to gain further insight into the operation of the pneumatic system.
 
 The top level of the Simulink model is shown in \ref{fig:pneumatics_top_level}: A PID controller block is used in a closed-loop configuration, and the response to a fixed step input is displayed on the scope block.
 
@@ -37,7 +34,7 @@ U\left(t\right) =
 \end{cases}
 \end{equation}
 
-The Simulink model which implements Eq. \ref{eq:pwm_generation} can be seen in Fig. \ref{fig:pneumatics_pwm}. The input to the subsystem, shown as \emph{In1}, is $V_{in}$, and the output, shown as \emph{Out1} is the pulse width modulated signal $U$. A Saturation and block was added to limit the input signal $V_{in}$ to the range [0..1]. A dead zone block was added to simulate the effect of dead zone in the response of the solenoid valves to a PWM signal: if the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve at all. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal as
+The Simulink model which implements Eq.\ \ref{eq:pwm_generation} can be seen in Fig.\ \ref{fig:pneumatics_pwm}. The input to the subsystem, shown as \emph{In1}, is $V_{in}$, and the output, shown as \emph{Out1} is the pulse width modulated signal $U$. A Saturation and block was added to limit the input signal $V_{in}$ to the range [0..1]. A dead zone block was added to simulate the effect of dead zone in the response of the solenoid valves to a PWM signal: if the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve at all. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal as
 
 \begin{equation}
   \label{eq:pwm_duty_min}
@@ -54,7 +51,7 @@ where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
 \label{fig:pneumatics_pwm}
 \end{figure}
 
-The signal generator block in Fig. \ref{fig:pneumatics_pwm} outputs a triangle wave with peak-to-peak amplitude 1, which is then offset by 0.5. The relational operator block then compares this with the input signal, and outputs either a 1 or a 0.
+The signal generator block in Fig.\ \ref{fig:pneumatics_pwm} outputs a triangle wave with peak-to-peak amplitude 1, which is then offset by 0.5. The relational operator block then compares this with the input signal, and outputs either a 1 or a 0.
 
 \paragraph{Solenoid Valves}
 
@@ -62,7 +59,7 @@ The signal generator block in Fig. \ref{fig:pneumatics_pwm} outputs a triangle w
 
 \paragraph{Pneumatic Actuator}
 
-The Simulink pneumatic actuator subsystem can be seen in Fig. \ref{fig:pneumatics_actuator}. In order to save time, pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. Physical port 1 (denoted by the octagonal port symbol) in \ref{fig:pneumatics_actuator} is the air inlet. Physical ports 2 and 3 are the displacement ports of the cylinder, and regular port 1 is used to display the displacement on a scope.
+The Simulink pneumatic actuator subsystem can be seen in Fig.\ \ref{fig:pneumatics_actuator}. In order to save time, pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. Physical port 1 (denoted by the octagonal port symbol) in \ref{fig:pneumatics_actuator} is the air inlet. Physical ports 2 and 3 are the displacement ports of the cylinder, and regular port 1 is used to display the displacement on a scope.
 
 \begin{figure}[H]
 \centering
@@ -73,7 +70,7 @@ The Simulink pneumatic actuator subsystem can be seen in Fig. \ref{fig:pneumatic
 
 \paragraph{Overall Electropneumatic Simulink Model}
 
-The complete open-loop actuator model can be seen in Fig. \ref{fig:pneumatics_model_full}. The absolute value of the real-valued input $u$ is first fed to the PWM block. This signal is then converted into seperate signals for each of the two solenoid valves in a way similar to the first PWM pulsing scheme presented by \citet{accurate_position}. The input to the subsystem $u$ is expected to range from -1 to 1. When $u\geq0$, the input to valve A is  the pulse width modulated signal $U$, and the input to valve B is 0. When $u<0$, the opposite occurs.
+The complete open-loop actuator model can be seen in Fig.\ \ref{fig:pneumatics_model_full}. The absolute value of the real-valued input $u$ is first fed to the PWM block. This signal is then converted into seperate signals for each of the two solenoid valves in a way similar to the first PWM pulsing scheme presented by \citet{accurate_position}. The input to the subsystem $u$ is expected to range from -1 to 1. When $u\geq0$, the input to valve A is  the pulse width modulated signal $U$, and the input to valve B is 0. When $u<0$, the opposite occurs.
 
 \begin{figure}[H]
 \centering
@@ -84,7 +81,7 @@ The complete open-loop actuator model can be seen in Fig. \ref{fig:pneumatics_mo
 
 \subsection{Solenoid Valves}
 
-Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation is a \emph{VQZ115}-series, as shown in Fig. \ref{fig:smc_solenoid_valve}. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. Particularly of interest was a valve with a high flow coefficient, or $C_v$, which is an industry standard measure of the fluid flow efficiency of the valve.
+Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation is a \emph{VQZ115}-series, as shown in Fig.\ \ref{fig:smc_solenoid_valve}. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. Particularly of interest was a valve with a high flow coefficient, or $C_v$, which is an industry standard measure of the fluid flow efficiency of the valve.
 
 \begin{table}[H]
   \caption{Solenoid valve specifications.\label{tab:solenoid_specs}}

@@ -1,5 +1,14 @@
 \chapter{Subsystem Implementation\label{cha:implementation}}
 
+The purpose of this chapter is to document the work completed in the implementation phase of the project. During this phase of the project, we had three major goals in mind:
+\begin{enumerate}
+  \item The implementation's primary objective is to verify the system design, and compare the results with those desired in Ch. \ref{cha:goals}.
+  \item The implemented systems are to be used as working prototypes for demonstration and communication of various aspects of the project.
+  \item Finally, it was desired to produce a first iteration of usable modules for the Formula SAE team to integrate into the vehicle and take to competition in May, 2010.
+\end{enumerate}
+
+This chapter is broken down into four sections: first the simulation and physical implementation of the electro-pneumatic subsystem is discussed, followed by sections on the hardware and software implementations of the 4 modules. Finally, a section is devoted to the CAN Snooper and Injector, which was implemented to permit easier in-place testing of modules individually and together.
+
 \input{implementation/implementation_pneumatic}
 
 \input{implementation/implementation_hardware}

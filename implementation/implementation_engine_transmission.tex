@@ -1,10 +1,10 @@
 \section{Engine and Transmission Module}
 
+The engine and transmission module implements the design specified in Sec.\ \ref{sec:engine_transmission_design}. The hardware and software aspects of this module's implementation are discussed in this section.
+
 \subsection{Hardware}
 
-The engine and transmission module implements the design specified in Sec. \ref{sec:engine_transmission_design}.
-
-In addition to the common life-support hardware for the micro-controller, the engine module includes an SPI capable octal \emph{low-side solenoid driver}. This driver chip switches the low side of the solenoid valves. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. 
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, 3 additional hardware components were added. The high-current solenoid drivers specified in the design in Sec. \ref{sec:design_engine_transmission_hardware} were implemented with a single SPI capable octal \emph{low-side solenoid driver}. This driver chip responds to commands over SPI, and switches the low side output pins accordingly. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. Additionally, a CMOS buffer chip was added to interface the discrete pins on the ECU (described in Sec.\ \ref{sec:ecu_background_discrete_inputs}), and an SPI capable DAC was added to output the \unit{0-5}{\volt} signal required for setting the traction control slip percentage.
 
 \begin{figure}[H]
 \centering
@@ -13,15 +13,17 @@ In addition to the common life-support hardware for the micro-controller, the en
 \label{fig:engine_transmission_pcb}
 \end{figure}
 
+Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the imlementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}. Descriptions of these components are in the following sections.
+
 \begin{figure}[H]
 \centering
 \input{implementation/figures/engine_transmission_overview_block.tex}
 \caption{Engine and transmission module hardware overview.}
-\label{fig:engine_system_overmview}
+\label{fig:engine_system_overview}
 \end{figure}
 
 \begin{table}
-  \caption{Engine and Transmission module components.\label{table:engine_transmission_module_components}}
+  \caption{Engine and Transmission module components.\label{tab:engine_transmission_module_components}}
   \centering
   \begin{tabular}{|c|c|c|}
     \hline 

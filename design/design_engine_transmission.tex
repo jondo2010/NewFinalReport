@@ -95,7 +95,7 @@ Full-throttle launch uses an important feature of the ECU called launch control.
 
 Part-throttle launch is a feature designed to mimic an automatic transmission. By controlling the clutch position, and thereby modulating the amount of torque transferred to the wheels for a short period of time, the car can be made to creep slowly from a stand-still. This will be used when driving up to the starting line of various dynamic events.
 
-\subsection{Hardware}
+\subsection{Hardware \label{sec:design_engine_transmission_hardware}}
 
 A high-level overview of the module's hardware design is shown in figure \ref{fig:engine_hardware_design_block}. The module makes use of a \emph{micro-controller} to execute all of the controller software. 
 
@@ -132,7 +132,7 @@ High-current solenoid drivers provide current to the solenoids that actuate the 
  
 \subsubsection{ECU Control Signals}
 
-The engine and transmission module have several outputs to control pins on the ECU:
+The engine and transmission module design has several outputs to control the discrete input pins on the ECU as described in Sec \ref{ecu_background_discrete_inputs}:
 
 \begin{itemize}
   \item the launch control pin, which enables and disables the launch control feature;

@@ -46,10 +46,12 @@ The ECU features a traction control system that monitors wheel slip and cuts spa
 
 The ECU communicates with proprietary software on a Windows-based computer over an RS-232 link. The communication protocol used is undocumented and possibly encrypted. The ECU also broadcasts select sensor readings such as engine RPM over a \emph{Controller Area Network} (CAN) interface at a fixed frequency of \unit{10}{\hertz}. The CAN message format is documented in Appendix \ref{cha:ecu_can_spec}.
 
+\subsubsection{Discrete Inputs\label{sec:ecu_background_discrete_inputs}}
+
 As well as the aforementioned bus-based interfaces, the ECU provides several CMOS-level discrete outputs:
 
 \begin{itemize}
-	\item Launch Control Enable, which allows the ECU to balance power distribution during accelleration;
+    \item Launch Control Enable, which allows the ECU to balance power distribution during accelleration;
     \item Shift Cut, which signals the ECU to reduce engine power before a downshift;
     \item Traction Control Enable, which reduces power output when the wheels begin to slip; and
     \item Wet/Dry Selection, which switches between two different sets of traction control parameters.

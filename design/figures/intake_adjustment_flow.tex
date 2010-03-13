@@ -1,0 +1,16 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node [start, text width=1.4cm] (start) {Start};
+  \node [block, right of=start, text width=1.5cm, node distance=2.5cm] (update) {Update RPM};
+  \node [decision, right of=update, text width=1cm, inner sep=0pt, node distance=2.5cm] (ideal) {Ideal length?};
+
+  \node [block, right of=ideal, text width=1.5cm, node distance=2.5cm] (switch) {Switch lengths};
+  \node [block, right of=switch, text width=1.5cm, node distance=2.5cm] (wait) {Wait for lockout};
+
+  \draw [->, thick] (start) -- (update);
+  \draw [->, thick] (update) -- (ideal);
+  \draw [->, thick] (ideal) -- node[above]{no} (switch);
+  \draw [->, thick] (switch) -- (wait);
+  \draw [->, thick] (wait) -- ++(0, -1.5cm) node[coordinate](x1){} -| ($(start.east)!0.5!(update.west)$);
+  \draw [->, thick] (ideal) -- node[]{yes} (ideal.south |- x1);
+
+\end{tikzpicture}

@@ -1,0 +1,116 @@
+\section{Engine and Transmission Module}
+
+\subsection{Hardware}
+
+The engine and transmission module implements the design specified in Sec. \ref{sec:engine_transmission_design}.
+
+In addition to the common life-support hardware for the micro-controller, the engine module includes an SPI capable octal \emph{low-side solenoid driver}. This driver chip switches the low side of the solenoid valves. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1]{implementation/figures/engine_transmission_pcb}
+\caption{Populated Engine and Transmission module PCB.}
+\label{fig:engine_transmission_pcb}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\input{implementation/figures/engine_transmission_overview_block.tex}
+\caption{Engine and transmission module hardware overview.}
+\label{fig:engine_system_overmview}
+\end{figure}
+
+\begin{table}
+  \caption{Engine and Transmission module components.\label{table:engine_transmission_module_components}}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline 
+    Part & Manufacturer & Part Number\tabularnewline 
+    \hline \hline
+    Solenoid Driver & ST Microelectronics & L9822E \tabularnewline
+    \hline
+    Digital to Analogue Converter & Texas Instruments & TLV5623C \tabularnewline
+    \hline
+    Hex CMOS Buffer & Texas Instruments & 74LVC07A \tabularnewline
+    \hline
+  \end{tabular}
+\end{table}
+
+
+\subsubsection{High Current Solenoid Driver}
+
+In order to meet the requirement of being able to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface for the microcontroller to talk to, and also takes care of possible flyback from the solenoids with built-in clamping diodes.
+
+Using this single component strongly reduces the complexity of the output stage of the circuit, since multiple discrete high-current transistors were not needed.
+
+\subsubsection{Input Buffers}
+
+
+\subsubsection{Traction Control Analogue Output}
+
+In order to generate a 0-5V analogue signal for the ECU's traction slip ratio input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs \unit{0-5}{\volt} analogue signal that varies with the digital input.
+
+The output voltage from the DAC can be determined by the following equation:
+
+\begin{equation}
+V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,\volt
+\end{equation}
+
+where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at fullscale input,
+
+\begin{equation}
+2\cdot{V_{ref}}\,\frac{2^{7}}{2^{8}}=V_{ref}=\unit{5}{\volt}
+\end{equation}.
+
+The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}\approx\unit{155}{\kilo\ohm}$. The output current of the DAC therefore will be at most $I_{out}=\frac{5v}{155k}\approx\unit{32.26}{\micro\ampere}$.
+
+\subsection{Software}
+
+<Software interface map>
+
+
+\subsubsection{Transmission Manager}
+
+
+\subsubsection{Intake Manager}
+
+
+\subsubsection{Starter Manager}
+
+
+\subsubsection{Event Scheduler}
+
+
+\subsubsection{CAN Interface}
+
+<Data flow diagram>
+
+
+\subsubsection{PWM Generator}
+
+An efficient method was devised to generate 2 synchronized PWM signals from the L9822E driver chip. The $32\, kHz$ external crystal was used as the input to the 8-bit TIM2 timer periferal on the microcontroller. The input to the timer was first scaled by 8 which provided a timebase:
+\begin{equation}
+TB=\frac{32.768\, kHz}{8}=4.096\, kHz
+\end{equation}
+
+The timebase period is then given by:
+\begin{equation}
+\frac{1}{TB}\approx244\,\mu{S}
+\end{equation}
+
+We then define a constant scaling factor for the PWM generator:
+\begin{equation}
+{PWM\_DUTY\_SCALE}=\frac{T_{PWM}}{TB}\approx205
+\end{equation}
+
+By loading the timers compare register with with a value scaled with the constant scaling factor, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
+
+When generating 2 waveforms with the same timer periferal, 8 combinations of duty cycles of channels A and B were identified, and can be seen in Figure \ref{fig:pwm_cases}.
+
+Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. 2 cases are also apparent when no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
+
+An efficient generating routine was constructed to effect the level transitions and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
+
+\input{implementation/figures/pwm_cases.tex}
+
+\subsubsection{Main Control Loop}

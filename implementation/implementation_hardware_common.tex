@@ -1,0 +1,56 @@
+\section{Common Hardware Implementation\label{sec:hardware_implementation}}
+
+In order to deliver high quality modules suitable for use in the vehicle, the module electronics were all implemented on custom designed two-layer printed circuit boards. Since the project budget could only afford the manufacture of a single iteration of prototype boards, a great deal of time was spent revising both the schematics and board layouts of all four modules to fix as many issues before sending them out for manufacture.
+
+\nomenclature{PCB}{Printed Circuit Board}
+
+\subsection{Base System Design}
+
+All four modules are implemented on custom printed circuit boards (PCBs), and utilize a common base platform consisting of a microcontroller, a power supply, status leds, and JTAG programming header. Additionally, the telemetry, braking, and transmission and engine control modules utilize a special sealed 23-pin connector header.
+
+Table \ref{tab:common_module_components} lists the major non-generic components that were specified as the common base for each module. An emph{AT90CAN128} micro-controller from Atmel was chosen for several reasons. We considered several simple, low cost microcontrollers specifically for automotive use as they are typically configured with the features we need, specifically, we wanted a microcontroller with:
+
+\begin{itemize}
+  \item a \unit{5}{\volt} power supply,
+  \item integrated CANBus periferal,
+  \item a large amount of on-chip RAM and ROM,
+  \item in-circuit debugging and programming capabilities, and
+  \item a flexible and cross-platform toolchain, ideally using GNU tools like gcc.
+\end{itemize}
+
+We considered the use of a 16-bit microcontroller, but felt it would be overkill for our system. The 8-bit AT90CAN128 met our requirements very well, and we had the additional benefit of already being somewhat familiar with the Atmel platform. The AT90CAN series runs off of a \unit{5}{\volt} power supply, has integrated CANBus, in addition to lots of other periferals \cite{AT90CAN}. The AT90CAN128 provides \unit{128}{\kilo\byte} ROM, however only \unit{4}{\kilo\byte} of RAM. We felt this would however suffice.
+
+Programming and debugging software on the microcontroller was done through a standard IEEE 1149.1 JTAG interface. Atmel provides support for their own compiler, toolchain and IDE for Windows, however GNU support for the Atmel 8-bit microcontrollers is very good. Since all development of the system software was to be done on Unix-type operating systems, we decided to use the GNU toolchain \emph{gcc-avr} and \emph{binutils-avr}. Additionally \emph{GDB} was used with an AVR-JTAG gateway utility called \emph{avarice}. Using a hardware programmer/debugger device from Atmel connected to a USB port on the development PC, avarice communicates with the microcontroller using Atmel specific JTAG commands. GDB then connects to avarice, and allows the user to set brakepoints, control execution, and access memory on the microcontroller.
+
+\nomenclature{GNU}{A free software project providing among other things, the GCC compiler and GDB debugger.}
+\nomenclature{JTAG}{An IEEE standard defining a boundary-scan architecture commonly used for in-circuit debugging and programming of embedded systems.}
+
+\begin{table}[H]
+	\caption{Common module components.}
+	\label{tab:common_module_components}
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline 
+		Part & Manufacturer & Part Number\tabularnewline 
+		\hline \hline
+		CAN Bus Transceiver & Microchip & MCP2551\tabularnewline \hline
+		Microcontroller & Atmel & AT90CAN128\tabularnewline \hline
+		Voltage Regulator & Linear Technology & LT1129CST5\tabularnewline		
+		\hline
+	\end{tabular}
+\end{table}
+
+\subsection{CAD Design}
+
+Schematic capture and PCB layout were both done using the free version of EagleCAD. Schematics and PCB layouts can be seen in Appendix \ref{cha:attached_dvd}.
+
+
+\subsection{Inter-module Communication\label{sec:inter_module_communication}}
+
+\nomenclature{CAN}{Controller Area Network}
+
+All electronic systems on the vehicle communicate over a two-wire \emph{Controller Area Network} (CAN) bus operating at 1 MBit/s. Each system module has a Microchip-brand MCP2551 CAN transceiver IC for connecting their local micro-controller to the bus, and all modules are capable of being a termination point for the bus \cite{MCP2551}. The CAN transceiver electrically interfaces the microcontroller to the physical bus.
+
+\subsection{Linear Regulator}
+
+The LT1129 from Linear Technology was chosen as the \unit{5}{\volt} regulator because of several features it offers. The device is capable of supplying up to \unit{700}{\milli\ampere}, requires only a single \unit{3.3}{\micro\farad} output capacitor, accepts input voltages up to \unit{30}{\volt}, and has built-in thermal limiting \cite{LTC1129}.

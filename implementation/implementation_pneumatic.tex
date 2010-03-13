@@ -81,7 +81,7 @@ The complete open-loop actuator model can be seen in Fig.\ \ref{fig:pneumatics_m
 
 \subsection{Solenoid Valves}
 
-Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation is a \emph{VQZ115}-series, as shown in Fig.\ \ref{fig:smc_solenoid_valve}. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. Particularly of interest was a valve with a high flow coefficient, or $C_v$, which is an industry standard measure of the fluid flow efficiency of the valve.
+Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation a the \emph{VQZ115}-series valve. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. The maximum operating frequency of \unit{20}{\hertz} was the fastest available capable of handling \unit{0.8}{\mega\pascal} while still being within the Formula SAE budget.
 
 \begin{table}[H]
   \caption{Solenoid valve specifications.\label{tab:solenoid_specs}}
@@ -104,20 +104,25 @@ Solenoid valves and cylinders from SMC corp were chosen for a physical implement
   \end{tabular}
 \end{table}
 
-\begin{figure}[H]
-\centering
-
-\includegraphics[scale=0.5]{implementation/figures/solenoid_valve.eps}
-\caption{SMC solenoid valve.}
-\label{fig:smc_solenoid_valve}
-\end{figure}
-
-
-
 \subsection{Pneumatic Actuators}
 
+The pneumatic actuators specified for implementation are the same as used in the previous design, and are only briefly mentioned in this report. Specifications can be found in Table \ref{tab:cylinder_specs}. The clutch cylinder is specified with an internal magnet on the piston that interfaces magnetically with a membrane potentiometer, discussed next.
+
+\begin{table}[H]
+ \caption{Pneumatic actuator specifications.\label{tab:cylinder_specs}}
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+   \hline
+   Part & Bore Size & Stroke & Part Number \tabularnewline
+    \hline
+    \hline
+    Shift actuator & 9/16`` & 2'' & NCMC056-0200 \tabularnewline
+    \hline
+    Clutch actuator & 3/4`` & 2'' & NCDMC075-0200 \tabularnewline
+    \hline
+  \end{tabular}
+\end{table}
 
 \subsection{Positional Feedback Sensors}
 
-
-\subsection{Mechanical Linkage}
+To provide positional feedback from the clutch cylinder, a MagnetoPot contactless potentiometer from Spectra Symbal is to be used. The internal magent in the cylinder interacts with the MagnetoPot, which operates as a standard potentiometer otherwise.

@@ -7,12 +7,20 @@ The purpose of this chapter is to document the work completed in the implementat
   \item Finally, it was desired to produce a first iteration of usable modules for the Formula SAE team to integrate into the vehicle and take to competition in May, 2010.
 \end{enumerate}
 
-This chapter is broken down into four sections: first the simulation and physical implementation of the electro-pneumatic subsystem is discussed, followed by sections on the hardware and software implementations of the 4 modules. Finally, a section is devoted to the CAN Snooper and Injector, which was implemented to permit easier in-place testing of modules individually and together.
+This chapter is broken down into four sections: first the simulation and physical implementation of the electro-pneumatic subsystem is discussed, followed by sections on the hardware and software implementations of each of the 4 modules. Finally, a section is devoted to the CAN Snooper and Injector, which was implemented to permit easier in-place testing of modules individually and together.
 
 \input{implementation/implementation_pneumatic}
 
-\input{implementation/implementation_hardware}
+\input{implementation/implementation_hardware_common}
 
-\input{implementation/implementation_software}
+\input{implementation/implementation_software_common}
+
+\input{implementation/implementation_engine_transmission}
+
+\input{implementation/implementation_braking}
+
+\input{implementation/implementation_telemetry}
+
+\input{implementation/implementation_driver_interface}
 
 \input{implementation/implementation_can_tester}

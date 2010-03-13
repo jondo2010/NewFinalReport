@@ -55,7 +55,9 @@ The signal generator block in Fig.\ \ref{fig:pneumatics_pwm} outputs a triangle 
 
 \paragraph{Solenoid Valves}
 
+An initial Simulink model of a solenoid valve was constructed based off of the modelling equations described by \citet{valve_models} along with the standard orifice equations for laminar and choked flow \cite{fluid_power}. It was however determined to be too difficult to identify the system parameters for our specific solenoid valves. The datasheets weren't detailed enough, and the straight-forward approach to system identification used by \cite{valve_models} requried equipment such as a instantaneous mass flow meter, which we didn't have access too, as well as more time than we were willing to commit on this section of the project.
 
+The custom Simulink solenoid valve block was then replaced with an approximate Simulink/Simscape pneumatic valve block. This block could be configured with data obtained from the valve's datasheets. The solenoid valve blocks \emph{Valve A} and \emph{Valve B} can be seen in Fig.\ \ref{fig:pneumatics_model_full}.
 
 \paragraph{Pneumatic Actuator}
 

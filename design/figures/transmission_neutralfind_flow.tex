@@ -1,0 +1,21 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node[start, text width=1.4cm] (start) {Start};
+  \node [decision, right of=start, text width=1.2cm, inner sep=0pt, node distance=2.5cm] (in_neutral1) {Neutral?};
+  \node [end, below of=start, node distance=1.5cm] (done) {Done};
+  \node [block, right of=in_neutral1, text width=1.5cm, node distance=2.5cm] (clutchin) {Disengage clutch};
+  \node [block, right of=clutchin, text width=1.5cm, node distance=2.5cm] (downshift) {Downshift};
+  \node [decision, right of=downshift, text width=1.2cm, inner sep=0pt, node distance=2.5cm] (in_neutral2) {Neutral?};
+
+  \node [block, below of=clutchin, text width=1.5cm, node distance=1.5cm] (clutchout) {Engage clutch};
+
+  \draw [->, thick] (in_neutral1.south) -- node[]{yes} (in_neutral1.south |- clutchout);
+
+  \draw [->, thick] (start) -- (in_neutral1);
+  \draw [->, thick] (in_neutral1) -- node[]{no} (clutchin);
+  \draw [->, thick] (clutchin) -- node[coordinate](x1){} (downshift);
+  \draw [->, thick] (downshift) -- (in_neutral2);
+  \draw [->, thick] (in_neutral2.north) -- node[above]{no} ++(0,0.25cm) -| (x1);
+
+  \draw [->, thick] (in_neutral2.south) |- node[]{yes} (clutchout);
+  \draw [->, thick] (clutchout) -- (done);
+\end{tikzpicture}

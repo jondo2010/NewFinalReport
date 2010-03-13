@@ -1,0 +1,41 @@
+\tikzstyle{big arrow} = [>=latex, line width=4pt, gray]
+
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
+  %\draw[help lines] (-1,-5) grid (8,2);
+  
+  \node [block, minimum width=2cm, inner xsep=0] (servo) {Servo Interface};
+
+  \node [block, grey shiny, minimum width=5cm, inner xsep=0, right of=servo, right=-1cm, text width=5cm, node distance=3cm] (intake_manager) {Intake Manager};
+
+  \node [block, minimum width=2cm, inner xsep=0, below of=intake_manager, node distance=2cm, right=-2.5cm, minimum height=1cm] (can) {CAN Interface};
+  \node [block, minimum width=2cm, inner xsep=0, below of=intake_manager, node distance=2cm, left=-2.5cm, minimum height=1cm] (nv) {NV Storage Interface};
+
+  \node [block, grey shiny, minimum width=5cm, inner xsep=0, below of=intake_manager, text width=5cm, node distance=4cm] (transmission_manager) {Transmission Manager};
+
+  \node [block, minimum width=2cm, inner xsep=0, below of=servo, node distance=4cm] (pwm) {PWM Generator};
+
+  \node [block, minimum width=2cm, inner xsep=0, below of=transmission_manager, node distance=1.5cm, right=-2.5cm, minimum height=1cm] (adc) {ADC Interface};
+  \node [block, minimum width=2cm, inner xsep=0, below of=transmission_manager, node distance=1.5cm, left=-2.5cm, text width=1.5cm, minimum height=1cm] (gpio) {GPIO Interface};
+
+  \node [block, minimum width=2cm, inner xsep=0, right of=nv, node distance=3cm] (coordinator) {Module Coordinator};
+  \node [block, minimum width=2cm, inner xsep=0, right of=coordinator, node distance=3cm] (scheduler) {Event Scheduler};
+
+  \draw [<-, big arrow] (servo) -- (intake_manager);
+  \draw [<-, big arrow] (pwm) -- (transmission_manager);
+
+  \draw [<->, big arrow] (can.north) -- ($(intake_manager.south west)!(can.north)!(intake_manager.south east)$);
+  \draw [<->, big arrow] (nv.north) -- ($(intake_manager.south west)!(nv.north)!(intake_manager.south east)$);
+
+  \draw [<->, big arrow] (can.south) -- ($(transmission_manager.north west)!(can.south)!(transmission_manager.north east)$);
+  \draw [<->, big arrow] (nv.south) -- ($(transmission_manager.north west)!(nv.south)!(transmission_manager.north east)$);
+
+  \draw [<-, big arrow] (adc.north) -- ($(transmission_manager.south west)!(adc.north)!(transmission_manager.south east)$);
+  \draw [->, big arrow] (gpio.north) -- ($(transmission_manager.south west)!(gpio.north)!(transmission_manager.south east)$);
+
+  \draw [<->, big arrow] (transmission_manager) -| node[](x1){} (coordinator);
+  \draw [->, big arrow] (x1) -| (scheduler);
+  \draw [<->, big arrow] (coordinator) -- (scheduler);
+
+  \draw [<->, big arrow] (intake_manager) -| (coordinator);
+ 
+\end{tikzpicture}

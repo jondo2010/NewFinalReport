@@ -1,10 +1,6 @@
-\section{Braking Module Design\label{sec:Braking-Module-Design}}
+\section{Braking Module\label{sec:Braking-Module-Design}}
 
-\subsection{Overview}
-
-The braking module adjusts the brake bias electronically when requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. 
-
-Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
+The braking module adjusts the brake bias electronically as requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
 
 \begin{figure}[H]
 \centering
@@ -13,114 +9,125 @@ Figure \ref{fig:design_brake_overview_block} shows an overview of the braking mo
 \label{fig:design_brake_overview_block}
 \end{figure}
 
-A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor must be bi-directional and have enough steps per revolution to provide the resolution required to allow a 0.5\% bias ratio adjustment.
+A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor is bi-directional and can provide the resolution required to allow a 0.5\% bias ratio adjustment. Two \emph{end-of-travel switches} are used to determine when the balance bar is at it's end of travel. \emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. These components were chosen as part of the mechanical design of the brake pedal assembly by another team member. The actual choice of stepper motor has yet to be determined.
 
-Two \emph{end-of-travel switches} are used to determine when the balance bar is at it's end of travel. These are required to calibrate the system. 
+\subsection{Processes \label{sec:braking_processes}}
 
-\emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. This is critical for safety, as we cannot rotate the balance bar when the brakes are engaged. As noted in \ref{sec:background_braking}, pressure in the braking systems can reach upwards of \unit{7000}{\kilo\pascal}. The pressure sensors chosen for the implementation must be capable of reading such pressures.
-
-\subsection{Processes}
-
-The major processes of the braking module, \emph{bias calibration}, \emph{sensor calibration}, and \emph{bias adjustment}, are described at a high level using flow charts.
-
-\subsubsection{Brake Bias Calibration}
-
-A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from it's leftmost extreme to it's rightmost extreme, we can determine the correct centre point for the bias bar. 
-
-\begin{figure}[H]
-\centering
-\input{design/figures/brake_bias_calibration_flow}
-\caption{Brake bias calibration sequence.}
-\label{fig:brake_bias_calibration_flow}
-\end{figure}
-
-The first step in calibrating the brake bias is to rotate the balance bar to it's leftmost point of travel. when the bar reaches this point, it pushes on the left end-of-travel switch, which signals the module that the balance bar is at it's leftmost extreme. 
-
-The next step is to rotate the balance bar to it's rightmost point of travel. The module counts each step taken until the balance bar reaches it's rightmost extreme and pushes on the right end-of-travel switch.
-
-At this point, the module is now aware of how many steps are required to move from left to right and thus can re-centre the bar. The module saves the number of steps required to travel between the two extremes in some non-volatile parameter storage to be specified later, and adjusts the bias ratio to the last set point before calibration.
+The major processes of the braking module are \emph{brake bias adjustment}, \emph{brake bias calibration}, and \emph{pressure calibration}. Requests to perform either of the processes are broadcast over the network from the driver interface. The module listens for these requests and executes the correct process accordingly. 
 
 \subsubsection{Brake Bias Adjustment}
 
-The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. 
+The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. The module performs a series of safety checks before rotating the balance bar to adjust the relative force distribution between the two brake master cylinders.
 
-When a request to adjust the bias is relayed to the module, the desired bias ratio is validated to ensure an adjustment that is out of range of the balance bar is not attempted. 
-
-Once validated, the module calculates the number of steps required to move from the current position to the desired offset. It then signals the motor to advance this many steps in the correct direction.
-
-\subsubsection{Pressure Sensor Calibration}
-
-\begin{figure}
-\centering
-\input{design/figures/brake_pressure_calibration_flow}
-\caption{Brake pressure calibration sequence.}
-\label{fig:design_brake_pressure_calibration_flow}
+\begin{figure}[H]
+	\centering
+	\input{design/figures/brake_bias_adjust_flow}
+	\caption{Brake bias adjustment sequence.}
+	\label{fig:design-braking-bias-adjustment}
 \end{figure}
 
-\subsection{Software}
+Of prime importance is that the vehicle is not in motion and the brakes are not engaged while the adjustment is underway. The desired bias ratio is also validated before any adjustment is attempted. If the vehicle is stopped, the brakes are not engaged, and the request is valid, the adjustment may proceed. The module calculates the number of steps required to move from the current position to the desired offset and signals the motor to advance this many steps in the correct direction.
 
-\begin{figure}
-\centering
-\input{design/figures/brake_software_design_block}
-\caption{Brake module software block diagram.}
-\label{fig:pneumatics_design}
-	\end{figure}
+\subsubsection{Brake Bias Calibration}
 
-\subsubsection{Bias Manager}
+A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from through it's range of motion, we can determine the correct centre point for the bias bar. 
 
-Handles requests to adjust the brake bias from the network. 
+\begin{figure}[H]
+	\centering
+	\input{design/figures/brake_bias_calibration_flow}
+	\caption{Brake bias calibration sequence.}
+	\label{fig:brake_bias_calibration_flow}
+\end{figure}
 
-Performs balance bar calibration sequence on demand.
+The first step in calibrating the brake bias is to rotate the balance bar to it's leftmost point of travel, where it pushes on the left end-of-travel switch. This signals the module that the leftmost extreme has been reached. Next, the balance bar is rotated to it's rightmost point of travel, until it pushes on the right end-of-travel switch. The module counts the steps required to travel through it's range of motion and saves the count in non-volatile parameter storage. Finally, the brake bias ratio is adjusted back to it's previous value.
 
+\subsubsection{Pressure Calibration}
 
-\subsubsection{Pressure Manager}
+The pressure sensor calibration routine is outlined in Fig. \ref{fig:brake_pressure_calibration_flow}. The module keeps track of the minimum and maximum pressures that will be present in both the front and rear systems. This allows it to determine when the brakes are engaged, and to what extent.
 
-Continuously samples brake pressure.
+\begin{figure}[H]
+	\centering
+	\input{design/figures/brake_pressure_calibration_flow}
+	\caption{Brake pressure calibration sequence.}
+	\label{fig:brake_pressure_calibration_flow}
+\end{figure}
 
-Performs a pressure calibration sequence on demand.
-
-
-\subsubsection{CAN Interface}
-
-As documented above.
-
-
-\subsubsection{Main Control Loop}
-
-Initializes the system and brings into a known state.
-
-Monitor for system faults and react accordingly.
-
+The first step of pressure calibration is to ask the driver to apply minimum pressure. The brake module signals the driver interface to request the driver take their foot off the brake. Once done, the driver interface signals the brake module that minimum pressure has been applied. The brake module then samples the current pressure in both systems. This procedure is repeated for maximum pressure by asking the driver to push on the brake as hard as possible. If the samples are valid, meaning the minimum pressures are less than the maximum pressures and there is a minimum pressure difference between fully-released and fully-applied, the sampled pressures are stored in non-volatile memory.
 
 \subsection{Hardware}
 
-\begin{figure}
+A high-level overview of the module's hardware design is shown in figure \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. The module communicates over the bus using a CAN transceiver. 
+
+\begin{figure}[H]
 \centering
 \input{design/figures/brake_hardware_design_block}
 \caption{Brake module hardware block diagram.}
-\label{fig:pneumatics_design}
+\label{fig:brake_hardware_design_block}
 \end{figure}
 
-
-\subsubsection{Microcontroller}
-
-As mentioned above.
-
-
-\subsubsection{CAN transceiver}
-
-As mentioned above.
-
+Unique to the brake module are a pair of \emph{analog-to-digital converters} (ADC) that sample the brake pressure sensors, and a \emph{stepper motor driver} that provides the signals necessary to drive the stepper motor connected to the balance bar. The micro-controller  interfaces to the end-of-travel switches without any extra hardware.
 
 \subsubsection{Stepper Motor Driver}
 
-Generates signals required to actuate the stepper motor used to adjust
-the balance bar.
+The stepper motor driver generates the signals required to drive the stepper motor connected to the balance bar. It must be capable of  driving a bi-polar stepper motor in the clockwise or counter-clockwise direction. It must also supply enough current to generate the torque required to spin the balance bar, which is approximately \unit{150}{mA}\footnote{This figure was supplied by the team member responsible for the braking pedal assembly.}.
 
+\subsubsection{Analogue-to-Digital Converters}
 
-\subsubsection{Analogue-to-Digital Converter}
-
-Samples both front and rear pressure sensors. Capable of 10-bit resolution.
-
+The analogue-to-digital converters sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}.
 
 \subsubsection{End-of-Travel Sensing Switches}
+\nomenclature{GPIO}{General Purpose Input-Output}
+
+Two end-of-travel switches are tripped whenever the balance bar reaches it's leftmost or rightmost extremes. The switches are normally high-impedance, and become switched to ground. The micro-controller should have \emph{general purpose input-output} (GPIO) pins with weak internal pull-up resistors to detect the state of the switches.
+
+\subsection{Software}
+
+A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_software_design_block}. The functionality of the system is separated into a \emph{bias manager} and a \emph{pressure manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. The entire process is overseen by a \emph{module coordinator}.
+
+\begin{figure}[H]
+	\centering
+	\input{design/figures/brake_software_design_block}
+	\caption{Brake module software block diagram.}
+	\label{fig:brake_software_design_block}
+\end{figure}
+
+\nomenclature{NVRAM}{Non-Volatile Random-Access Memory}
+
+\subsubsection{Hardware Abstraction Interfaces}
+
+Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. These interfaces include a \emph{CAN interface}, \emph{stepper interface}, an \emph{input-output (I/O) interface}, an \emph{analog-to-digital (ADC) interface} and a \emph{non-volatile storage interface}.
+
+\begin{itemize}
+
+\item The CAN interface, common to each module, enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager.
+
+\item The stepper interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps.
+
+\item The input-output (I/O) interface monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs.
+
+\item The analog-to-digital (ADC) interface communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either input channel and then return the results to the program for further processing.
+
+\item The non-volatile storage interface can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration and calibration parameters to be stored and read even if the module loses power or is reset.
+
+\end{itemize}
+
+\subsubsection{Bias Manager}
+
+The bias manager implements the bias adjustment and bias calibration processes. It listens for requests to initiate either process from the network by way of the CAN interface.
+
+When asked to adjust the brake bias, the bias manager coordinates with the pressure manager to determine if the brakes are being applied, and with the engine and transmission controller to determine if the vehicle is in motion. It performs the calculations required to calculate the new bias position, and adjusts the balance bar accordingly by sending motor step commands to the \emph{stepper motor interface}.
+
+Bias calibration requires similar coordination to ensure a safe operating state. The bias manager again uses the stepper motor interface to move the balance bar between it's extremes. Calibration data is loaded at start-up and stored after calibration in NVRAM by way of the non-volatile storage interface.
+
+\subsubsection{Pressure Manager}
+
+The pressure manager periodically outputs the front and rear brake pressures. It also implements the pressure calibration procedure and listens for calibration requests over the network, similar to the bias manager.
+
+The front and rear pressures are sampled through the analog-to-digital (ADC) interface. The pressure manager uses the CAN interface to output the samples over the network. Current pressure readings are made available to the bias manager to avoid adjusting or calibrating the bias while the brakes are engaged.
+
+The pressure manager communicates with the driver interface through the CAN interface to coordinate the sequence of driver inputs required to calibrate the front and rear brake pressures. Like the pressure manager, calibration data is loaded at start-up and stored after calibration through the non-volatile storage interface.
+
+\subsubsection{Module Coordinator}
+
+Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to adjust the brake bias, are handled by the managers themselves. The module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time.  
+

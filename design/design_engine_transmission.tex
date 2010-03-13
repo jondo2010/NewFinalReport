@@ -1,43 +1,40 @@
 \section{Engine and Transmission Module}
 
-The engine and transmission module is designed to meet the engine and transmission goals outlined in Secs. \ref{sec:goals_engine} and \ref{goals_transmission}, namely to provide optimized selection of the variable-length intake, to change gears at the driver's request without requiring manual clutching, and to implement transmission features that make driving easier. 
-
-\subsection{Overview}
-
-Figure \ref{fig:design_engine_overview} shows an overview of the engine and transmission controller and it's interactions with the environment.
+The engine and transmission module provides optimized selection of the variable-length intake, changes gears at the driver's request without requiring manual clutching, and provides transmission features that make driving easier. Figure \ref{fig:design_engine_overview} shows an overview of the engine and transmission module and it's interactions with the environment.
 
 \begin{figure}[H]
-\centering
-\input{design/figures/engine_hardware_design_block}
-\caption{Engine module overview block diagram.}
-\label{fig:design_engine_hardware_block}
+	\centering
+	\input{design/figures/engine_overview_block}
+	\caption{An overview of the engine and transmission module and it's environmental interactions.}
+	\label{fig:design_engine_overview_block}
 \end{figure}
 
-Provide intelligent control of the intake runner length and transmission system.
-Provide the control signals required to actuate the clutch and gear position levers with the pneumatic system.
+The intake runner position is mechanically actuated with a \emph{servo motor}. The module generates the control signals required by electro-pneumatic system to actuate both the clutch and shift levers. The ECU interfaces with the module both directly through discrete inputs and through the CAN bus.
 
 \subsection{Processes}
 
-The major processes of the engine and transmission module, \emph{upshift}, \emph{downshift}, and \emph{neutral find}, are described at a high level using flow charts.
+The major processes of the engine and transmission module are \emph{up-shifting}, \emph{down-shifting}, and \emph{neutral find}. They are described at a high level using flow charts. Requests to perform these processes are broadcast over the network from the driver interface. The module listens for these requests and executes the correct process accordingly.
 
-\subsubsection{Upshift}
+\subsubsection{Up-shifting}
 
-When the Transmission Manager receives an upshift request over the network, it creates asynchronous events in the Event Scheduler to respond to the request, as shown in Fig. \ref{fig:transmission_upshift_flow}. The upshift process depends upon feedback from the ECU of engine RPM and gear position. Shift cut is enabled on the ECU to drop the engine RPM by a slight amount $RPM^{TH}_{cut}$ (the exact amount is a tuned parameter.) When the RPM has dropped, the upshift solenoid is engaged, actuating the pneumatics to push the shift lever. When the module receives notification that the current gear has incremented, the pneumatics are relaxed, and shift cut is disabled.
-
-\nomenclature{$RPM^{TH}_{cut}$}{The threshold RPM is expected to drop when shiftcut is enabled for no-lift upshifting.}
+The up-shift procedure is described in \ref{fig:transmission_upshift_flow}. Up-shifting does not require disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
 
 \begin{figure}[H]
-\centering
-\input{design/figures/transmission_upshift_flow}
-\caption{Transmission upshift procedure.}
-\label{fig:transmission_upshift_flow}
+	\centering
+	\input{design/figures/transmission_upshift_flow}
+	\caption{Transmission upshift procedure.}
+	\label{fig:transmission_upshift_flow}
 \end{figure}
 
-The asynchronous wait operations that depend on external feedback all have built-in timeout mechanisms that prevent deadlock in the event of a problem in the actuation or feedback path.
+The up-shift process depends upon engine RPM and gear position, both of which are provided by the ECU. The shift-cut feature is engaged on the ECU to drop the engine RPM by a small amount known as the cut RPM threshold, or $RPM^{TH}_{cut}$. The exact value of $RPM^{TH}_{cut}$ can be tuned on the ECU. Once the RPM reaches the cut threshold, the upshift solenoid is engaged, which actuates the pneumatics to push the shift lever. Once the module receives notification that the current gear has incremented, the pneumatics are relaxed, and shift cut feature is disengaged.
 
-\subsubsection{Downshift}
+\nomenclature{$RPM^{TH}_{cut}$}{The threshold RPM is expected to drop when shift-cut is engaged for no-lift up-shifting.}
 
-When the Transmission Manager receives a downshift request over the network, similar to the upshift request handling, it creates asynchronous events in the Event Scheduler to respond to the request. Figure \ref{fig:transmission_downshift_flow} shows the flow chart of the downshift procedure. Clutch engagement and disengagement is handled asynchronously by the Clutch Controller. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch, as well as two asynchronous incoming events from the driver:
+\subsubsection{Down-shifting}
+
+The down-shift procedure is described in \ref{fig:transmission_downshift_flow}. Unlike up-shifting, down-shifting requires disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
+
+When the Transmission Manager receives a down-shift request over the network, similar to the up-shift request handling, it creates asynchronous events in the Event Scheduler to respond to the request. Figure \ref{fig:transmission_downshift_flow} shows the flow chart of the downshift procedure. Clutch engagement and disengagement is handled asynchronously by the Clutch Controller. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch, as well as two asynchronous incoming events from the driver:
 
 \begin{enumerate}
   \item The original downshift request, when the driver pulls and holds the downshift paddle on the steering wheel, and
@@ -58,7 +55,6 @@ Additionally, a minimum clutch disengagement time $t^{clutch}_{min}$ is observed
 \end{figure}
 
 \subsubsection{Variable Intake}
-
 
 \subsubsection{Gear Selection \label{sec:design_engine_transmission_gear_selection}}
 

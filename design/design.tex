@@ -2,7 +2,7 @@
 
 As mentioned in Sec. \ref{sec:intro_strategy}, the overall target of this project is to develop four electronic modules and an electro-pneumatic actuation system for the 2010 Formula SAE vehicle. This chapter describes the design of these modules and the electro-pneumatic system, and provides context for design choices. The electrical portions of the design will be discussed in more detail than the mechanical portions, as the main focus of the thesis is electrical. 
 
-Figure \ref{fig:design_overview} shows the electrical and mechanical interrelations between the 4 custom modules (in blue) and the systems they interact with. All of the modules communicate over a shared CANBus network, which eliminates point-to-point wiring between them.
+Figure \ref{fig:design_overview} shows the electrical and mechanical interrelations between the 4 custom modules (in blue) and the systems they interact with. All of the modules communicate over a shared CAN bus network, which eliminates point-to-point wiring between them. The use of a CAN-based network was dictated by the use of the ECU, which uses a CAN interface to output data required by the modules. 
 
 \begin{figure}[H]
 \centering

@@ -1,6 +1,6 @@
 \begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize]
   \node[start, text width=1.2cm] (start) {Upshift Request};
-  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (at_top) {At top gear?};
+  \node [decision, right of=start, text width=1cm, inner sep=0pt, node distance=2.5cm] (at_top) {Top\\gear?};
   \node [end, below of=at_top] (done) {Done};
   \node [block, right of=at_top, text width=1.5cm, node distance=2.5cm] (shiftcut) {Enable shiftcut};
 

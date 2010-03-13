@@ -1,5 +1,5 @@
 \begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\footnotesize]
-  \node [block, blue shiny, minimum width=4cm, text width=4cm, right=-1cm, node distance=1.5cm] (module) {Braking Module};
+  \node [block, blue shiny, minimum width=4cm, text width=4cm, right=-1cm, node distance=1.5cm] (module) {Engine and\\Transmission Module};
 
   \node at ($(module.east)+(1cm,0)$) [block, text width=0.8cm] (ecu) {ECU};
 
@@ -19,11 +19,11 @@
   \draw [<-, thick] (intake) -- (motor);
   \draw [<-, thick] (motor) -- ($(module.south west)!(motor.north)!(module.south)$);
 
-  \node [block, below of=module, inner xsep=0pt, right=0cm, node distance=1.5cm] (pneumatics) {Electro-pneumatic system};
+  \node [block, below of=module, inner xsep=0pt, right=0cm, node distance=1.5cm] (pneumatics) {Electro-Pneumatic system};
   \draw [<-, thick] (pneumatics) -- ($(module.south west)!(pneumatics.north)!(module.south)$);
 
-  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, above=0.25cm] (shift) {Shift lever};
-  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, below=0.25cm] (clutch) {Clutch lever};
+  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, above=0.25cm] (shift) {Shift Lever};
+  \node [block, right of=pneumatics, text width=2cm, node distance=3cm, below=0.25cm] (clutch) {Clutch Lever};
 
   \draw [<-, thick, dashed] (clutch) -- ($(pneumatics.north east)!(clutch.west)!(pneumatics.south east)$);
   \draw [<-, thick, dashed] (shift) -- ($(pneumatics.north east)!(shift.west)!(pneumatics.south east)$);

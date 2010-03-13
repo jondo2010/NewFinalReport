@@ -1,10 +1,10 @@
 \section{Engine and Transmission Module}
 
-The engine and transmission module provides optimized selection of the variable-length intake, changes gears at the driver's request without requiring manual clutching, and provides transmission features that make driving easier. Figure \ref{fig:design_engine_overview} shows an overview of the engine and transmission module and it's interactions with the environment.
+The engine and transmission module provides optimized selection of the variable-length intake, changes gears at the driver's request without requiring manual clutching, and provides transmission features that make driving easier. Figure \ref{fig:design_engine_overview_block} shows an overview of the engine and transmission module and it's interactions with the environment.
 
 \begin{figure}[H]
 	\centering
-% 	\input{design/figures/engine_overview_block}
+ 	\input{design/figures/engine_transmission_overview_block}
 	\caption{An overview of the engine and transmission module and it's environmental interactions.}
 	\label{fig:design_engine_overview_block}
 \end{figure}
@@ -22,7 +22,7 @@ The up-shift procedure is described in \ref{fig:transmission_upshift_flow}. Up-s
 \begin{figure}[H]
 	\centering
 	\input{design/figures/transmission_upshift_flow}
-	\caption{Transmission upshift procedure.}
+	\caption{The transmission up-shift procedure.}
 	\label{fig:transmission_upshift_flow}
 \end{figure}
 
@@ -37,52 +37,69 @@ The down-shift procedure is described in \ref{fig:transmission_downshift_flow}. 
 \begin{figure}[H]
 	\centering
 	\input{design/figures/transmission_downshift_flow}
-	\caption{Transmission downshift procedure.}
+	\caption{The transmission down-shift procedure.}
 	\label{fig:transmission_downshift_flow}
 \end{figure}
 
 From the drivers perspective, down-shifting is a two-stage process:
 
 \begin{enumerate}
-  \item The driver pulls and holds the downs-hift paddle on the steering wheel to request the gear change; and
+  \item The driver pulls and holds the down-shift paddle on the steering wheel to request the gear change; and
   \item The driver releases the down-shift paddle to requests the clutch re-engage.
 \end{enumerate}
 
-Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage\footnote{This was explained in Sec. \ref{sec:background_transmission}.}. 
+Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage\footnote{"Blipping" was previously described in Sec. \ref{sec:background_transmission}.}. 
 
-Once the driver requests a down-shift, the clutch is disengaged and the downshift solenoid is engaged to change gears. Once the correct gear has engaged, the solenoid is disengaged and the controller waits for the driver to release the down-shift paddle. When the paddle is released, the clutch is re-engaged. A minimum clutch disengagement time $t_{clutch_{min}}$ is observed in the event the driver pulls the paddle and releases it without any delay. This parameter is tunable.
+Once the driver requests a down-shift, the clutch is disengaged and the down-shift solenoid is engaged to change gears. Once the correct gear has engaged, the solenoid is disengaged and the controller waits for the driver to release the down-shift paddle. When the paddle is released, the clutch is re-engaged. A minimum clutch disengagement time $t_{clutch_{min}}$ is observed in the event the driver pulls the paddle and releases it without any delay. This parameter is tunable.
 
 \nomenclature{$t^{clutch}_{min}$}{Minimum clutch disengagement time during a downshift request.}
 
 \subsubsection{Neutral Find}
 
+Neutral find can be used by the driver to quickly shift into neutral when entering the pit area, without having to manually cycle through gears. The procedure is described in \ref{fig:transmission_neutralfind_flow}.
 
+\begin{figure}[H]
+	\centering
+%	\input{design/figures/transmission_downshift_flow}
+	\caption{The transmission neutral find procedure.}
+	\label{fig:transmission_neutralfind_flow}
+\end{figure}
+
+When the driver engages the neutral find feature, the transmission controller disengages the clutch and downshifts until the neutral sensor indicates the transmission has reached the neutral gear. The clutch lever is then released with the transmission in neutral. If the driver attempts to engage the feature while the vehicle is already in neutral, the procedure is aborted.
 
 \subsection{Variable Intake}
 
+The length of the intake runners is modulated automatically to provide the optimal torque output for the current engine RPM. The control flow chart is shown in Fig. \ref{engine_varintake_flow}. 
+\begin{figure}[H]
+	\centering
+%	\input{design/figures/transmission_downshift_flow}
+	\caption{The variable intake adjustment flow.}
+	\label{fig:engine_varintake_flow}
+\end{figure}
+
+Optimizing the runner length requires coordination with the ECU to acquire the latest RPM values. A set-point RPM value to be determined will act as a cross-over point at which the runner length changes. As the engine RPM crosses over this line, the runner length is modulated. A brief timeout period exists to prevent the runner length from oscillating if the driver is operating near the cross-over point.
+
 \subsection{Advanced Transmission Features}
 
-\begin{description}
+The transmission portion of the module implements several features to aide the driver. The driver can enable or disable these features from the driver interface. The module will listen for feature requests over the network and act accordingly.
 
-\item[Auto Upshift Feature]
+\subsubsection{Auto Up-shift}
 
-This feature of the engine module is aimed primarily at improving performance in the acceleration event. Based on known torque curves, a table of optimal shift points in the RPM range is developed. As the engine reaches the top RPM for a given gear, the engine module will automatically upshift to the next gear, without any driver input. All the driver needs to do is maintain full throttle, and hold on.
+This feature of the engine module is aimed primarily at improving performance in the acceleration event. Based on known torque curves, a table of optimal shift points in the RPM range is developed. As the engine reaches the top RPM for a given gear, the engine module will automatically upshift to the next gear, without any driver input. All the driver needs to do is maintain full throttle, and hang on.
 
-\item[Launch]
+\subsubsection{Launch}
+
 Full-throttle launch uses an important feature of the ECU called launch control. From a stand-still, the slip ratio of the driven wheels to the non-driven wheels is monitored, and the engine output power is reduced until the ratio reaches 1:1. Drivers use this feature by maintaining full-throttle at the starting line while holding the brake pedal. As soon as the brake pedal is released, the the engine module will release the clutch in a controlled manner in an attempt to get the best possible acceleration.
 
-\item[Crawl]
-Part-throttle launch is a feature designed to mimic an automatic transmission. By controlling the clutch position, and thereby modulating the amount of torque transferred to the wheels for a short period of time, the car can be made to creep slowly from a standstill. This will be used when driving up to the starting line of various dynamic events.
+\subsubsection{Crawl}
 
-\item[Neutral Find]
-As drivers come in to the pits from driving the course, a useful feature is the ability for the car to shift the transmission back into neutral to avoid stalling the car. The neutral find feature will automatically downshift the transmission repeatedly until it finds neutral.
+Part-throttle launch is a feature designed to mimic an automatic transmission. By controlling the clutch position, and thereby modulating the amount of torque transferred to the wheels for a short period of time, the car can be made to creep slowly from a stand-still. This will be used when driving up to the starting line of various dynamic events.
 
 \end{description}
 
 \subsection{Hardware}
 
 Show system hardware diagram
-
 
 \subsubsection{Microcontroller}
 
@@ -94,21 +111,17 @@ Has built-in CAN controller.
 
 Has built-in RAM and ROM as well as EEPROM for holding configuration parameters.
 
-
 \subsubsection{CAN transceiver}
 
 Interface module with the CAN bus.
 
 Be capable of terminating the bus.
 
-
 \subsubsection{High current solenoid drivers}
-
 
 Controlling pneumatic solenoid valves (4)
   
 Controlling starter solenoid
-
 
 \subsubsection{I/O lines to the ECU}
 

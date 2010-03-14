@@ -2,14 +2,14 @@
 
 The Braking module implements the design specified in Sec.\ \ref{sec:Braking-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section.
 
-\subsection{Hardware}
-
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{implementation/figures/braking_pcb}
 \caption{Populated Braking module PCB.}
 \label{fig:braking_pcb}
 \end{figure}
+
+\subsection{Hardware}
 
 The braking module implementation was the simplest of the 4 modules in terms of electrical design. Only one special component on the board was required, a stepper motor controller/driver, and the interface to the microcontroller only required a handful of i/o lines. Additionally, a pressure transducer was also specified to facilitate measuring the hydraulic pressure in the brake lines. The components chosen for the braking module are listed in Table \ref{table:braking_module_components}.
 

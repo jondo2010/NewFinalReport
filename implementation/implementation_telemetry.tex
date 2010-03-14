@@ -1,6 +1,6 @@
 \section{Telemetry Module}
 
-The Telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section.
+The Telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:telemetry_pcb} shows a photo of the completely populated and debugged Telemetry module hardware.
 
 \begin{figure}[H]
 \centering
@@ -98,9 +98,7 @@ When the mainline software wants to send a packet, it calls the \verb|xbee_send_
 
 Receiving packets is more complicated, since individual bytes arrive at the MAX3100 drivers's RX buffer asynchronously. A state machine was constructed that waits for a full packet to be available in the RX buffer, and then pushes it into a seperate, incoming packet buffer. This incoming packet buffer can then be read by the mainline code.
 
-Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface.
-
-The modem commands implemented are listed in Table \ref{tab:xbee_commands}.
+Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the Telemetry Module are listed in Table \ref{tab:xbee_commands}.
 
 \begin{table}
 \caption{Implemented Xbee modem commands.\label{tab:xbee_commands}}
@@ -121,7 +119,7 @@ MY & Set and read the modems local address \tabularnewline
 \end{tabular}
 \end{table}
 
-The XBee modem can be controlled by entering into it's command mode by sending a special string of bytes, by default ``+++''. A list of modem-style AT-commands, documented in the manual, are used to change the various settings of the modem. This command mode was used to initially set up the modems by hand, but is only used by the software once on startup to enable the API mode.
+The XBee modem can be controlled out of API mode by entering into it's command mode by sending a special string of bytes, by default ``+++''. A list of modem-style AT-commands, documented in the manual, are used to change the various settings of the modem. This command mode was used to initially set up the modems by hand, but is only used by the software once on startup to enable the API mode.
 
 Similar to the rest of the software drivers implemented, the Xbee library uses callbacks to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different USART on-the-fly.
 
@@ -130,6 +128,8 @@ Similar to the rest of the software drivers implemented, the Xbee library uses c
 To reduce the implementation work required by us, we asked David Schilling, a computer science student on the Formula SAE team, to write the DAC software library to read and write the DAC's serial format, given the requirements described in Section \ref{sec:Telemetry-Module-Design}.
 
 The DAC library maintains it's own buffer of incoming DAC data. We also asked Dave to provide seperate functions for buffering incoming data, and for processing that data. This seperation allowed the library to be easily tied in with the rest of the system software on the telemetry module: adding data to the DAC buffer occurs whenever the internal USART driver interrupts with a new byte, and processing is called from the mainline loop.
+
+Transmission of DAC data over the wireless link is synchronized with the DAC Libraries' decoder. Whenever an entire DAC packet is decoded by the library, that packet is then sent in it's entirety over the link. Since transmission is done packet-wise, and not byte-by-byte, the injection of arbitrary packets into the DAC serial stream is possible without having packets collide.
 
 \subsubsection{Main Control Loop}
 

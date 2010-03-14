@@ -2,6 +2,8 @@
 
 \subsection{Hardware}
 
+The LCD module used in the Driver Interface implementation is a packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
+
 \subsubsection{LCD Module Bias Circuit}
 
 The LCD screen requires a large bias voltage of +\unit{22}{\volt}.

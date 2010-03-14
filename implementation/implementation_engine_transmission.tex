@@ -51,7 +51,7 @@ A standard 74-series CMOS buffer chip was used to buffer the GPIO output lines f
 
 \subsubsection{Traction Control Analogue Output}
 
-In order to generate the \unit{0-5}{\volt} analogue signal for the ECU's traction slip percent input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs a \unit{0-5}{\volt} analogue signal that varies with the digital input.
+In order to generate the \unit{0-5}{\volt} analogue signal for the ECU's traction slip percent input, as was described in Sec. \ref{sec:ECU}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs a \unit{0-5}{\volt} analogue signal that varies with the digital input.
 
 According to the datasheet, the output voltage from the DAC $V_{out}^{DAC}$ can be determined by the following equation \cite{TLV5623}:
 \nomenclature{$V_{out}^{DAC}$}{Voltage output from the digital to analogue converter on the Engine and Transmission module.}
@@ -118,7 +118,7 @@ By loading the timers' compare register with with a value scaled by ${PWM\_SCALE
 
 \paragraph{Algorithm}
 
-Figure \ref{fig:pwm_cases} shows 8 different combinations of the duty cycles of two synchronized PWM channels. Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. 2 cases are also apparent when no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}. In the cases shown in Figs. \ref{fig:pwm_cases_1, fig:pwm_cases_2}, where both channels have a different duty-cycle between 0 and 100\%, three transitions per PWM period are required: one at the beginning, and two for falling edges of both channels. The other cases 3 to 8 require fewer transitions.
+Figure \ref{fig:pwm_cases} shows 8 different combinations of the duty cycles of two synchronized PWM channels. Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required: one at the beginning, and two for falling edges of both channels, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. Two cases are also visible where no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
 
 An efficient generating routine was constructed to effect the level transitions by sending new data to the Solenoid Driver, and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
 

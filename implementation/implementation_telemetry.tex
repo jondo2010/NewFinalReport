@@ -129,6 +129,8 @@ To reduce the implementation work required by us, we asked David Schilling, a co
 
 The DAC library maintains it's own buffer of incoming DAC data. We also asked Dave to provide seperate functions for buffering incoming data, and for processing that data. This seperation allowed the library to be easily tied in with the rest of the system software on the telemetry module: adding data to the DAC buffer occurs whenever the internal USART driver interrupts with a new byte, and processing is called from the mainline loop.
 
+Transmission of DAC data over the wireless link is synchronized with the DAC Libraries' decoder. Whenever an entire DAC packet is decoded by the library, that packet is then sent in it's entirety over the link. Since transmission is done packet-wise, and not byte-by-byte, the injection of arbitrary packets into the DAC serial stream is possible without having packets collide.
+
 \subsubsection{Main Control Loop}
 
 Once all of the hardware on the module is initialized and the XBee has successfully entered API mode, the Telemetry module's main control loop repeatedly calls the \verb|telemetry_process()| function. This function runs through three seperate processes:

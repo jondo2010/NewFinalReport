@@ -1,29 +1,25 @@
-\section{Electro-pneumatic Implementation\label{sec:electropneumatic_implementation}}
+\section{Electro-Pneumatic System\label{sec:electropneumatic_implementation}}
 
-Several steps were taken in the implementation phase with the pneumatic system to facilitate further understanding of the subsystems' dynamics, and to provide data and models that could be used in the implementation of controller software. A Simulink model was developed of the electro-pneumatic actuation system in order to verify that fundamental design would work and to gain further insight into the operation of the pneumatic system. A simple PID controller block was used to show that the closed-loop system was inherently stable.
+\nomenclature{PID}{Proportional-Integral-Differential}
 
-\subsection{Simulation}
+Several steps were taken in the implementation phase to develop a better understanding of the electro-pneumatic's behaviour, and to provide data and models that could be used in the implementation of the controller software. A Simulink model was developed to verify that our fundamental design would work, and to gain further insight into the operation of the electro-pneumatic system. A simple \emph{Proportional-Integral-Derivative} (PID) controller block was used to show that the closed-loop system was inherently stable.
 
-The top level of the Simulink model is shown in \ref{fig:pneumatics_top_level}: A PID controller block is used in a closed-loop configuration, and the response to a fixed step input is displayed on the scope block.
+\subsection{Simulation with Simulink}
 
-In modelling the electropneumatic system, 3 subsystems were identified and modelled independently:
+An overview of the Simulink model used to simulate the electro-pneumatics system is shown in \ref{fig:pneumatics_top_level}. A PID controller block is used in a closed-loop configuration, and the response to a fixed step input is displayed on the scope block. 
 
-\begin{enumerate}
-  \item the PWM generator;
-  \item the solenoid valves;
-  \item and the pneumatic actuator (single-acting spring-return cylinder).
-\end{enumerate}
-
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=1]{implementation/figures/pneumatic_modelling1.eps}
-\caption{Top-level electropneumatic model for simulation in Simulink.}
+\caption{Simulink model of the electro-pneumatic system.}
 \label{fig:pneumatics_top_level}
 \end{figure}
 
-\paragraph{PWM Generator}
+The three major components of the electro-pneumatic system are the \emph{PWM generator}, the \emph{solenoid valves}, and the \emph{pneumatic actuator}. Models of these systems are described further in the following sections.
 
-The PWM generator in Simulink was built using the instantaneous model presented by \citet{valve_models} which compares a generated saw-tooth signal, $V_{saw}$ with a period $T_{saw}$, with the input signal $V_{in}$ to obtain the pulse-width-modulated signal $U$:
+\subsubsection{PWM Generator Model}
+
+The PWM generator is used to provide the electrical control signals required by the solenoid valves to open and close. A model of the PWM generator was developed using the instantaneous model presented by \citet{valve_models}. This model compares a generated saw-tooth signal $V_{saw}$ with the input signal $V_{in}$ over a time period $T_{saw}$ to obtain the pulse-width-modulated signal $U(t)$. The relationship is illustrated in Eq. \ref{eq:pwm_generation}.
 
 \begin{equation}
 \label{eq:pwm_generation}
@@ -34,59 +30,67 @@ U\left(t\right) =
 \end{cases}
 \end{equation}
 
-The Simulink model which implements Eq.\ \ref{eq:pwm_generation} can be seen in Fig.\ \ref{fig:pneumatics_pwm}. The input to the subsystem, shown as \emph{In1}, is $V_{in}$, and the output, shown as \emph{Out1} is the pulse width modulated signal $U$. A Saturation and block was added to limit the input signal $V_{in}$ to the range [0..1]. A dead zone block was added to simulate the effect of dead zone in the response of the solenoid valves to a PWM signal: if the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve at all. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal as
+The Simulink model which implements Eq. \ref{eq:pwm_generation} can be seen in Fig. \ref{fig:pneumatics_pwm}. The input to the subsystem, shown as \emph{In1}, is $V_{in}$, and the output, shown as \emph{Out1} is the pulse width modulated signal $U(t)$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling2.eps}
+\caption{Simulink model of the PWM generator.}
+\label{fig:pneumatics_pwm}
+\end{figure}
+
+A saturation block was added to limit the input signal $V_{in}$ to the range of \unit{[0..1]}{\volt}. A dead-zone block was added to account for the dead-zone present in the solenoid valve response to a PWM signal. If the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal, known as $d_{min}$. This value can be calculated as:
 
 \begin{equation}
   \label{eq:pwm_duty_min}
   d_{min}=\left(T_{vr}/T_{PWM}\right)\cdot100\%
 \end{equation}
 
-where $T_{vr}$ is the valve response time, and $T_{PWM}$ the PWM period.
+In this case, $T_{vr}$ is the he time required by a solenoid valve to respond to an input, and $T_{PWM}$ the period of the PWM signal.
 
+\nomenclature{$d_{min}$}{The minimum possible duty cycle of a solenoid's drive signal that will cause the valve to open.}
+\nomenclature{$T_{vr}$}{The time required by a solenoid valve to respond to an input.}
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling2.eps}
-\caption{Simulink PWM Generator model.}
-\label{fig:pneumatics_pwm}
-\end{figure}
+The signal generator block in Fig. \ref{fig:pneumatics_pwm} outputs a triangle wave with peak-to-peak amplitude of \unit{1}{\volt}, which is then offset by \unit{0.5}{\volt}. The relational operator block then compares this with the input signal, and outputs the resulting PWM signal.
 
-The signal generator block in Fig.\ \ref{fig:pneumatics_pwm} outputs a triangle wave with peak-to-peak amplitude 1, which is then offset by 0.5. The relational operator block then compares this with the input signal, and outputs either a 1 or a 0.
+\subsubsection{Solenoid Valve Model}
 
-\paragraph{Solenoid Valves}
+An initial Simulink model of a solenoid valve was constructed based on the modelling equations described by \citet{valve_models} and the standard orifice equations for laminar and choked flow described in \cite{fluid_power}. However, it was too difficult to identify the system parameters cited in \cite{fluid_power} for our specific solenoid valves. The solenoid's data-sheet was not detailed enough, and the straight-forward approach to system identification used by \cite{valve_models} required specialized measuring equipment (such as a instantaneous mass flow meter) that we did not have access to.
 
-An initial Simulink model of a solenoid valve was constructed based off of the modelling equations described by \citet{valve_models} along with the standard orifice equations for laminar and choked flow \cite{fluid_power}. It was however determined to be too difficult to identify the system parameters for our specific solenoid valves. The datasheets weren't detailed enough, and the straight-forward approach to system identification used by \cite{valve_models} requried equipment such as a instantaneous mass flow meter, which we didn't have access too, as well as more time than we were willing to commit on this section of the project.
+The custom Simulink solenoid valve block was replaced with an approximate Simulink ``Simscape'' pneumatic valve block. This block could be configured with data obtained from the valve's data-sheets. 
 
-The custom Simulink solenoid valve block was then replaced with an approximate Simulink Simscape pneumatic valve block. This block could be configured with data obtained from the valve's datasheets. The solenoid valve blocks \emph{Valve A} and \emph{Valve B} can be seen in Fig.\ \ref{fig:pneumatics_model_full}.
+\subsubsection{Pneumatic Actuator Model}
 
-\paragraph{Pneumatic Actuator}
-
-The Simulink pneumatic actuator subsystem can be seen in Fig.\ \ref{fig:pneumatics_actuator}. In order to save time, pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. Physical port 1 (denoted by the octagonal port symbol) in \ref{fig:pneumatics_actuator} is the air inlet. Physical ports 2 and 3 are the displacement ports of the cylinder, and regular port 1 is used to display the displacement on a scope.
+Simulink's pneumatic actuator subsystem is illustrated in Fig. \ref{fig:pneumatics_actuator}. Pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. \emph{Physical Port 1} (denoted by the octagonal port symbol with a ``1'' inside) in \ref{fig:pneumatics_actuator} represents the air inlet. \emph{Physical Ports 2 and 3} (denoted by the octagonal port symbol with a ``2'' and ``3'' inside, respectively) represent the displacement ports of the cylinder. \emph{Regular Port 1} (denoted by the rounded port symbol with a ``1'' inside) is used to display the displacement on a scope.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling3}
-\caption{Simulink actuator model.}
+\caption{Simulink model of the penumatic actuator.}
 \label{fig:pneumatics_actuator}
 \end{figure}
 
-\paragraph{Overall Electropneumatic Simulink Model}
+\subsubsection{Integrated Simulink Model}
 
-The complete open-loop actuator model can be seen in Fig.\ \ref{fig:pneumatics_model_full}. The absolute value of the real-valued input $u$ is first fed to the PWM block. This signal is then converted into seperate signals for each of the two solenoid valves in a way similar to the first PWM pulsing scheme presented by \citet{accurate_position}. The input to the subsystem $u$ is expected to range from -1 to 1. When $u\geq0$, the input to valve A is  the pulse width modulated signal $U$, and the input to valve B is 0. When $u<0$, the opposite occurs.
+The complete open-loop actuator model can be seen in Fig. \ref{fig:pneumatics_model_full}. The absolute value of the real-valued input $u$ is first fed to the PWM block. This signal is then converted into separate signals for each of the two solenoid valves in a way similar to the first PWM pulsing scheme presented by \citet{accurate_position}. The input to the subsystem $u$ is expected to range from -1 to 1. When $u\geq0$, the input to valve A is the pulse width modulated signal $U$, and the input to valve B is 0. When $u<0$, the opposite situation occurs.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.65]{implementation/figures/pneumatic_modelling4}
-\caption{Overall electropneumatic model.}
+\caption{Simulink model of the full electro-pneumatic system.}
 \label{fig:pneumatics_model_full}
 \end{figure}
 
-\subsection{Solenoid Valves}
+\subsection{Component Selection}
 
-Solenoid valves and cylinders from SMC corp were chosen for a physical implementation of the design. The solenoid valve specified for a sample implementation a the \emph{VQZ115}-series valve. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. The maximum operating frequency of \unit{20}{\hertz} was the fastest available capable of handling \unit{0.8}{\mega\pascal} while still being within the Formula SAE budget.
+Selection of components was limited by budgetary constraints, however adequate solenoid valves and pneumatic actuators were found. These are detailed in the following sections.
+
+\subsubsection{Solenoid Valves}
+
+Solenoid valves and cylinders from SMC corp were chosen for the physical implementation of the design, specifically the \emph{VQZ115} series valve. Table \ref{tab:solenoid_specs} shows the specifications for this solenoid valve. A maximum operating frequency of \unit{20}{\hertz} was the fastest available solenoid that met the output force requirements while still being within the Formula SAE budget.
 
 \begin{table}[H]
-  \caption{Solenoid valve specifications.\label{tab:solenoid_specs}}
+  \caption{Specifications of the SMC VQZ115 solenoid valve.\label{tab:solenoid_specs}}
   \centering
 
   \begin{tabular}{|l|l|}
@@ -95,23 +99,23 @@ Solenoid valves and cylinders from SMC corp were chosen for a physical implement
   \hline
   Coil Voltage & \unit{12}{\volt} \tabularnewline
   \hline
-  Configuration & 3-port normally closed \tabularnewline
+  Configuration & 3-port Normally Closed \tabularnewline
   \hline
-  Flow coefficient & $C_v=\unit{0.23}{}$ \tabularnewline
+  Flow Coefficient & $C_v=\unit{0.23}{}$ \tabularnewline
   \hline
-  Max. Operating Frequency & \unit{20}{\hertz} \tabularnewline
+  Maximum Operating Frequency & \unit{20}{\hertz} \tabularnewline
   \hline
-  Max. Pressure & \unit{0.7}{\mega\pascal} \tabularnewline
+  Maximum Pressure & \unit{0.7}{\mega\pascal} \tabularnewline
   \hline
   \end{tabular}
 \end{table}
 
-\subsection{Pneumatic Actuators}
+\subsubsection{Pneumatic Actuators}
 
 The pneumatic actuators specified for implementation are the same as used in the previous design, and are only briefly mentioned in this report. Specifications can be found in Table \ref{tab:cylinder_specs}. The clutch cylinder is specified with an internal magnet on the piston that interfaces magnetically with a membrane potentiometer, discussed next.
 
 \begin{table}[H]
- \caption{Pneumatic actuator specifications.\label{tab:cylinder_specs}}
+ \caption{Specifications of the pneumatic actuators used.\label{tab:cylinder_specs}}
   \centering
   \begin{tabular}{|l|l|l|l|}
    \hline
@@ -125,6 +129,6 @@ The pneumatic actuators specified for implementation are the same as used in the
   \end{tabular}
 \end{table}
 
-\subsection{Positional Feedback Sensors}
+\subsubsection{Positional Feedback Sensors}
 
-To provide positional feedback from the clutch cylinder, a MagnetoPot contactless potentiometer from Spectra Symbal is to be used. The internal magent in the cylinder interacts with the MagnetoPot, which operates as a standard potentiometer otherwise.
+A ``MagnetoPot'' contact-less potentiometer from Spectra Symbal provides positional feedback from the clutch cylinder. The internal magnet in the cylinder interacts with the ``MagnetoPot'', which has a three-wire electrical interface similar to a standard potentiometer.

@@ -5,7 +5,7 @@ The engine and transmission module provides optimized selection of the variable-
 \begin{figure}[H]
 	\centering
  	\input{design/figures/engine_transmission_overview_block}
-	\caption{An overview of the engine and transmission module and it's interactions.}
+	\caption{Overview of the engine and transmission module and it's environment.}
 	\label{fig:design_engine_overview_block}
 \end{figure}
 
@@ -22,7 +22,7 @@ The up-shift procedure is illustrated in \ref{fig:transmission_upshift_flow}. Up
 \begin{figure}[H]
 	\centering
 	\input{design/figures/transmission_upshift_flow}
-	\caption{The transmission up-shift procedure.}
+	\caption{Flow-chart for the transmission up-shift procedure.}
 	\label{fig:transmission_upshift_flow}
 \end{figure}
 
@@ -37,7 +37,7 @@ The down-shift procedure is illustrated in \ref{fig:transmission_downshift_flow}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/transmission_downshift_flow}
-	\caption{The transmission down-shift procedure.}
+	\caption{Flow-chart for the transmission down-shift procedure.}
 	\label{fig:transmission_downshift_flow}
 \end{figure}
 
@@ -61,7 +61,7 @@ Neutral find can be used by the driver to quickly shift into neutral when enteri
 \begin{figure}[H]
 	\centering
 	\input{design/figures/transmission_neutralfind_flow}
-	\caption{The transmission neutral find procedure.}
+	\caption{Flow-chart for the neutral find procedure.}
 	\label{fig:transmission_neutralfind_flow}
 \end{figure}
 
@@ -73,7 +73,7 @@ The length of the intake runners is modulated automatically to provide the optim
 \begin{figure}[H]
 	\centering
 	\input{design/figures/intake_adjustment_flow}
-	\caption{The variable intake adjustment flow.}
+	\caption{Flow-chart for the variable intake adjustment.}
 	\label{fig:engine_varintake_flow}
 \end{figure}
 
@@ -103,7 +103,7 @@ A high-level overview of the module's hardware design is shown in figure \ref{fi
 \begin{figure}[H]
 	\centering
 	\input{design/figures/engine_hardware_design_block}
-	\caption{A block diagram of the engine and transmission module hardware.}
+	\caption{Block diagram of the engine and transmission module hardware.}
 	\label{fig:engine_hardware_design_block}
 \end{figure}
 
@@ -132,7 +132,7 @@ High-current solenoid drivers provide current to the solenoids that actuate the 
  
 \subsubsection{ECU Control Signals}
 
-The engine and transmission module design has several outputs to control the discrete input pins on the ECU as described in Sec \ref{ecu_background_discrete_inputs}:
+The engine and transmission module design has several outputs to control the discrete input pins on the ECU as described in Sec. \ref{sec:ecu_background_discrete_inputs}:
 
 \begin{itemize}
   \item the launch control pin, which enables and disables the launch control feature;
@@ -149,7 +149,7 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:engine
 \begin{figure}[H]
 	\centering
 	\input{design/figures/engine_software_design_block}
-	\caption{The engine and transmission module software block diagram.}
+	\caption{Block diagram of the engine and transmission module software.}
 	\label{fig:engine_software_design_block}
 \end{figure}
 
@@ -157,34 +157,34 @@ The external hardware and micro-controller features that are needed by the intak
 
 \subsubsection{Transmission Manager}
 
-The \emph{transmission manager} listens to shifting and feature requests from the driver over the network. It implements the up-shift, down-shift, and neutral find processes. It is also responsible for implementing the advanced transmission features such as launch and crawl.
+The transmission manager listens to shifting and feature requests from the driver over the network. It implements the up-shift, down-shift, and neutral find processes. It is also responsible for implementing the advanced transmission features such as launch and crawl.
 
 The transmission manager uses the event scheduler to sequence the complex series of actuation vectors required by up-shifting and down-shifting. It also implements the feedback control system required by the electro-pneumatic system to smoothly actuate the clutch lever. Timing signals are generated with the help of the PWM generator.
 
 \subsubsection{Intake Manager}
 
-The \emph{intake manager} continuously monitors the engine RPM being broadcast by the ECU. It adjusts the intake runner length based on a cross-over point determined by dynometer testing. Adjustments to the runner length are made via the servo interface.
+The intake manager continuously monitors the engine RPM being broadcast by the ECU. It adjusts the intake runner length based on a cross-over point determined by dynometer testing. Adjustments to the runner length are made via the servo interface.
 
 \subsubsection{Event Scheduler}
 
-The \emph{event scheduler} allows for complex sequencing of events in time. It allows for new events to be scheduled at some point in the future.
+The event scheduler allows for complex sequencing of events in time. It allows for new events to be scheduled at some point in the future.
 The scheduler will continuously update the schedule and signal the module coordinator to execute events that are now current. The scheduler requires a resolution of \emph{1}{\milli\second} to be useful to the transmission manager for scheduling solenoid actuation events.
 
 \subsubsection{Pulse Width Modulation (PWM) Generator}
 
-The \emph{PWM generator} generates the signals required by the transmission manager to engage the clutch lever solenoids. To meet the goals of the transmission system, the signals must have a frequency of at least \unit{20}{\hertz} and a 1\% duty cycle resolution. Since there are two solenoids to be activated, the generator must be able to offer two independent output channels.
+The PWM generator generates the signals required by the transmission manager to engage the clutch lever solenoids. To meet the goals of the transmission system, the signals must have a frequency of at least \unit{20}{\hertz} and a 1\% duty cycle resolution. Since there are two solenoids to be activated, the generator must be able to offer two independent output channels.
 
 \subsubsection{Module Coordinator}
 
-Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to change gears, are handled by the managers themselves. The \emph{module coordinator} contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. The coordinator also interacts with the event scheduler, waiting for pending events to be executed and then executing them.
+Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to change gears, are handled by the managers themselves. The module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. The coordinator also interacts with the event scheduler, waiting for pending events to be executed and then executing them.
 
 \subsubsection{CAN Interface}
 
-The \emph{CAN interface}, common to each module, enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager.
+The CAN interface enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager. It is common to all four modules.
 
 \subsubsection{Solenoid Driver Interface}
 
-The \emph{solenoid driver interface} communicated with the high-current solenoid driver to switch the solenoid valves on and off. Logical requests from the transmission manager are translated into a format understandable by the driver.
+The solenoid driver interface communicated with the high-current solenoid driver to switch the solenoid valves on and off. Logical requests from the transmission manager are translated into a format understandable by the driver.
 
 \subsubsection{Servo Motor Interface}
 
@@ -193,15 +193,15 @@ The \emph{servo motor interface} takes a positional adjustment command from the 
 \subsubsection{General-Purpose Input-Output (GPIO) Interface}
 \label{sec:design_engine_gpio}
 
-The \emph{general-purpose input-output (GPIO) interface} provides a means of setting any of the control lines connected to the ECU. It is responsible for generating the correct logic levels for a given ECU feature request.
+The GPIO interface provides a means of setting any of the control lines connected to the ECU. It is responsible for generating the correct logic levels for a given ECU feature request.
 
 \subsubsection{Analog-to-Digital (ADC) Interface} 
 \label{sec:design_engine_adc}
 
-The \emph{analog-to-digital (ADC) interface} communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either return the results to the program for further processing.
+The ADC interface communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either return the results to the program for further processing.
 
 \nomenclature{NVRAM}{Non-Volatile Random-Access Memory}
 \subsubsection{Non-Volatile Storage Interface}
 \label{sec:design_engine_nvsi}
 
-The \emph{non-volatile storage interface} can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration parameters to be stored and read even if the module loses power or is reset.
+The non-volatile storage interface can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration parameters to be stored and read even if the module loses power or is reset.

@@ -5,7 +5,7 @@ The braking module adjusts the brake bias electronically as requested by the dri
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_overview_block}
-\caption{An overview of the brake module and it's interactions.}
+\caption{Overview of the braking module and it's environment.}
 \label{fig:design_brake_overview_block}
 \end{figure}
 
@@ -22,7 +22,7 @@ The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bia
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_adjust_flow}
-	\caption{The brake bias adjustment sequence.}
+	\caption{Flow-chart for the brake bias adjustment procedure.}
 	\label{fig:design-braking-bias-adjustment}
 \end{figure}
 
@@ -35,7 +35,7 @@ A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:b
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_calibration_flow}
-	\caption{The brake bias calibration sequence.}
+	\caption{Flow-chart for the brake bias calibration procedure.}
 	\label{fig:brake_bias_calibration_flow}
 \end{figure}
 
@@ -48,7 +48,7 @@ The pressure sensor calibration routine is outlined in Fig. \ref{fig:brake_press
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_pressure_calibration_flow}
-	\caption{The brake pressure calibration sequence.}
+	\caption{Flow-chart for the brake pressure calibration sequence.}
 	\label{fig:brake_pressure_calibration_flow}
 \end{figure}
 
@@ -61,7 +61,7 @@ A high-level overview of the module's hardware design is shown in figure \ref{fi
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_hardware_design_block}
-\caption{A block diagram of brake module hardware.}
+\caption{Block diagram of the braking module hardware.}
 \label{fig:brake_hardware_design_block}
 \end{figure}
 
@@ -86,7 +86,7 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_software_design_block}
-	\caption{The brake module software block diagram.}
+	\caption{Block diagram of the braking module software.}
 	\label{fig:brake_software_design_block}
 \end{figure}
 
@@ -96,7 +96,7 @@ Several hardware abstraction interfaces link the external hardware and micro-con
 
 The bias manager implements the bias adjustment and bias calibration processes. It listens for requests to initiate either process from the network by way of the CAN interface.
 
-When asked to adjust the brake bias, the bias manager coordinates with the pressure manager to determine if the brakes are being applied, and with the engine and transmission controller to determine if the vehicle is in motion. It performs the calculations required to calculate the new bias position, and adjusts the balance bar accordingly by sending motor step commands to the \emph{stepper motor interface}.
+When asked to adjust the brake bias, the bias manager coordinates with the pressure manager to determine if the brakes are being applied, and with the engine and transmission controller to determine if the vehicle is in motion. It performs the calculations required to calculate the new bias position, and adjusts the balance bar accordingly by sending motor step commands to the stepper motor interface.
 
 Bias calibration requires similar coordination to ensure a safe operating state. The bias manager again uses the stepper motor interface to move the balance bar between it's extremes. Calibration data is loaded at start-up and stored after calibration in NVRAM by way of the non-volatile storage interface.
 
@@ -114,15 +114,15 @@ Like the module coordinator for the engine and transmission module, the braking 
 
 \subsubsection{Stepper Motor Interface}
 
-The \emph{stepper motor interface} takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
+The stepper motor interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
 
 \subsubsection{General Purpose Input-Output (GPIO) Interface}
 
-The \emph{general-purpose input-output (GPIO) interface} monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs. This interface operates in a similar manner to the GPIO interface specified in Sec. \ref{sec:design_engine_gpio}.
+The GPIO interface monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs. This interface operates in a similar manner to the GPIO interface specified in Sec. \ref{sec:design_engine_gpio}.
 
 \subsubsection{Analog-to-Digital Converter (ADC) Interface}  
 
-The analog-to-digital (ADC) interface initiates a sampling cycle on either pressure sensor channel. The resulting sample is provided to  the program for further processing. This interface operates in a similar manner to the ADC interface specified in Sec. \ref{sec:design_engine_adc}.
+The ADC interface initiates a sampling cycle on either pressure sensor channel. The resulting sample is provided to  the program for further processing. This interface operates in a similar manner to the ADC interface specified in Sec. \ref{sec:design_engine_adc}.
 
 \subsubsection{Non-Volatile Storage Interface}
 

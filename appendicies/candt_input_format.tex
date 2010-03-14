@@ -1,0 +1,87 @@
+
+\chapter{CAN Diagnostic Tool Input Format}
+
+The CAN diagnostic tool can be programmed to output a sequence of messages onto the bus at pre-determined times. As mentioned in Sec. \ref{sec:implementation_candt}, the packet sequence is input via a serial link. This appendix describes the format of this input.
+
+\nomenclature{ASCII}{American Standard Code for Information Interchange}
+\section*{Input Format}
+
+Each packet is input on a single line that is terminated with the new-line character (ASCII Character 10). The fields are colon-separated. Each line contains the following fields:
+
+\begin{itemize}
+	\item the \emph{packet type} field, which specifies a data or remote request packet;
+	\item the \emph{injection time} field, which indicates the time at which the packet should be broadcast;
+	\item the \emph{identifier mode} field, which specifies if the packet uses the extended identifier feature;
+	\item the \emph{identifier} field, which defines the ID with which the packet will be broadcast;
+	\item the \emph{data length} field, which indicates how many bytes will be broadcast; and
+	\item the \emph{data} field, which includes the actual data bytes to be broadcast.
+\end{itemize}
+
+\subsection*{Packet Type}
+
+Packet type can be either a data packet or remote request packet. A data packet is specified by the `@' character, while a remote request packet is specified by the `\$' character.
+
+\subsection*{Injection Time}
+
+Injection time is specified in milliseconds from the start of the injection sequence, and must be a 32-bit unsigned integer value in decimal form. Packets must be input in ascending injection time.
+
+\subsection*{Identifier Mode}
+
+The identifier mode can be set to either standard or extended. A standard identifier type is specified by a `0' character, while an extended identifier type is specified by a `1' character.
+
+\subsection*{Identifier}
+
+The identifier can be either an 11-bit value (for the standard identifier type) or a 29-bit value (for the extended identifier type). The field itself expects a 32-bit unsigned integer in hexadecimal format with a leading {}``0x''.
+
+\subsection*{Data Length}
+
+Both data packets and remote request packets can include data. CAN packets are limited packets to 8 bytes of data. This field is an 8-bit unsigned integer value in decimal form, ranging from 0 to 8.
+
+\subsection*{Data}
+
+Bytes to be broadcast are specified as pairs of ascii characters representing the hexadecimal equivalent of the data byte, e.g., the corresponding data field for $1A2B3C4D_{16}$ would be {}``1A2B3C4D''.
+
+\section*{Input Termination}
+
+Input is terminated when a single exclamation mark (`!') followed by a new-line character is transmitted. 
+
+\section*{Example}
+
+In this example, we broadcast four packets, outlined in Table \ref{table:candt_packet_example}.
+
+\begin{table}[H]
+\caption{List of packets to be broadcast for the input format example.}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline 
+	Packet Type & Injection Time (ms) & Identifier Mode & Identifier &	 Data \\
+	\hline
+	\hline
+	Data & 1000 & Standard & 0x7FF & 0x1A 0x2B 0x3C \\
+	\hline
+	Remote & 2000 & Standard & 0x1AB & \emph{no data} \\
+	\hline
+	Remote & 2500 & Extended & 0x1FFFFF & 0x01 \\
+	\hline
+	Data & 4000 & Extended & 0x1AC90 & 0x00 0x01 0x02 \\
+	\hline
+\end{tabular}
+\label{table:candt_packet_example}
+\end{table}
+
+A listing of the corresponding input is shown in Fig. \ref{fig:candt_packet_example}.
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth]{\hrulefill}
+	\begin{verbatim}
+	@:1000:0:0x7FF:3:1A2B3C
+	$:2000:0:0x1AB
+	$:2500:1:0x1FFFFF:1:01
+	@:4000:1:0x1AC90:3:000102
+	!
+	\end{verbatim}
+	\makebox[\textwidth]{\hrulefill}
+	\caption{Listing of the corresponding input for the input format example.}
+	\label{fig:candt_packet_example}
+\end{figure}

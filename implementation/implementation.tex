@@ -1,26 +1,20 @@
 \chapter{Subsystem Implementation\label{cha:implementation}}
 
-The purpose of this chapter is to document the work completed in the implementation phase of the project. During this phase of the project, we had three major goals in mind:
+The purpose of this chapter is to document the work completed in the implementation phase of the project. Implementation was carried out with three major goals in mind:
+
 \begin{enumerate}
-  \item The implementation's primary objective is to verify the system design, and compare the results with those desired in Ch. \ref{cha:goals}.
-  \item The implemented systems are to be used as working prototypes for demonstration and communication of various aspects of the project.
-  \item Finally, it was desired to produce a first iteration of usable modules for the Formula SAE team to integrate into the vehicle and take to competition in May, 2010.
+  \item To verify the system design, and compare the results with those desired in Ch. \ref{cha:goals};
+  \item To use the results as working prototypes for the demonstration and communication of various aspects of the project; and
+  \item To produce a first iteration of usable modules to be integrated into the vehicle for competition in May of 2010.
 \end{enumerate}
 
-This chapter is broken down into four sections: first the simulation and physical implementation of the electro-pneumatic subsystem is discussed, followed by sections on the hardware and software implementations of each of the 4 modules. Finally, a section is devoted to the CAN Snooper and Injector, which was implemented to permit easier in-place testing of modules individually and together.
+This chapter is broken down into eight sections. First, the simulation and physical implementation of the electro-pneumatic subsystem is discussed. Next, commonalities in the hardware and software implementations are introduced. Then, the hardware and software implementations of the four modules are explained. Finally, the \emph{CAN Diagnostic Tool} is introduced. This tool was implemented to allow for in-place testing of the four modules, and is complex enough to warrant inclusion in the implementation.
 
 \input{implementation/implementation_pneumatic}
-
 \input{implementation/implementation_hardware_common}
-
 \input{implementation/implementation_software_common}
-
 \input{implementation/implementation_engine_transmission}
-
 \input{implementation/implementation_braking}
-
 \input{implementation/implementation_telemetry}
-
 \input{implementation/implementation_driver_interface}
-
 \input{implementation/implementation_can_tester}

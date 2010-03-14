@@ -1,3 +1,79 @@
-\chapter{Description of Attached Materials}
+\chapter{Attached Materials}
 
-Attached DVD, etc.
+Included with this report is a DVD containing material relevant to the project. This material includes:
+
+\begin{itemize}
+	\item the \emph{source code} for the various modules, libraries, and test harnesses; 
+	\item the \emph{hardware schematics} and \emph{printed circuit board layouts} for the four modules; and
+	\item the \emph{Simulink models} for the electro-pneumatic system.
+\end{itemize}
+
+\section*{Source Code}
+
+The complete source code for the project is included in the \texttt{source\_code} directory. Consult Appendix \ref{apx:environment} for a detailed description of the build environment for the source code. Table \ref{tbl:attached_source_code} lists the source code included on the DVD.
+
+\begin{table}[H]
+\caption{Description of source code included on the DVD.}
+\centering
+\begin{tabular}{|c|l|}
+	\hline 
+	Directory & Contents \\ 
+	\hline
+	\hline
+	\texttt{cantester} & CAN diagnostic tool and input examples. \\
+	\hline	
+	\texttt{canping168} & {}Automatic CAN packet reply utility. \\
+	\hline	
+	\texttt{helloc128} & {}``Hello World'' LED-blinker for the AT90CAN128. \\ 
+	\hline		
+	\texttt{libadc} & Library for the on-board ADC. \\ 
+	\hline		
+	\texttt{libcan} & Library for the on-board CAN controller. \\ 
+	\hline
+	\texttt{libeeprom} & Library for the on-board EEPROM. \\ 
+	\hline		
+	\texttt{libracetech} & Library for the RaceTech DAC packet injection and decoding. \\ 
+	\hline		
+	\texttt{libspi} & Library for the onboard SPI interface. \\ 
+	\hline	
+	\texttt{libxbee} & Library for the XBee Pro wireless modem.  \\ 
+	\hline	
+	\texttt{pbr\_braking} & Brake module software. \\ 
+	\hline
+	\texttt{pbr\_engine} & Engine and transmission module software. \\ 
+	\hline	
+	\texttt{pbr\_telemetry} & Telemetry module software. \\ 
+	\hline	
+	\texttt{pbr\_steering} & Driver interface software. \\ 
+	\hline	
+\end{tabular}
+\label{tbl:attached_source_code}
+\end{table}
+
+\section*{Schematics and Layouts}
+
+The hardware schematics and circuit board layouts are included in the \texttt{schematics} directory. Consult Appendix \ref{apx:environment} for a detailed description of the software used to develop the schematics and layouts. Table \ref{tbl:attached_schematics} lists the schematics  and layouts included on the DVD.
+
+\begin{table}[H]
+\caption{Description of schematics and layouts included on the DVD.}
+\centering
+\begin{tabular}{|c|c|c|c|}
+	\hline 
+	Directory & Module & Schematic File & Layout File \\ 
+	\hline
+	\hline
+	\texttt{brake} & Braking  & \texttt{brake.sch} & \texttt{brake.brd} \\
+	\hline	
+	\texttt{engine} & Engine and Transmission & \texttt{engine.sch} & \texttt{engine.brd} \\
+	\hline	
+	\texttt{telemetry} & Telemetry & \texttt{telemetry.sch} & \texttt{telemetry.brd} \\
+	\hline	
+	\texttt{steering} & Driver Interface & \texttt{steering.sch} & \texttt{steering.brd} \\			
+	\hline	
+\end{tabular}
+\label{tbl:attached_schematics}
+\end{table}
+
+\section*{Simulink Models}
+
+The Simulink models used to develop the electro-pneumatic system are included in the \texttt{simulink} directory. They were developed with the Simulink tool-kit included with MATLAB release ``2008b''.

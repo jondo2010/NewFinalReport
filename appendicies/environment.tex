@@ -1,0 +1,43 @@
+\chapter{Development Environment}
+\label{apx:environment}
+
+This appendix exists to document the exact build and debug environment used by the thesis team, so that all of the source code may be built  and run on the target hardware. Information regarding the schematics and layout are also provided.
+
+\section*{JTAG Interface}
+
+The particular JTAG interface used was Atmel's ``AVR JTAGICE mkII''. It utilizes a USB connection and special drivers to communicate with the host computer. Freeware utilities to interface with the ``mkII'' are described later in the appendix.
+
+\section*{Integrated Development Environment (IDE)}
+\nomenclature{IDE}{Integrated Development Environment}
+
+All of the source code was developed using IBM's ``Eclipse'' \emph{integrated development environment} (IDE). The particular version of Eclipse used was {}``Galileo''. In addition to Eclipse, the open-source {}``AVR Eclipse Plugin'' was also used. Each piece of software includes the Eclipse project meta-data that defines the build settings used for compilation.
+
+\section*{AVR Tool-Chain}
+
+The AVR tool-chain consists of a set of programs used to compile, burn, and debug software that targets the AVR line of micro-controllers (including the AT90CAN128 used in the four modules.) Here, we briefly describe the tools and the versions used.
+
+\subsection*{avr-gcc}
+
+{}``avr-gcc'' is an implementation of the GNU ``C'' compiler, used to translate source code into AVR-compatible machine code. The particular version used was \texttt{4.3.3}.
+
+\subsection*{avr-libc}
+
+{}``avr-libc'' is an implementation of the standard ``C'' library for the AVR platform. It contains header files and libraries useful for programming AVR hardware. The particular version used was \texttt{1.6.7}.
+
+\subsection*{binutils}
+
+{}``binutils'' is a suite of tools used for creating relocatable object files. It consists of an assembler, linker and profiler. The particular version used was \texttt{2.19}.
+
+\subsection*{gdb}
+
+{}``gdb'' is the GNU debugger application. It is a command-line tool that allows developers to test and debug code running locally or on a remote target such as a micro-controller. The particular version used was \texttt{6.8}.
+
+\subsection*{avarice}
+
+{}``avarice'' interfaces between the micro-controller and gdb using the on-board JTAG port. It allows code to be downloaded onto the micro-controller, and then debugged. The particular version used was \texttt{2.9}.
+
+\section*{Schematic Capture and Layout}
+
+Schematic capture and layout was accomplished with CadSoft's ``Eagle'' suite. The particular version used was \texttt{5.7.0}. 
+
+

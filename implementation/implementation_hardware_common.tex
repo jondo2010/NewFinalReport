@@ -37,8 +37,6 @@ We considered the use of a 16-bit microcontroller, but felt it would be overkill
 
 \subsection{Inter-module Communication\label{sec:inter_module_communication}}
 
-\nomenclature{CAN}{Controller Area Network}
-
 All electronic systems on the vehicle communicate over a two-wire \emph{Controller Area Network} (CAN) bus operating at 1 MBit/s. Each system module has a Microchip-brand MCP2551 CAN transceiver IC for connecting their local micro-controller to the bus, and all modules are capable of being a termination point for the bus \cite{MCP2551}. The CAN transceiver electrically interfaces the microcontroller to the physical bus.
 
 \subsection{Linear Regulator}

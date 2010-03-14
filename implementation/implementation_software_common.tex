@@ -12,16 +12,12 @@ Due to the constraint on the available resources on the microcontroller, code ef
 
 Programming and debugging software on the microcontroller was done through a standard IEEE 1149.1 JTAG interface. Atmel provides support for their own compiler, toolchain and IDE for Windows, however GNU support for the Atmel 8-bit microcontrollers is very good. Since all development of the system software was to be done on Unix-type operating systems, we decided to use the GNU toolchain \emph{gcc-avr} and \emph{binutils-avr}. Additionally \emph{GDB} was used with an AVR-JTAG gateway utility called \emph{avarice}. Using a hardware programmer/debugger device from Atmel connected to a USB port on the development PC, avarice communicates with the microcontroller using Atmel specific JTAG commands. GDB then connects to avarice, and allows the user to set brakepoints, control execution, and access memory on the microcontroller.
 
-\nomenclature{GNU}{A free software project providing among other things, the GCC compiler and GDB debugger.}
-\nomenclature{JTAG}{An IEEE standard defining a boundary-scan architecture commonly used for in-circuit debugging and programming of embedded systems.}
+\nomenclature{JTAG}{Joint Test and Action Group}
 
 \subsection{Common Low-Level Drivers}
 
-
 \subsubsection{CAN Driver}
 
-
 \subsubsection{EEPROM Driver}
-
 
 \subsubsection{SPI Driver}

@@ -29,33 +29,24 @@
 
 \maketitle
 
-%%% Visual Abstract
-\vspace*{1in}
-\begin{center}
-\includegraphics[scale=1]{visual_abstract.eps}
-\end{center}
-\phantomsection \label{visual_abstract}
-\addcontentsline{toc}{chapter}{Visual Abstract}
+%%% Front Matter
+
+\input{front/visual}
 
 \include{fancy_headers}
 
-\begin{abstract}
-\include{abstract}
-\end{abstract}
-
-\chapter*{Contributions}
-\addcontentsline{toc}{chapter}{Contributions}
-Contributions
-
-\chapter*{Acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
-Acknowledgements
+\input{front/abstract}
+\input{front/contributions}
+\input{front/acknowledgements}
 
 \renewcommand{\contentsname}{Table of Contents}
 
-%%% Shorten the TOC depth
+%%% Table of Contents
+
 \setcounter{tocdepth}{1}
 \tableofcontents{}
+
+%%% Lists and Nomenclature
 
 \newpage
 \phantomsection \label{listoffig}
@@ -73,24 +64,18 @@ Acknowledgements
 \printnomenclature{}
 
 \newpage
-
 \pagenumbering{arabic}
 %\setstretch{1.5}
 
+%%% Body of Report
+
 \input{introduction/introduction}
-
 \input{background/background}
-
 \input{goals/goals}
-
 \input{design/design}
-
 \input{implementation/implementation}
-
 \input{experimental_results/experimental_results}
-
 \input{conclusion/conclusion}
-
 \input{future_work/future_work}
 
 %%% References
@@ -104,11 +89,15 @@ Acknowledgements
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{reference/datasheets,reference/literature,IEEEfull}
 
-%%% Appendix
+%%% Appendicies
 
 \appendix
 
-\input{appendicies/appendicies}
+\input{appendicies/materials}
+\input{appendicies/clutch}
+
+\phantomsection \label{cha:attached_dvd}
+\addcontentsline{toc}{chapter}{Attached DVD}
 
 % Finito
 

@@ -26,6 +26,7 @@
 \usepackage{tikz-timing}[2009/05/15]
 \usepackage{subfigure}
 \usepackage{tabularx}
+\usepackage[compact]{titlesec}
 \usepackage{array}
 \usepackage{flafter,fnpos}
 \usepackage{booktabs}
@@ -54,6 +55,19 @@
 \setlength{\footskip}{20pt}
 \setlength{\headsep}{15pt}
 
+\usepackage[compact]{titlesec} 
+\newcommand{\bigrule}{\titlerule[0.5mm]} 
+\titleformat{\chapter}[display] 
+{\bfseries\Huge} 
+{% 
+ \vskip-3em 
+ \titlerule 
+ \filleft 
+ \Large\chaptertitlename\ 
+ \Large\thechapter} 
+{0mm} 
+{\filleft} 
+[\vspace{0.5mm} \bigrule]
 \setlength{\parskip}{\medskipamount}
 \makeatletter
 

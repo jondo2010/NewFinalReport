@@ -1,0 +1,29 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+  \node[block, text width=1.25cm, minimum height=1cm] (lcd) {LCD\\ Module};
+  \node[block, right of=lcd, minimum height=1cm, text width=1.15cm] (knobs) {Knobs};
+  \node[block, right of=knobs, minimum height=1cm, text width=1.35cm] (buttons) {Buttons};
+  \node[block, right of=buttons, text width=1.35cm, minimum height=1cm] (paddles) {Shift\\ Paddles};
+
+  %%% Microcontroller block
+  \path ($(lcd.south west) + (0,-1.25cm)$) node[coordinate] (mu1) {};
+  \path ($(paddles.south east) + (0,-1.25cm)$) node[coordinate] (mu2) {};
+
+  \node [block, fit=(mu1) (mu2), inner xsep=0, minimum height=1cm] (micro) {Microcontroller};
+  \node at ($(micro.east)+(2cm,0)$) [block, text width=2cm] (can_interface) {CAN Transceiver};
+
+  \draw [<->, thick] (lcd.south) -- ($(micro.north west)!(lcd.south)!(micro.north east)$);
+  \draw [<->, thick] (knobs.south) -- ($(micro.north west)!(knobs.south)!(micro.north east)$);
+  \draw [<->, thick] (buttons.south) -- ($(micro.north west)!(buttons.south)!(micro.north east)$);
+  \draw [<-> ,thick] (paddles.south) -- ($(micro.north west)!(paddles.south)!(micro.north east)$);
+
+  \draw [-, line width=3pt] (can_interface.north) -- ++(0, 1cm) node[coordinate,label=above:CAN Bus](x1){} -- ++(1cm,0);
+  \draw [-, line width=3pt] (x1) -- ++(-1cm,0);
+  
+
+  %%% Background
+  \begin{pgfonlayer}{background}
+    \path (micro.north west)+(-0.3,0.3) node (a) {};
+    \path (can_interface.south east)+(+0.2,-0.2) node (b) {};
+    \path[module] (a) rectangle (b);
+  \end{pgfonlayer}
+\end{tikzpicture}

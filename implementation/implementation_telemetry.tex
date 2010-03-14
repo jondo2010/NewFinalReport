@@ -85,7 +85,7 @@ An interrupt-driven driver was written to interface with the MAX3100 uart chip w
 
 The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $\unit{4}{\mega\hertz}$.
 
-The MAX3100 was configured to operate at \unit{115,200}{\kilo\bit\per\second}, which was matched with the XBee modem's interface rate. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the driver's software transmit buffer. A fixed-length 32 byte buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyser.
+
 
 \subsubsection{Xbee Library}
 

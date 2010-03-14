@@ -1,22 +1,10 @@
 \chapter{Results and Discussion}
 
-
-\section{Transmission}
-
-
-\subsection{Shift Speed}
+The electronics for all four modules was completely implemented, tested and debugged
 
 
-\subsection{Launch Control}
 
-
-\subsection{Neutral Find}
-
-
-\subsection{Anti-Stall}
-
-
-\subsection{Electropneumatics}
+\input{results/results_transmission.tex}
 
 
 \section{Intake}
@@ -36,6 +24,9 @@
 
 \section{Telemetry}
 
+
+
+The MAX3100 was configured to operate at \unit{115,200}{\kilo\bit\per\second}, which was matched with the XBee modem's interface rate. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the driver's software transmit buffer. A fixed-length 32 byte buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyser.
 
 \subsection{Data Interfaces}
 
@@ -71,11 +62,11 @@ To verify the LCD data interface circuitry before the final Driver Interface mod
 \centering
 \subfigure[LCD Bench test]{
   \label{fig:lcd_bench_test}
-  \includegraphics[width=2.5in,keepaspectratio]{experimental_results/figures/lcd_bench_test.eps}
+  \includegraphics[width=2.5in,keepaspectratio]{results/figures/lcd_bench_test.eps}
 }
 \subfigure[CAN Bench test]{
   \label{fig:can_bench_test}
-  \includegraphics[width=2.5in,keepaspectratio]{experimental_results/figures/can_bench_test.eps}
+  \includegraphics[width=2.5in,keepaspectratio]{results/figures/can_bench_test.eps}
 }
 \caption{Bench experiments conducted during the implementation phase.}
 \label{fig:bench_experiments}
@@ -85,7 +76,7 @@ Once all the hardware bugs with the Driver Interface module had been corrected, 
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=6in,keepaspectratio]{experimental_results/figures/driver_interface_lcd.eps}
+ \includegraphics[width=6in,keepaspectratio]{results/figures/driver_interface_lcd.eps}
  \caption{Testing the LCD on the Driver Interface module.}
  \label{fig:driver_interface_lcd}
 \end{figure}

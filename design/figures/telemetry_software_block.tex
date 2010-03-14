@@ -1,0 +1,27 @@
+\tikzstyle{big arrow} = [>=latex, line width=4pt, gray]
+
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth']
+  \node [block, minimum width=4cm, text width=2.5cm] (data_manager) {Data Manager};
+  \node [block, text width=1.5cm, below of=data_manager, left=-2cm, font=\scriptsize] (can_interface) {CAN Interface};
+  \node [block, minimum width=4cm, text width=2.5cm, below of=data_manager, node distance=4cm] (link_manager) {Link Manager};
+
+  \node [block, minimum width=1.5cm, text width=1.25cm, above of=data_manager, font=\scriptsize, left=-2cm] (decoder) {Packet Decoder};
+  \node [block, minimum width=1.5cm, text width=1.25cm, above of=data_manager, font=\scriptsize, right=-2cm] (injector) {Packet Injector};
+
+  \draw [<->, big arrow] (decoder) -- ($(data_manager.north west)!(decoder.south)!(data_manager.north east)$);
+  \draw [<->, big arrow] (injector) -- ($(data_manager.north west)!(injector.south)!(data_manager.north east)$);
+
+  \draw [<->, big arrow] (can_interface) -- ($(data_manager.south west)!(can_interface.north)!(data_manager.south east)$);
+  \draw [<->, big arrow] (can_interface) -- ($(link_manager.north west)!(can_interface.south)!(link_manager.north east)$);
+
+  \node [block, minimum width=1.5cm, right of=can_interface, font=\scriptsize, node distance=3.5cm] (init) {Module Initializer};
+  \node [block, minimum width=1.5cm, above of=init, font=\scriptsize] (uart) {UART Interface};
+  \node [block, minimum width=1.5cm, below of=init, font=\scriptsize] (wireless) {Wireless Modem Interface};
+
+  \draw [->, big arrow] (init) -- (can_interface);
+  \draw [->, big arrow] (init) -- (uart);
+  \draw [->, big arrow] (init) -- (wireless);
+  \draw [<->, big arrow] (uart) -- (data_manager);
+  \draw [<->, big arrow] (wireless) -- (link_manager);
+  
+\end{tikzpicture}

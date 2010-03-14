@@ -109,12 +109,12 @@ The timebase period is then given by:
 
 We then defined a constant scaling factor in software for the PWM generator:
 \begin{equation}
-{PWM\_DUTY\_SCALE}=\frac{1}{TB\cdot{f_{PWM}}}\approx205,
+{PWM\_SCALE}=\frac{1}{TB\cdot{f_{PWM}}}\approx205,
 \end{equation}
 
 where $f_{PWM}$ is the PWM frequency desired, in our case \unit{20}{\hertz}.
 
-By loading the timers' compare register with with a value scaled by ${PWM\_DUTY\_SCALE}$, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
+By loading the timers' compare register with with a value scaled by ${PWM\_SCALE}$, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
 
 \paragraph{Algorithm}
 

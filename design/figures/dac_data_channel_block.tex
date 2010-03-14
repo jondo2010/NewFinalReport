@@ -1,0 +1,29 @@
+\begin{tikzpicture}[auto, node distance=1.75cm, draw=black!70, >=stealth', font=\scriptsize, minimum height=1cm]
+  \node [block, text width=0.75cm] (dac) {DAC};
+  \node [block, right of=dac, text width=1.25cm, above=0.25cm] (injector) {Injector};
+  \node [block, right of=injector, text width=0.75cm] (mux) {MUX};
+  \node [block, right of=mux, text width=1.25cm] (modem1) {Wireless Modem};
+
+  \node [block, right of=dac, text width=1.25cm, below=0.25cm] (decoder) {Decoder};
+  \node [cloud, red shiny, inner sep=0cm, right of=decoder, cloud ignores aspect=true, node distance=2cm] (network) {Network};
+  
+  \draw [->, thick] (dac) -- (injector);
+  \draw [->, thick] (dac) -- (decoder);
+  \draw [->, thick] (decoder) -- (network);
+  \draw [->, thick] (injector) -- (mux);
+  \draw [->, thick] (mux) -- (modem1);
+  \draw [-, thick] (modem1.east) -- ++(0.5cm,0) \antenna;
+
+  \node [block, right of=modem1, node distance=4cm, text width=1.25cm] (modem2) {Wireless Modem};
+  \node [block, right of=modem2, text width=1cm] (laptop) {Laptop};
+  \node [block, right of=laptop, text width=1.25cm] (software) {DTAFast Software};
+  
+  \draw [-, thick] (modem2.west) -- ++(-0.5cm, 0) \antenna;
+  \draw [->, thick] (modem2) -- (laptop);
+  \draw [->, thick] (laptop) -- (software);
+
+  \draw [-, thick, dashed] ($(modem1)!0.5!(modem2)+(0,1cm)$) -- ++(0,-3cm) node[](x1){};
+
+  \node at (x1) [anchor=east, inner xsep=0.5cm] (vehicle) {Vehicle Side};
+  \node at (x1) [anchor=west, inner xsep=0.5cm] (remote) {Remote Side};
+\end{tikzpicture}

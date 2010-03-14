@@ -1,0 +1,22 @@
+\begin{tikzpicture}[auto, node distance=2cm, draw=black!70, >=stealth', font=\scriptsize, minimum height=1cm]
+  \node [block, text width=1cm] (ecu) {ECU};
+  \node [block, right of=ecu, text width=1cm] (packetizer) {MUX};
+  \node [block, right of=packetizer, text width=1.25cm] (modem1) {Wireless Modem};
+  
+  \draw [->, thick] (ecu) -- (packetizer);
+  \draw [->, thick] (packetizer) -- (modem1);
+  \draw [-, thick] (modem1.east) -- ++(0.5cm,0) \antenna;
+
+  \node [block, right of=modem1, node distance=4cm, text width=1.25cm] (modem2) {Wireless Modem};
+  \node [block, right of=modem2, text width=1cm] (laptop) {Laptop};
+  \node [block, right of=laptop, text width=1.25cm] (software) {DTAFast Software};
+  
+  \draw [-, thick] (modem2.west) -- ++(-0.5cm, 0) \antenna;
+  \draw [->, thick] (modem2) -- (laptop);
+  \draw [->, thick] (laptop) -- (software);
+
+  \draw [-, thick, dashed] ($(modem1)!0.5!(modem2)+(0,1cm)$) -- ++(0,-2cm) node[](x1){};
+
+  \node at (x1) [anchor=east, inner xsep=0.5cm] (vehicle) {Vehicle Side};
+  \node at (x1) [anchor=west, inner xsep=0.5cm] (remote) {Remote Side};
+\end{tikzpicture}

@@ -5,7 +5,7 @@ In previous years, the team has often been hindered by a lack of direct informat
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/interface_overview_block}
+	\input{design/figures/interface_overview_block}
 	\caption{Overview of the driver interface module and it's interactions.}
 	\label{fig:design_interface_overview_block}
 \end{figure}
@@ -84,7 +84,7 @@ A high-level overview of the module's hardware design is shown in figure \ref{fi
 
 \begin{figure}[H]
 \centering
-%\input{design/figures/interface_hardware_design_block}
+\input{design/figures/interface_hardware_design_block}
 \caption{A block diagram of interface module hardware.}
 \label{fig:interface_hardware_design_block}
 \end{figure}
@@ -103,28 +103,37 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:interf
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/interface_software_design_block}
+	\input{design/figures/interface_software_design_block}
 	\caption{The interface module software block diagram.}
 	\label{fig:interface_software_design_block}
 \end{figure}
 
 \subsubsection{User Interface Manager}
 
-The \emph{user interface manager} sets the content displayed on the driver information panel. New driver commands are relayed to the manager, which decides what content should be displayed. 
+The \emph{user interface manager} controls the content displayed on the information display panel, and implements a menu system for the driver to modify the various dynamic parameters of the vehicle. New input from the driver is directed to the interface for processing. Vehicle diagnostics are also relayed to the manager and displayed as appropriate. The user interface manager updates the information display panel through the \emph{LCD interface}.
 
-\subsubsection{Driver Control Manager}
+\subsubsection{Diagnostics Manager}
 
-The \emph{driver control manager} listens for new driver inputs on the knobs, buttons, and paddles, and relays them through the network to the affected modules. It also relays adjustment requests to the \emph{vehicle dynamic mode manager} for processing.
-
-\subsubsection{Vehicle Diagnostics Manager}
-
-The \emph{vehicle diagnostics manager} listens to the network for the information listed in Sec. \ref{sec:interface_diag}. It coordinates with the user interface manager to display the information on screen to the driver.
+The \emph{diagnostics manager} listens to the network for the information listed in Sec. \ref{sec:interface_diag}. It grabs important vehicle parameters and coordinates with the user interface manager to display them on the information display panel.
 
 \subsubsection{Vehicle Dynamic Mode (VDM) Manager}
 
-The \emph{vehicle dynamic mode manager} handles requests from the driver control manager to change the current vehicle dynamic mode, and to overwrite the dynamic mode presets. It uses the CAN interface to communicate the new parameters over the network to the other modules. The non-volatile storage interface is utilized to load and save the parameters for each preset.
+The \emph{vehicle dynamic mode manager} handles requests from the driver control manager to change the current vehicle dynamic mode, and to overwrite the dynamic mode presets. It uses the CAN interface to communicate the new parameters over the network to the other modules. The non-volatile storage interface is utilized to load and save the parameters for each preset. 
+
+\subsubsection{Driver Controls Manager}
+
+The \emph{driver controls manager} listens for new driver inputs on the knobs, buttons, and paddles. Driver input is directed to the user interface manager for processing. Transmission requests are relayed directly to the engine and transmission module over the CAN interface.
 
 \subsubsection{LCD Interface}
 
 The \emph{LCD interface} abstracts the functionality of the LCD module for the user interface manager. It translates high-level drawing and text commands into the low-level memory operations required by the LCD module to draw on the screen.
+
+\subsubsection{General Purpose Input-Output (GPIO) Interface}
+
+The \emph{general-purpose input-output (GPIO) interface} monitors the knobs, buttons, and levers for activity. It notifies the driver control manager when a change of state occurs. 
+
+\subsubsection{Non-Volatile Storage Interface}
+
+The \emph{non-volatile storage interface} reads and writes vehicle dynamic mode parameters to the non-volatile storage portion of the micro-controller. 
+
 

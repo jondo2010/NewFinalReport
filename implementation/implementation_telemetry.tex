@@ -86,11 +86,17 @@ The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP
 In order to facilitate routing data to and from multiple sources and sinks, it was determined that the Xbee would need to be interfaced using the special "API" mode described in the Xbee documentation \cite{XBeeManual}. The API mode is characterized by a packet interface that needed to be implemented in software. A library was written to implement two critical pieces of functionality:
 
 \begin{enumerate}
-\item to set the modem into API mode operation and manage the modem's operating state;
 \item and to send and receive packetized data from the modem on behalf of the user software as per the Xbee's API specification \cite{XBeeManual};
+\item to set the modem into API mode operation and manage the modem's operating state;
 \end{enumerate}
 
+The XBee library can be split logically into two chunks: code to packetize outgoing data for the main control loop software, and code to disassemble incoming packets and provide their payload to the main control loop.
+
 The Xbee library implements the binary packet protocol described in the XBee manual, and is able to send and receive unicast and multicast packets. The driver is only capable of sending packets to 16-bit addresses. Full 64-bit address mode was not implemented as the address space was not required in our 3 node network. The driver is also capable of sending command-type packets to the modem and reading the response.
+
+When the mainline software wants to send a packet, it calls the \verb|xbee_send_data()| function. A pointer to the data as well as the 16-bit address is passed. The packet is constructed, and the packetized data is added to the MAX3100 driver's TX buffer to be sent to the XBee.
+
+Receiving packets is more complicated, since individual bytes arrive at the MAX3100 drivers's RX buffer asynchronously. A state machine was constructed that waits for a full packet to be available in the RX buffer, and then pushes it into a seperate, incoming packet buffer. This incoming packet buffer can then be read by the mainline code.
 
 Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface.
 
@@ -115,12 +121,23 @@ MY & Set and read the modems local address \tabularnewline
 \end{tabular}
 \end{table}
 
+The XBee modem can be controlled by entering into it's command mode by sending a special string of bytes, by default ``+++''. A list of modem-style AT-commands, documented in the manual, are used to change the various settings of the modem. This command mode was used to initially set up the modems by hand, but is only used by the software once on startup to enable the API mode.
+
 Similar to the rest of the software drivers implemented, the Xbee library uses callbacks to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different USART on-the-fly.
 
 \subsubsection{DAC Library}
 
 To reduce the implementation work required by us, we asked David Schilling, a computer science student on the Formula SAE team, to write the DAC software library to read and write the DAC's serial format, given the requirements described in Section \ref{sec:Telemetry-Module-Design}.
 
-The DAC library maintains it's own buffer of incoming DAC data. We also asked Dave to provide seperate functions for buffering incoming data, and for processing that data. This seperation allowed the library to be easily tied in with the rest of the system software on the telemetry module: adding a data to the DAC buffer occurs whenever the internal USART driver interrupts with a new byte, and processing is called from the mainline loop.
+The DAC library maintains it's own buffer of incoming DAC data. We also asked Dave to provide seperate functions for buffering incoming data, and for processing that data. This seperation allowed the library to be easily tied in with the rest of the system software on the telemetry module: adding data to the DAC buffer occurs whenever the internal USART driver interrupts with a new byte, and processing is called from the mainline loop.
 
 \subsubsection{Main Control Loop}
+
+Once all of the hardware on the module is initialized and the XBee has successfully entered API mode, the Telemetry module's main control loop repeatedly calls the \verb|telemetry_process()| function. This function runs through three seperate processes:
+\begin{enumerate}
+  \item The RX buffer of the USART that the ECU is connected to is polled for data. If there is any incoming data waiting, send it over the ECU link by passing it to the packetizer;
+  \item all decoded packets in the incoming packet buffer are dealt with, by calling\\ \verb|xbee_digest_incoming_packets()|;
+  \item and finally, an iteration of the DAC libraries' decoder function is called,\\ \verb|dac_decode_serial()|. This checks to see if any of the buffered incoming DAC data can be decoded.
+\end{enumerate}
+
+Incoming DAC data does not need to be polled in the same way as with the ECU, since an incoming byte callback is set which places any incoming DAC bytes into the DAC libraries' own buffer.

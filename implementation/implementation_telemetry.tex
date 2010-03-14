@@ -1,6 +1,6 @@
 \section{Telemetry Module}
 
-\subsection{Hardware}
+The Telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section.
 
 \begin{figure}[H]
 \centering
@@ -8,16 +8,15 @@
 \caption{Populated telemetry module PCB.}\label{fig:telemetry_pcb}
 \end{figure}
 
+\subsection{Hardware}
+
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, several additional components were required in the implementation of the Telemetry module. A block diagram of the Telemetry module hardware implementation is shown in Fig.\ \ref{fig:telemetry_hardware_block}. The additional components are an XBee-PRO wireless mode, MAX232 RS-232 transceiver, MAX3100 external UART, an LTI1521 \unit{3.3}{\volt} linear voltage regulator, and an ST2378E 8-bit level translator. These additional components are listed in Table \ref{tab:telemetry_module_components} and will be described further in this chapter.
 
 \begin{figure}[H]
 \centering
 \input{implementation/figures/telemetry_hardware_block}
-\caption{Block Diagram, Wireless Telemetry Module.\label{fig:tele_tx_overview}}
+\caption{Block Diagram, Wireless Telemetry Module.\label{fig:telemetry_hardware_block}}
 \end{figure}
-
-The telemetry module is implemented on a custom PCB with the same AT90CAN128 micro-controller common to the other modules. In addition to the common life-support hardware, the telemetry module includes a dual RS-232 transceiver chip and two DE-9 connectors. 
-
-The ECU and the DAQ connect to the telemetry board with specialized cables that connect to the wiring harness. The ECU and DAQ interface with two built-in USART ports on the micro-controller. A third, SPI-based UART interfaces with the wireless transmitter.
 
 \begin{table}[H]
   \caption{Wireless Telemetry Module Components\label{tab:telmetry_module_components}}
@@ -40,27 +39,25 @@ The ECU and the DAQ connect to the telemetry board with specialized cables that 
     \end{tabular}
 \end{table}
 
-
-\subsubsection{XBee-PRO Wireless Modem}
-
-To meet the range and data throughput requirements for the telemetry system, an XBee-PRO wireles modem was used. The XBee requires \unit{3.3}{\volt} I/O levels and power supply, and so a second linear voltage regulator was used in the design, the LT1521 from Linear Technology. Since the AT90CAN129 has only 2 built-in UARTS that were used for the RS232 interfaces to the ECU and DAQ, an third external UART was added to the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has an active-low IRQ line connected to external interrupt line EXT7 on the microcontroller. 
-
-The wireless transmitter is an XBee Pro Modem from Digi International. The modem is in a package designed for mounting on a printed circuit board, and is attached to the telemetry module directly. This modems requires a 3.3V power supply. and consumes at most 215mA of current during transmit. Since the common module hardware only provides power for 5V devices, the telemetry module has a second LDO regulator providing 3.3V. A separate antenna port is connected to the modem and mounted in the side of the module enclosure.
-
 \subsubsection{Dual RS-232 Transceiver}
 
-A MAX232 dual RS-232 trasceiver chip was used in the design to interface the built-in UARTS on the AT90CAN128 with the line levels expected by the serial ports on the ECU and DAQ.
+The ECU and the DAQ modules connect to the telemetry board with specialized cables that connect to the wiring harness. The ECU and DAQ interface with two built-in USART ports on the AT90CAN128 micro-controller. A MAX232 dual RS-232 trasceiver chip was used in the design to interface the built-in UARTS on the AT90CAN128 with the line levels expected by the serial ports on the ECU and DAQ.
 
-\subsubsection{External SPI USART}
+\subsubsection{XBee-PRO Wireless Modem and External SPI UART}
 
-A third UART was needed in the design to interface with the XBee-PRO modem, since the AT90CAN128 only provides 2. A MAX3100 SPI-capable external UART was chosen
+To meet the range and data throughput requirements for the telemetry system, an XBee-PRO wireles modem was used. The XBee requires \unit{3.3}{\volt} I/O levels and power supply, and so a second linear voltage regulator was used in the design, the LT1521 from Linear Technology. Since the AT90CAN129 has only 2 built-in UARTS that were used for the RS232 interfaces to the ECU and DAQ, an third external UART was added to the design. The MAX3100 is a SPI-interfaced UART with an 8 word deep FIFO buffer. It is interfaced to the AT90CAN128's SPI pins and has an active-low IRQ line connected to external interrupt line EXT7 on the microcontroller.
 
+The wireless transmitter consumes at most \unit{215}{\milli\ampere} of current during transmit \cite{XBeeManual}. Since the common module hardware only provides power for 5V devices, the telemetry module has a second LDO regulator providing \unit{3.3}{\volt}. A separate antenna port is connected to the modem and mounted in the side of the module enclosure.
 
-\subsubsection{Two-Channel ECU and DAC USART}
+Since the XBee, MAX3100, and AT90CAN128 are operating at different logic levels, a dual-supply level translator was used. Signals between the XBee, MAX3100, and the low supply voltage side of the level translator use \unit{+3.3}{\volt} logic, while signals between the AT90CAN128 and the high supply voltage side of the level translator use \unit{+5}{\volt} logic.
 
 \subsection{Software}
 
-The primary objective of the software running on the Telemetry Module is to push data around from various sources to various sinks. It uses the interrupt-driven USART drivers written for the on-board USARTs of the AT90CAN128, as well as the MAX3100 external USART extensively. These USART drivers are discussed in section ?? 
+The primary objective of the software running on the Telemetry Module is to push data around from various sources to various sinks. An overview of the Telemetry module's system software can be seen in Fig.\ \ref{fig:telemetry_software_implementation}. A layer of software drivers interacts directly with the hardware, providing an easy-to-use interface for the specific system software to use. Interrupt-driven USART drivers were written for the on-board USARTs of the AT90CAN128, as well as the MAX3100 external UART.
+
+Three major libraries 
+
+Nearly 3000 lines of c code were written by us for the Telemetry modules' system software. 3800 lines of code were also contributed by David Schilling for the DAC library.
 
 \begin{figure}[H]
 \centering
@@ -69,23 +66,20 @@ The primary objective of the software running on the Telemetry Module is to push
 \label{fig:telemetry_software_implementation}
 \end{figure}
 
-\subsubsection{Internal USART Driver}
+\subsubsection{Internal and External USART Drivers}
 
-\begin{figure}[]
+Software drivers for both the internal built-in USART periferals as well as the MAX3100 external UART were written in a similar fashion, and share the same software interfaces and buffering code. The drivers were written to utilize the hardware interrupts of the periferals to allow asynchronous sending and receiving of data. A statically allocated circular buffering approach was taken for both receiving and transmitting data. An abstracted flow chart of the USART interrupt handling is shown in Fig.\ \ref{fig:usart_driver_flow}.
+
+\paragraph{MAX3100 SPI Interface}
+
+The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $\unit{4}{\mega\hertz}$.
+
+\begin{figure}[H]
 \centering
 \input{implementation/figures/usart_driver_flow.tex}
 \caption{Basic USART interrupt flow diagram.}
 \label{fig:usart_driver_flow}
 \end{figure}
-
-
-\subsubsection{MAX3100 Driver}
-
-An interrupt-driven driver was written to interface with the MAX3100 uart chip which allows asynchronous serial communication with the XBee modem on the Telemetry Module. The same circular buffer approach as with the internal USART drivers was taken, and in fact the drivers use very similar buffering code. Additionally, the software interfaces to the drivers were made as close as possible to allow interchangability by the main module software.
-
-The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $\unit{4}{\mega\hertz}$.
-
-
 
 \subsubsection{Xbee Library}
 

@@ -2,4 +2,7 @@
 \pagestyle{fancy}
 
 %%% Add the running title to the left side of the header
-\fancyhead[L]{Distributed Sensor/Actuator Network}
+\fancyhead[L]{Automotive Sensor/Actuator Network}
+
+%%% Renew the chaptermark command to display CH. instead of CHAPTER in the header
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{CH. \thechapter. #1}}{}}

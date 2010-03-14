@@ -60,7 +60,7 @@ The function of a UART is to frame data into serial packets for transmission, an
 
 Three UARTs are required for the telemetry module; one for interfacing with the DAC, one for interfacing the ECU, and one for interfacing with the wireless modem. The UARTs must be configurable to meet the baud rate and frame formats laid out in Sec. \ref{sec:goals_telemetry}.
 
-\subsubsection{RS-232 Transceiver}
+\subsubsection{RS-232 Transceiver\label{sec:design_telemetry_rs232}}
 
 The TIA/EIA-232-F standard for serial communications requires serial links use $\pm \unit{10}{\volt}$ signalling levels. The RS-232 transceiver converts the logic-level bit stream from the UARTs into serial-level voltages, and visa-versa. The transceiver acts as the bridge between the UART, ECU, and DAC. Two separate receiver/transmitter channels are required, each for the ECU and DAC. The wireless modem does not require a transceiver, as it should be capable of using a logic-level serial stream.
 

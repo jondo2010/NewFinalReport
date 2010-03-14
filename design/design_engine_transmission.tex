@@ -5,7 +5,7 @@ The engine and transmission module provides optimized selection of the variable-
 \begin{figure}[H]
 	\centering
  	\input{design/figures/engine_transmission_overview_block}
-	\caption{An overview of the engine and transmission module and it's environmental interactions.}
+	\caption{An overview of the engine and transmission module and it's interactions.}
 	\label{fig:design_engine_overview_block}
 \end{figure}
 
@@ -144,7 +144,7 @@ The engine and transmission module design has several outputs to control the dis
 
 \subsection{Software}
 
-A block-diagram overview of the software design is shown in Fig. \ref{fig:engine_software_design_block}. The functionality of the system is separated into an \emph{intake manager} and a \emph{transmission manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. A \emph{PWM generator} provides the signals required to interact with the electro-pneumatic system. The entire process is overseen by a \emph{module coordinator}.
+A block-diagram overview of the software design is shown in Fig. \ref{fig:engine_software_design_block}. The functionality of the system is separated into an \emph{intake manager} and a \emph{transmission manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. A \emph{pulse width modulation (PWM) generator} provides the signals required to interact with the electro-pneumatic system. The entire process is overseen by a \emph{module coordinator}.
 
 \begin{figure}[H]
 	\centering
@@ -153,48 +153,55 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:engine
 	\label{fig:engine_software_design_block}
 \end{figure}
 
-\subsubsection{Hardware Abstraction Interfaces}
-
 The external hardware and micro-controller features that are needed by the intake and pressure managers are best abstracted through \emph{hardware abstraction interfaces}. This allows for a modular design that is not intimately mated with any particular external hardware choice. 
-
-Abstraction interfaces required by the engine and transmission module include a \emph{CAN interface}, \emph{servo interface}, a \emph{general-purpose input-output (GPIO) interface}, an \emph{analog-to-digital (ADC) interface} and a \emph{non-volatile storage interface}. A summary of the purpose for each interface is listed below.
-
-\begin{itemize}
-
-\item The CAN interface, common to each module, enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager.
-
-\item The solenoid driver interface converts the logic-level on-off commands to control signals for the high-current solenoid driver.
-
-\item The servo interface takes a positional adjustment command from the program and utilizes the pulse-width generator to generate a drive signal for the servo motor with the correct duty cycle and frequency.
-
-\item The GPIO interface provides a means of setting any of the control lines connected to the ECU. It is responsible for generating the correct logic levels for a given ECU feature request.
-
-\item The analog-to-digital (ADC) interface communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either return the results to the program for further processing.
-
-\item The non-volatile storage interface can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration parameters to be stored and read even if the module loses power or is reset.
-
-\end{itemize}
-
-\subsubsection{Event Scheduler}
-
-The event scheduler allows for complex sequencing of events in time. It allows for new events to be scheduled at some point in the future.
-The scheduler will continuously update the schedule and signal the module coordinator to execute events that are now current. The scheduler requires a resolution of \emph{1}{\milli\second} to be useful to the transmission manager for scheduling solenoid actuation events.
-
-\subsubsection{PWM Generator}
-
-The PWM generator generates the signals required by the transmission manager to engage the clutch lever solenoids. To meet the goals of the transmission system, the signals must have a frequency of at least \unit{20}{\hertz} and a 1\% duty cycle resolution. Since there are two solenoids to be activated, the generator must be able to offer two independent output channels.
 
 \subsubsection{Transmission Manager}
 
-The transmission manager listens to shifting and feature requests from the driver over the network. It implements the up-shift, down-shift, and neutral find processes. It is also responsible for implementing the advanced transmission features such as launch and crawl.
+The \emph{transmission manager} listens to shifting and feature requests from the driver over the network. It implements the up-shift, down-shift, and neutral find processes. It is also responsible for implementing the advanced transmission features such as launch and crawl.
 
 The transmission manager uses the event scheduler to sequence the complex series of actuation vectors required by up-shifting and down-shifting. It also implements the feedback control system required by the electro-pneumatic system to smoothly actuate the clutch lever. Timing signals are generated with the help of the PWM generator.
 
 \subsubsection{Intake Manager}
 
-The intake manager continuously monitors the engine RPM being broadcast by the ECU. It adjusts the intake runner length based on a cross-over point determined by dynometer testing. Adjustments to the runner length are made via the servo interface.
+The \emph{intake manager} continuously monitors the engine RPM being broadcast by the ECU. It adjusts the intake runner length based on a cross-over point determined by dynometer testing. Adjustments to the runner length are made via the servo interface.
 
+\subsubsection{Event Scheduler}
+
+The \emph{event scheduler} allows for complex sequencing of events in time. It allows for new events to be scheduled at some point in the future.
+The scheduler will continuously update the schedule and signal the module coordinator to execute events that are now current. The scheduler requires a resolution of \emph{1}{\milli\second} to be useful to the transmission manager for scheduling solenoid actuation events.
+
+\subsubsection{Pulse Width Modulation (PWM) Generator}
+
+The \emph{PWM generator} generates the signals required by the transmission manager to engage the clutch lever solenoids. To meet the goals of the transmission system, the signals must have a frequency of at least \unit{20}{\hertz} and a 1\% duty cycle resolution. Since there are two solenoids to be activated, the generator must be able to offer two independent output channels.
 
 \subsubsection{Module Coordinator}
 
-Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to change gears, are handled by the managers themselves. The module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. The coordinator also interacts with the event scheduler, waiting for pending events to be executed and then executing them.
+Each of the processes implemented by the managers are made up of several states. Asynchronous events, such as a request to change gears, are handled by the managers themselves. The \emph{module coordinator} contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. The coordinator also interacts with the event scheduler, waiting for pending events to be executed and then executing them.
+
+\subsubsection{CAN Interface}
+
+The \emph{CAN interface}, common to each module, enables network communication over the CAN bus. Managers can schedule packets for transmission, and incoming packets can be routed to the appropriate manager.
+
+\subsubsection{Solenoid Driver Interface}
+
+The \emph{solenoid driver interface} communicated with the high-current solenoid driver to switch the solenoid valves on and off. Logical requests from the transmission manager are translated into a format understandable by the driver.
+
+\subsubsection{Servo Motor Interface}
+
+The \emph{servo motor interface} takes a positional adjustment command from the program. It utilizes the pulse width modulation generator to generate a drive signal for the servo motor with the correct duty cycle and frequency.
+
+\subsubsection{General-Purpose Input-Output (GPIO) Interface}
+\label{sec:design_engine_gpio}
+
+The \emph{general-purpose input-output (GPIO) interface} provides a means of setting any of the control lines connected to the ECU. It is responsible for generating the correct logic levels for a given ECU feature request.
+
+\subsubsection{Analog-to-Digital (ADC) Interface} 
+\label{sec:design_engine_adc}
+
+The \emph{analog-to-digital (ADC) interface} communicates with the hardware analog-to-digital converter. It can initiate a sampling cycle on either return the results to the program for further processing.
+
+\nomenclature{NVRAM}{Non-Volatile Random-Access Memory}
+\subsubsection{Non-Volatile Storage Interface}
+\label{sec:design_engine_nvsi}
+
+The \emph{non-volatile storage interface} can read and write data to and from \emph{non-volatile random-access memory} (NVRAM). This enables configuration parameters to be stored and read even if the module loses power or is reset.

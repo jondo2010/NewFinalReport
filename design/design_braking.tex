@@ -5,7 +5,7 @@ The braking module adjusts the brake bias electronically as requested by the dri
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_overview_block}
-\caption{Braking module overview block diagram.}
+\caption{An overview of the brake module and it's interactions.}
 \label{fig:design_brake_overview_block}
 \end{figure}
 
@@ -90,21 +90,7 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_
 	\label{fig:brake_software_design_block}
 \end{figure}
 
-\nomenclature{NVRAM}{Non-Volatile Random-Access Memory}
-
-\subsubsection{Hardware Abstraction Interfaces}
-
-Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. All of the interfaces are re-used from the engine and transmission module, except for the \emph{stepper interface}. These abstraction interfaces are utilized as follows:
-
-\begin{itemize}
-
-\item The stepper interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
-
-\item The GPIO interface monitors the state of the end-of-travel buttons and asynchronously interrupts the program when a change of state occurs. 
-
-\item The analog-to-digital (ADC) interface initiates a sampling cycle on either pressure sensor channel and then return the results to the program for further processing. 
-
-\end{itemize}
+Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. Unique to the braking module is the \emph{stepper motor interface}. The CAN interface is exactly as described earlier, and is not mentioned here.
 
 \subsubsection{Bias Manager}
 
@@ -125,4 +111,20 @@ The pressure manager communicates with the driver interface through the CAN inte
 \subsubsection{Module Coordinator}
 
 Like the module coordinator for the engine and transmission module, the braking module coordinator contains the low-level state machine mechanisms needed by the two managers to transition between their internal states. It keeps track of the current state of the system, and also initializes all of the hardware abstraction interfaces and managers at start-up time. 
+
+\subsubsection{Stepper Motor Interface}
+
+The \emph{stepper motor interface} takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
+
+\subsubsection{General Purpose Input-Output (GPIO) Interface}
+
+The \emph{general-purpose input-output (GPIO) interface} monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs. This interface operates in a similar manner to the GPIO interface specified in Sec. \ref{sec:design_engine_gpio}.
+
+\subsubsection{Analog-to-Digital Converter (ADC) Interface}  
+
+The analog-to-digital (ADC) interface initiates a sampling cycle on either pressure sensor channel. The resulting sample is provided to  the program for further processing. This interface operates in a similar manner to the ADC interface specified in Sec. \ref{sec:design_engine_adc}.
+
+\subsubsection{Non-Volatile Storage Interface}
+
+The \emph{non-volatile storage interface} reads and writes calibration data to the non-volatile storage portion of the micro-controller. This interface operates in a similar manner to the non-volatile storage interface specified in Sec. \ref{sec:design_engine_nvsi}.
 

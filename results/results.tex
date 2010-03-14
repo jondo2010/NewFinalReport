@@ -1,16 +1,21 @@
 \chapter{Results and Discussion}
 
-The Engine and Transmission, and Braking modules both require that the Formula SAE 2010 vehicle be at least partly complete for testing. Since the build schedule for the vehicle is to have it complete for the beginning of May, 2010, much of the testing and tuning of these modules is incomplete.
+This purpose of this chapter is to describe the testing prodecures, results, and implementation issues that were encountered during the implementation phase of the project. Whenever possible, concrete results will be compared with those described previously in Ch.\ \ref{cha:goals}.
 
-The electronics for all four modules is completely implemented, tested and debugged. Most of the system software for all four modules has also been written.
+The Engine and Transmission, and Braking modules both require that the Formula SAE 2010 vehicle be at least partly complete for testing. Since the build schedule for the vehicle is to have it complete for the beginning of May, 2010, much of the final-stage testing and tuning of these modules was not yet possible as of writing.
+
+\section{CAN Transceiver Hardware Bug}
+
+After the first module, the Engine and Transmission module, was populated, we proceeded to inspect all solder joints and check for shorts between VCC and ground. Initially no problems were apparent, but when we first applied power to the module, using a current limiting bench power supply, a dynamic short circuit quickly appeared. The power supply immediately began limiting current, and the voltage dropped.
+
+After a lot of searching, inspecting all the components under a microscope, and hot air rework, it was determined that the problem was not with any of the solder joints or the PCB, but in fact a problem with the schematic. In error, the circuit design for the CAN Transceiver had got the VCC and GND lines to the chip swapped. Additionally, this CAN Transceiver schematic block had been duplicated to all four modules, which resulted in the same fate.
+
+A fix was quickly implemented, first on the Engine and Transmission module, and subsequently for the other modules. The copper traces to the VCC and GND pins on the CAN Transceiver were cut with an exacto knife, and rewired correctly with wire-wrap wire.
 
 \input{results/results_transmission.tex}
 
 
 \section{Intake}
-
-
-\section{Starter}
 
 
 \section{Braking}
@@ -28,19 +33,11 @@ The electronics for all four modules is completely implemented, tested and debug
 \section{Driver Interface}
 
 
-\subsection{Driver Controls}
 
-\begin{figure}[h!]
- \centering
- \includegraphics[width=6in,keepaspectratio]{results/figures/driver_interface_lcd.eps}
- \caption{Testing the LCD on the Driver Interface module.}
- \label{fig:driver_interface_lcd}
-\end{figure}
-
-\subsection{Vehicle Dynamic Adjustment}
+%\subsection{Driver Controls}
 
 
-\subsection{Diagnostic Information}
+%\subsection{Diagnostic Information}
 
 
 \subsection{LCD Interface}
@@ -65,7 +62,9 @@ To verify the LCD data interface circuitry before the final Driver Interface mod
 \label{fig:bench_experiments}
 \end{figure}
 
-Once all the hardware bugs with the Driver Interface module had been corrected, it was possible to continue writing the LCD interfacing software that had been started during the initial LCD testing. The external memory interface circuitry described in Sec.\ \label{sec:lcd_module_data_interface} worked without issue. Figure \ref{fig:driver_interface_lcd} shows the LCD displaying a sample bitmap from the manufacturer.
+\subsection{Graphics Display}
+
+Once all the hardware bugs with the Driver Interface module had been corrected, it was possible to continue writing the LCD interfacing software that had been started during the initial LCD testing. The external memory interface circuitry described in Sec.\ \ref{sec:lcd_module_data_interface} worked without issue. Figure \ref{fig:driver_interface_lcd} shows the LCD displaying a sample bitmap from the manufacturer.
 
 \begin{figure}[h!]
  \centering
@@ -73,6 +72,17 @@ Once all the hardware bugs with the Driver Interface module had been corrected, 
  \caption{Testing the LCD on the Driver Interface module.}
  \label{fig:driver_interface_lcd}
 \end{figure}
+
+\subsection{Vehicle Dynamic Adjustment}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=3in,keepaspectratio]{results/figures/driver_interface_menu.eps}
+ \caption{Parameter menu on the Driver Interface module.}
+ \label{fig:driver_interface_menu}
+\end{figure}
+
+
 
 \section{Implementation Issues Encountered}
 

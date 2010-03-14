@@ -66,13 +66,11 @@ Nearly 3000 lines of c code were written by us for the Telemetry modules' system
 \label{fig:telemetry_software_implementation}
 \end{figure}
 
-\subsubsection{Internal and External USART Drivers}
+\subsubsection{MAX3100 External UART Driver}
 
-Software drivers for both the internal built-in USART periferals as well as the MAX3100 external UART were written in a similar fashion, and share the same software interfaces and buffering code. The drivers were written to utilize the hardware interrupts of the periferals to allow asynchronous sending and receiving of data. A statically allocated circular buffering approach was taken for both receiving and transmitting data. An abstracted flow chart of the USART interrupt handling is shown in Fig.\ \ref{fig:usart_driver_flow}.
+The software driver written for the MAX3100 exteran UART was crafted in the image of the built-in USART driver, and shares the same software interfaces and buffering code. The drivers was written to utilize the external hardware interrupt to allow asynchronous sending and receiving of data. A statically allocated circular buffering approach was taken for both receiving and transmitting data. An abstracted flow chart of the interrupt handling is shown in Fig.\ \ref{fig:usart_driver_flow}.
 
-\paragraph{MAX3100 SPI Interface}
-
-The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency resulting in $\unit{4}{\mega\hertz}$.
+The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP}=\unit{238}{\nano\second}$, which results in a maximum frequency of approximately $\unit{4.2}{\mega\hertz}$ \cite{MAX3100}. The SPI periferal was thus set to use 1/4 of the system clocks frequency when communicating with the MAX3100, resulting in $\unit{4}{\mega\hertz}$ SPI clock speed.
 
 \begin{figure}[H]
 \centering
@@ -81,18 +79,18 @@ The datahseet for the MAX3100 states that the minimum SPI Clock period is $t_{CP
 \label{fig:usart_driver_flow}
 \end{figure}
 
-\subsubsection{Xbee Library}
+\subsubsection{XBee Library}
 
-In order to facilitate routing data to and from multiple sources and sinks, it was determined that the Xbee would need to be interfaced using the special "API" mode described in the Xbee documentation \cite{XBeeManual}. The API mode is characterized by a packet interface that needed to be implemented in software. A library was written to implement two critical pieces of functionality:
+In order to facilitate routing data to and from multiple sources and sinks, it was determined that the XBee would need to be interfaced using the special ``API'' mode described in the XBee documentation \cite{XBeeManual}. The API mode is characterized by a packet interface that would require a supporting library in software. The library was written to implement two critical pieces of functionality:
 
 \begin{enumerate}
-\item and to send and receive packetized data from the modem on behalf of the user software as per the Xbee's API specification \cite{XBeeManual};
+\item and to send and receive packetized data from the modem on behalf of the user software as per the XBee's API specification \cite{XBeeManual};
 \item to set the modem into API mode operation and manage the modem's operating state;
 \end{enumerate}
 
 The XBee library can be split logically into two chunks: code to packetize outgoing data for the main control loop software, and code to disassemble incoming packets and provide their payload to the main control loop.
 
-The Xbee library implements the binary packet protocol described in the XBee manual, and is able to send and receive unicast and multicast packets. The driver is only capable of sending packets to 16-bit addresses. Full 64-bit address mode was not implemented as the address space was not required in our 3 node network. The driver is also capable of sending command-type packets to the modem and reading the response.
+The XBee library implements the binary packet protocol described in the XBee manual, and is able to send and receive unicast and multicast packets. The driver is only capable of sending packets to 16-bit addresses. Full 64-bit address mode was not implemented as the address space was not required in our 3 node network. The driver is also capable of sending command-type packets to the modem and reading the response.
 
 When the mainline software wants to send a packet, it calls the \verb|xbee_send_data()| function. A pointer to the data as well as the 16-bit address is passed. The packet is constructed, and the packetized data is added to the MAX3100 driver's TX buffer to be sent to the XBee.
 
@@ -101,7 +99,7 @@ Receiving packets is more complicated, since individual bytes arrive at the MAX3
 Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the Telemetry Module are listed in Table \ref{tab:xbee_commands}.
 
 \begin{table}
-\caption{Implemented Xbee modem commands.\label{tab:xbee_commands}}
+\caption{Implemented XBee modem commands.\label{tab:xbee_commands}}
 \centering{}
 \begin{tabular}{|l|l|}
 \hline 
@@ -121,9 +119,9 @@ MY & Set and read the modems local address \tabularnewline
 
 The XBee modem can be controlled out of API mode by entering into it's command mode by sending a special string of bytes, by default ``+++''. A list of modem-style AT-commands, documented in the manual, are used to change the various settings of the modem. This command mode was used to initially set up the modems by hand, but is only used by the software once on startup to enable the API mode.
 
-Similar to the rest of the software drivers implemented, the Xbee library uses callbacks to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different USART on-the-fly.
+Similar to the rest of the software drivers implemented, the XBee library uses callbacks to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different USART on-the-fly.
 
-\subsubsection{DAC Library}
+\subsubsection{DAC Library\label{sec:dac_library}}
 
 To reduce the implementation work required by us, we asked David Schilling, a computer science student on the Formula SAE team, to write the DAC software library to read and write the DAC's serial format, given the requirements described in Section \ref{sec:Telemetry-Module-Design}.
 

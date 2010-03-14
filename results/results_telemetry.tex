@@ -51,8 +51,10 @@ Simultaneous data streams from both the DAC and ECU were successfully bench test
 
 The DAC was configured to output all analogue channels at a maximum of \unit{10}{\hertz} at an RS-232 baud rate of \unit{38}{\kilo\bit\per\second}, while the ECU was operated at it's fixed \unit{56.7}{\kilo\bit\per\second}.
 
-The ECU connection to the DTASWin software worked the same as with a hard line connection, and without any hiccups. The DAC connection to the DAC software on the PC worked without the software reporting any synchronization errors, but the refresh rate of the data was lower than expected. Inspection of the serial links in and out of the Telemetry module with a logic analyzer confirmed the suspicion that not every packet received from the DAC was being transmitted, however no corrupt or partial packets were being transmitted either. Since
+The ECU connection to the DTASWin software performed the same as with a hard line connection, and without any issues. The DAC connection to the DAC software on the PC worked without the software reporting any synchronization errors, but the refresh rate of the data was lower than expected. Inspection of the serial links in and out of the Telemetry module with a logic analyzer confirmed the suspicion that not every packet received from the DAC was being transmitted, however no corrupt or partial packets were being transmitted either.
 
-\subsubsection{ECU}
+Since transmission of DAC data is synchronized with the decoder library successfully decoding a packet, as described in Sec.\ \ref{sec:dac_library}, incoming data from the DAC that the decoder isn't able to decode is discarded. Seeing a large amount of discarded data, as we were, would indicate an issue with the DAC library.
 
-\subsubsection{DAC}
+\subsubsection{DAC Packet Injection}
+
+Additionally, a second test was performed with the DAC serial link by injecting data encoded on the Telemetry module using the DAC encoder. Every time a real incoming packet from the DAC was decoded, it was forwarded along with an artificial one. This test proved successful, and the DAC software was able to display the artificial ``analogue'' channel, even though no such physical channel existed on the DAC unit.

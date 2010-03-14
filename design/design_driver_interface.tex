@@ -1,40 +1,52 @@
 \section{Driver Interface Module\label{sec:Driver-Interface-Module}}
-
 \nomenclature{LCD}{Liquid Crystal Display}
 
-In previous years, the team has often been hindered by a lack of direct information from the electronic systems in the car. The driver interface module remedies this by providing information to the driver in real-time, and allows the driver to control aspects of the electronic control systems.
+In previous years, the team has often been hindered by a lack of direct information from the electronic systems in the car. The driver interface module remedies this by providing information to the driver in real-time, and allows the driver to control aspects of the electronic control systems. The driver module and it's interactions are shown in Fig. \ref{fig:design_interface_overview_block}.
 
-The driver interface system consists of:
+\begin{figure}[H]
+	\centering
+%	\input{design/figures/interface_overview_block}
+	\caption{Overview of the driver interface module and it's interactions.}
+	\label{fig:design_interface_overview_block}
+\end{figure}
 
-\begin{itemize}
-\item \emph{driver controls}, which are tactile inputs for adjusting vehicle dynamics; 
-\item the \emph{information display panel}, which displays vehicle information to the driver; and
-\item the \emph{driver interface module} which collects information from the driver controls and other modules in the system and relays them to the driver through the information display panel, and also relays driver inputs to the other modules.
-\end{itemize}
+The driver module receives driver input from \emph{driver controls}, which are tactile inputs for adjusting vehicle dynamics. Driver commands are collected through the controls and relayed across the network to the relevant modules. The module communicates with the driver using the \emph{information display panel}, which displays vehicle information on an easy-to-read display mounted in the steering wheel. Diagnostic information from the other modules is received over the network and relayed to the driver through the information display panel. 
 
+\subsection{Vehicle Dynamics Mode (VDM)}
+\nomenclature{VDM}{Vehicle Dynamics Mode}
 
-\subsection{Purpose}
+The driver interface system provides a method of quickly modifying several dynamic vehicle parameters quickly and easily. We have called this feature \emph{Vehicle Dynamics Mode} (VDM). 
 
+For example, an acceleration event calls for launch control, auto-upshift, and a heavy forward brake bias. It is possible to enable all of these features in one step by changing the VDM mode to {}``acceleration''. 
 
-\subsection{Processes}
+When a new mode is selected, all nodes on the network are notified and synchronized to modify their dynamic parameters in accordance with the specific mode. For example, when the  {}``acceleration'' mode is enabled, the engine module will enable launch control and auto-upshift, and the brake controller will modify the brake bias to a pre-set ratio.
 
+\begin{description}
+  \item [{Pit Mode}] enables soft-launch driving characteristics that mimic a fully automatic transmission. This makes slowly driving the car forward from a stand-still far easier, and only requires the driver to take their left foot off the brake, and slightly apply the throttle.
+  \item [{Acceleration Mode}] puts the vehicle systems into full-performance characteristics. Launch control is activated. The engine module will watch for a launch signal from the driver, and will automatically up-shift based on the engine RPM.
+  \item [{Dynamic Mode}] puts the vehicle systems into a mode that is suitable for the autocross, and the endurance race.
+\end{description}
 
-\subsubsection{Driver Controls}
-The driver controls consist of three rotary encoder knobs and three buttons. See table \ref{table:driver_controls} for a description of each.
+Individual VDM parameters can be changed by the driver using the driver controls. Existing presets may be overwritten on demand with the new parameters chosen by the driver.
+
+\subsection{Driver Controls}
+\label{sec:interface_controls}
+
+The driver controls consist of adjustment knobs, buttons, and paddle shifters. See table \ref{table:driver_controls} for a description of each.
 
 \begin{table}[H]
-\caption{Available driver controls.\label{table:driver_controls}}
+\caption{Available driver controls.}
 \centering
 \begin{tabular}{|c|c|p{8 cm}|}
 	\hline 
 	Type & Name & Description \\
 	\hline
 	\hline 
-	Rotary & VDM & Changes the current VDM setting. \\
+	Knob & VDM & Changes the current VDM setting. \\
 	\hline 
-	Rotary & Option & Changes the currently selected menu option. \\
+	Knob & Option & Changes the currently selected menu option. \\
 	\hline
-	Rotary & Adjust & Adjusts the value associated with the currently selected menu option. \\
+	Knob & Adjust & Adjusts the value associated with the currently selected menu option. \\
 	\hline
 	Button & Starter & Engages the automatic start sequence if pressed once, or the manual start sequence if held down.\\
 	\hline
@@ -42,13 +54,18 @@ The driver controls consist of three rotary encoder knobs and three buttons. See
 	\hline
 	Button & Diagnostics/Save & Pages through diagnostic information if pressed once, or saves the current dynamic settings to the selected VDM if held down.\\		
 	\hline 		
+	Paddle & Up-Shift & Up-shifts the transmission. \\
+	\hline
+	Paddle & Down-Shift & When held, disengages the clutch and down-shifts. When released, re-engages the clutch.
+	\hline
 \end{tabular}
+\label{table:driver_controls}
 \end{table}
 
+\subsection{Diagnostic Information}
+\label{sec:interface_diag}
 
-\subsubsection{Diagnostic Information}
-
-The interface display panel is a large monochrome \emph{Liquid Crystal Display} (LCD) screen, inset into the steering wheel. The panel provides real-time information to the driver regarding all of the electronic systems in the car. Primary information displayed on the panel includes:
+The interface display panel is a large monochrome \emph{Liquid Crystal Display} (LCD) screen, inset in the steering wheel. The panel provides real-time information to the driver regarding all of the electronic systems in the car. Primary information displayed on the panel includes:
 
 \begin{itemize}
 \item the selected gear;
@@ -61,62 +78,53 @@ The interface display panel is a large monochrome \emph{Liquid Crystal Display} 
 
 The list of available options and the current value for the selected option is displayed on screen when the driver rotates the option dial. After a timeout period, normal real-time information display resumes. 
 
-
-
-\subsubsection{Vehicle Dynamics Mode (VDM)}
-\nomenclature{VDM}{Vehicle Dynamics Mode}
-
-The driver interface system provides a method of quickly modifying several dynamic vehicle parameters quickly and easily. For example, an acceleration event calls for launch control, auto-upshift, and a heavy forward brake bias. It is possible to enable all of these features in one step by changing the VDM mode to {}``acceleration''. 
-
-When a new mode is selected, all nodes on the network are notified and synchronized to modify their dynamic parameters in accordance with the specific mode. For example, when the  {}``acceleration'' mode is enabled, the engine module will enable launch control and auto-upshift, and the brake controller will modify the brake bias to a pre-set ratio.
-
-\begin{description}
-  \item [{Pit Mode}] enables soft-launch driving characteristics that mimic a fully automatic transmission. This makes slowly driving the car forward from a stand-still far easier, and only requires the driver to take their left foot off the brake, and slightly apply the throttle.
-  \item [{Acceleration Mode}] puts the vehicle systems into full-performance characteristics. Launch control is activated. The engine module will watch for a launch signal from the driver, and will automatically up-shift based on the engine RPM.
-  \item [{Dynamic Mode}] puts the vehicle systems into a mode that is suitable for the autocross, and the endurance race.
-\end{description}
-
-
-\subsubsection{Parameter Tuning}
-
-
-\subsection{Software}
-
-
-\subsubsection{User Interface Manager}
-
-
-\subsubsection{Driver Control Manager}
-
-
-\subsubsection{Vehicle Diagnostics Manager}
-
-
-\subsubsection{Vehicle Dynamic Mode Manager}
-
-
-\subsubsection{I/O Monitor}
-
-
-\subsubsection{CAN Interface}
-
-
-\subsubsection{Main Control Loop}
-
-
 \subsection{Hardware}
 
+A high-level overview of the module's hardware design is shown in figure \ref{fig:interface_hardware_design_block}. The driver interface module builds on the common architecture present in the other three modules. 
 
-\subsubsection{Microcontroller}
-
-
-\subsubsection{CAN Transceiver}
-
+\begin{figure}[H]
+\centering
+%\input{design/figures/interface_hardware_design_block}
+\caption{A block diagram of interface module hardware.}
+\label{fig:interface_hardware_design_block}
+\end{figure}
 
 \subsubsection{LCD Module}
 
+The LCD module is a self-contained unit that consists of an easy-to-read LCD screen and a controller for interfacing the LCD with a micro-controller. It is not directly attached to the driver interface module, to help decouple the driver interface module and steering wheel design.
 
-\subsubsection{Input Knobs and Buttons}
+\subsubsection{Knobs, Buttons, and Paddles}
 
+The knobs and buttons described in Sec. \ref{sec:interface_controls} connect to the driver interface module. Appropriate de-bouncing and knob encoding circuitry is present to interface the controls with the module. 
 
-\subsubsection{Paddle Shifters}
+\subsection{Software}
+
+A block-diagram overview of the software design is shown in Fig. \ref{fig:interface_software_design_block}. Like with other designs, various managers oversee operation of the module, and interact with hardware through abstraction interfaces.
+
+\begin{figure}[H]
+	\centering
+%	\input{design/figures/interface_software_design_block}
+	\caption{The interface module software block diagram.}
+	\label{fig:interface_software_design_block}
+\end{figure}
+
+\subsubsection{User Interface Manager}
+
+The \emph{user interface manager} sets the content displayed on the driver information panel. New driver commands are relayed to the manager, which decides what content should be displayed. 
+
+\subsubsection{Driver Control Manager}
+
+The \emph{driver control manager} listens for new driver inputs on the knobs, buttons, and paddles, and relays them through the network to the affected modules. It also relays adjustment requests to the \emph{vehicle dynamic mode manager} for processing.
+
+\subsubsection{Vehicle Diagnostics Manager}
+
+The \emph{vehicle diagnostics manager} listens to the network for the information listed in Sec. \ref{sec:interface_diag}. It coordinates with the user interface manager to display the information on screen to the driver.
+
+\subsubsection{Vehicle Dynamic Mode (VDM) Manager}
+
+The \emph{vehicle dynamic mode manager} handles requests from the driver control manager to change the current vehicle dynamic mode, and to overwrite the dynamic mode presets. It uses the CAN interface to communicate the new parameters over the network to the other modules. The non-volatile storage interface is utilized to load and save the parameters for each preset.
+
+\subsubsection{LCD Interface}
+
+The \emph{LCD interface} abstracts the functionality of the LCD module for the user interface manager. It translates high-level drawing and text commands into the low-level memory operations required by the LCD module to draw on the screen.
+

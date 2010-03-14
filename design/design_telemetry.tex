@@ -1,6 +1,6 @@
 \section{Telemetry Module\label{sec:Telemetry-Module-Design}}
 
-The \emph{wireless telemetry module} provides a means for multiplexing the ECU and DAC data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAC and makes it available over the network to other modules, and injects data from other modules into the DAC stream. An overview of the telemetry module and it's environmental interactions is shown in Fig. \ref{fig:design_telemetry_overview_block}.
+The \emph{telemetry module} provides a means for multiplexing the ECU and DAC data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAC and makes it available over the network to other modules, and injects data from other modules into the DAC stream. An overview of the telemetry module and it's environmental interactions is shown in Fig. \ref{fig:design_telemetry_overview_block}.
 
 \begin{figure}[H]
 	\centering
@@ -17,7 +17,7 @@ The ECU data channel is illustrated in Fig. \ref{fig:ecu_data_channel}. It is a 
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/ecu_data_channel}
+	\input{design/figures/ecu_data_channel_block}
 	\caption{The ECU data channel.}
 	\label{fig:ecu_data_channel}
 \end{figure}
@@ -30,7 +30,7 @@ The DAC data channel is illustrated in Fig. \ref{fig:dac_data_channel}. Unlike t
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/dac_data_channel}
+	\input{design/figures/dac_data_channel_block}
 	\caption{The DAC data channel.}
 	\label{fig:dac_data_channel}
 \end{figure}
@@ -45,9 +45,9 @@ A high-level overview of the module's hardware design is shown in figure \ref{fi
 
 \begin{figure}[H]
 \centering
-%\input{design/figures/telemetry_hardware_design_block}
+\input{design/figures/telemetry_hardware_block}
 \caption{A block diagram of telemetry module hardware.}
-\label{fig:telemetry_hardware_design_block}
+\label{fig:telemetry_hardware_block}
 \end{figure}
 
 \nomenclature{UART}{Universal Asynchronous Receiver-Transmitter}
@@ -74,9 +74,9 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:teleme
 
 \begin{figure}[H]
 	\centering
-%	\input{design/figures/telemetry_software_design_block}
+	\input{design/figures/telemetry_software_block}
 	\caption{The telemetry module software block diagram.}
-	\label{fig:telemetry_software_design_block}
+	\label{fig:telemetry_software_block}
 \end{figure}
 
 As is typical with our design, the high-level systems interact with a set of hardware abstraction interfaces to speak with the low-level systems. The CAN interface is exactly as described earlier, and is not mentioned here.

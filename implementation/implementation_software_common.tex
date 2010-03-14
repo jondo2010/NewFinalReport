@@ -1,23 +1,90 @@
 \section{Common Software Implementation\label{sec:common_software_implementation}}
 
-Although not nearly as visible as the hardware aspects of the implementation, hidden beneath the surface is a substantial amount of system code written to implement the soft aspects of the design.
+Hidden beneath the surface of the hardware is a substantial amount of system code written to implement the soft aspects of the design. In fact, thousands upon thousands of lines of code already exist. This section outlines the approach taken to control the complexity of the software, and details the tool-chain used. The hardware abstraction libraries shared by the four modules are also discussed.
 
 \subsection{Methodology}
+\label{sec:imp_software_meth}
 
-The reusability of the system code written for all modules was a concern that had to be balanced with the need to write concise functionality. Being able to reuse portions of code written for one module in another was expected, however portability to other projects was not considered at all. Low level drivers for the CAN, UART, EEPROM and SPI periferals were all written as c libraries that could be reused and linked into module-specific code.
+Code re-usability was a primary target of the software implementation. However, this target was tempered by the need to write concise code that solves only problems that actually exist. Portability to other projects was not considered at all. Low-level hardware abstraction libraries for the various micro-controller peripherals were written as ``C'' libraries. These libraries are linked to module-specific code as needed. 
 
-Due to the constraint on the available resources on the microcontroller, code efficiency was of the utmost concern. Especially in consideration of memory usage, the AT90CAN only has \unit{4}{\kilo\byte} ram, so wherever possible 8-bit data types were used. The size of buffers were also carefully managed. Due to known issues with the implementation of malloc(), the use dynamically allocated memory was avoided. Since a comparatively large amount of ROM is available on the AT90CAN128 (\unit{128}{\kilo\byte}Large statically allocated constant data was moved from positions in RAM to positions in the ROM
+\nomenclature{RAM}{Random-Access Memory}
 
-\subsection{Toolchain}
+Because of the limited resources of the micro-controller, code efficiency was also of the utmost concern. The AT90CAN128 has \unit{4}{\kilo\byte} of \emph{random-access memory} (RAM). Data sizes were kept to a minimum, and buffers were also carefully managed. The use of dynamically allocated memory was avoided to reduce the possibility of memory leaks. The micro-controller features (\unit{128}{\kilo\byte} of \emph{read-only memory} (ROM). Effort was made to place as much statically allocated data into the ROM as possible, such as string constants.
 
-Programming and debugging software on the microcontroller was done through a standard IEEE 1149.1 JTAG interface. Atmel provides support for their own compiler, toolchain and IDE for Windows, however GNU support for the Atmel 8-bit microcontrollers is very good. Since all development of the system software was to be done on Unix-type operating systems, we decided to use the GNU toolchain \emph{gcc-avr} and \emph{binutils-avr}. Additionally \emph{GDB} was used with an AVR-JTAG gateway utility called \emph{avarice}. Using a hardware programmer/debugger device from Atmel connected to a USB port on the development PC, avarice communicates with the microcontroller using Atmel specific JTAG commands. GDB then connects to avarice, and allows the user to set brakepoints, control execution, and access memory on the microcontroller.
+\subsection{Tool-Chain}
 
-\nomenclature{JTAG}{Joint Test and Action Group}
+Atmel offers their own tool-chain and \emph{integrated development environment} (IDE) for Windows. Neither author uses Windows, but open-source support for the Atmel 8-bit micro-controllers is mature and capable. The development environment is documented in detail in Appendix \ref{apx:environment}.
 
-\subsection{Common Low-Level Drivers}
+\subsection{Hardware Abstraction Libraries}
+
+As mentioned in Sec. \ref{sec:imp_software_meth}, several hardware abstraction libraries exist to simplify access to the peripherals of the micro-controller. These libraries are shared amongst the modules. 
+
+\subsection{ADC Driver}
+
+The ADC driver provides access to the on-board analog-to-digital converter hardware. The driver provides the ability to:
+
+\begin{itemize}
+	\item Sample any of the fifteen channels available to the ADC; 
+	\item Operate in \emph{blocking} or \emph{non-blocking} modes; and
+	\item Enable or disable the ADC to reduce power consumption.
+\end{itemize}
+
+In blocking mode, the micro-controller waits for the sampling process to complete before returning control to the program. In non-blocking mode, control returns back to the program immediately after the sampling begins. The user specifies a specific function to be called when sampling completes. 
 
 \subsubsection{CAN Driver}
 
+The CAN driver provides a simplified interface to the functionality of the AT90CAN128's on-board CAN controller. The key features of the driver are:
+
+\begin{itemize}
+	\item Up to fifteen local \emph{message objects} available for sending and receiving;
+	\item Support for CAN 2.0A and 2.0B identifier formats;
+	\item The ability to assign receive and transmit \emph{callback functions} for each message object.
+	\item An \emph{auto-reply} feature that listens for remote requests and replies with a pre-allocated data packet; and
+	\item User-configurable baud-rate settings.
+\end{itemize}
+
+Users can configure message objects to receive or send a particular type of packet with any particular identifiers. The callback feature lets the user schedule functions to be executed whenever a message object receives or transmits a new packet. This allows asynchronous interaction with the bus and avoids wasteful polling strategies.
+
+The auto-reply feature allows modules to automatically reply to incoming remote requests from particular identifiers. The data to be used for the reply can be udpated at any time, and the data must be flagged as ``valid'' by the user before transmission.
+
+The driver is capable of operating at the standard CAN baud rates of 100, 125, 250, 500, and 1000 KBps. The baud rate is set at initialization time.
+
 \subsubsection{EEPROM Driver}
 
+The EEPROM driver provides a transparent interface to the 1024 bytes of EEPROM locates on the micro-controller. Writing data to the EEPROM is a relatively slow process that requires the micro-controller remain uninterrupted. The driver takes care of these details for the user. Specifically, the EEPROM driver implements:
+
+\begin{itemize}
+\item The ability to read and write 8-bit values to and from the EEPROM transparently; and
+\item Protection against interruption during the write-process.
+\end{itemize}
+
 \subsubsection{SPI Driver}
+
+The AT90CAN128 comes with a built-in SPI interface that generates the necessary signals required to communicate with SPI-capable devices. This interface is made available to the user through the SPI driver. Some aspects of the driver are:
+
+\begin{itemize}
+\item Single character and string based read and write functions; and
+\item Dynamic configuration of up to eight slave select lines, including \emph{pin assignment} and \emph{transition delay}.
+\end{itemize}
+
+Up to eight slave select lines can be utilized by the driver. The user specifies which line is to be toggled at any given time. The user may also specify a delay (in microseconds) to be observed after transitioning the slave select lines. This allows the design to meet the varying timing requirements dictated by different SPI-enabled hardware.
+
+\subsubsection{USART Driver}
+
+The USART driver provides access to the receive and transmit functions of the AT90CAN128's built-in dual-channel USART. It also implements circular receive and transmit buffers to allow efficient data flow, and callback functions for asynchronously operation.
+Some features of the USART driver are:
+
+\begin{itemize}
+	\item Two 64-byte circular receive and transmit buffers for each channel; and
+	\item Callback functions for receiving and transmitting events.
+\end{itemize}
+
+The buffers have the ability to callback the user when particular events occur. These events include:
+
+\begin{itemize}
+\item A new byte has been received successfully; 
+\item The receive buffer is full;
+\item The receive buffer has overrun;
+\item A new byte has been transmitted successfully; or
+\item The transmit buffer is empty.
+\end{itemize}

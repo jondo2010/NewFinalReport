@@ -2,16 +2,16 @@
 
 The engine and transmission module implements the design specified in Sec.\ \ref{sec:engine_transmission_design}. The hardware and software aspects of this module's implementation are discussed in this section.
 
-\subsection{Hardware}
-
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, 3 additional hardware components were added. The high-current solenoid drivers specified in the design in Sec. \ref{sec:design_engine_transmission_hardware} were implemented with a single SPI capable octal \emph{low-side solenoid driver}. This driver chip responds to commands over SPI, and switches the low side output pins accordingly. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. Additionally, a CMOS buffer chip was added to interface the discrete pins on the ECU (described in Sec.\ \ref{sec:ecu_background_discrete_inputs}), and an SPI capable DAC was added to output the \unit{0-5}{\volt} signal required for setting the traction control slip percentage.
-
 \begin{figure}[H]
 \centering
 \includegraphics[scale=1]{implementation/figures/engine_transmission_pcb}
 \caption{Populated Engine and Transmission module PCB.}
 \label{fig:engine_transmission_pcb}
 \end{figure}
+
+\subsection{Hardware}
+
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, 3 additional hardware components were added. The high-current solenoid drivers specified in the design in Sec. \ref{sec:design_engine_transmission_hardware} were implemented with a single SPI capable octal \emph{low-side solenoid driver}. This driver chip responds to commands over SPI, and switches the low side output pins accordingly. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. Additionally, a CMOS buffer chip was added to interface the discrete pins on the ECU (described in Sec.\ \ref{sec:ecu_background_discrete_inputs}), and an SPI capable DAC was added to output the \unit{0-5}{\volt} signal required for setting the traction control slip percentage.
 
 Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the imlementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}. Descriptions of these components are in the following sections.
 
@@ -41,44 +41,48 @@ Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardw
 
 \subsubsection{High Current Solenoid Driver}
 
-In order to meet the requirement of being able to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface for the microcontroller to talk to, and also takes care of possible flyback from the solenoids with built-in clamping diodes.
+In order to meet the requirement of being able to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface for the microcontroller to talk to, and also takes care of possible flyback from the solenoids with built-in clamping diodes. Using this single component strongly reduces the complexity of the output stage of the circuit, since multiple discrete high-current transistors were not needed.
 
-Using this single component strongly reduces the complexity of the output stage of the circuit, since multiple discrete high-current transistors were not needed.
+The maximum operating frequency of the LT9822E, listed in the datasheet, is $f_{op}^{LT9822E}=\unit{2}{\mega\hertz}$. This specifies the SPI data rate used to communicate with the driver. The outputs of the driver are changed after clocking in 8 bits of data into the chips shift register. With the SPI clock running at \unit{2}{\mega\hertz}, it should therefore possible to update the outputs of the driver at $f_{op}^{LT9822E}/8=\unit{250}{\kilo\hertz}$. This is far more than the required \unit{20}{\hertz} output to the solenoids.
 
-\subsubsection{Input Buffers}
+\subsubsection{CMOS Buffer}
 
+A standard 74-series CMOS buffer chip was used to buffer the GPIO output lines from the microprocessor from the discrete input pins on the ECU.
 
 \subsubsection{Traction Control Analogue Output}
 
-In order to generate a 0-5V analogue signal for the ECU's traction slip ratio input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs \unit{0-5}{\volt} analogue signal that varies with the digital input.
+In order to generate the \unit{0-5}{\volt} analogue signal for the ECU's traction slip percent input, as was described in Sec. \ref{sec:background_ecu_data_interfaces}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs a \unit{0-5}{\volt} analogue signal that varies with the digital input.
 
-The output voltage from the DAC can be determined by the following equation:
+According to the datasheet, the output voltage from the DAC $V_{out}^{DAC}$ can be determined by the following equation \cite{TLV5623}:
+\nomenclature{$V_{out}^{DAC}$}{Voltage output from the digital to analogue converter on the Engine and Transmission module.}
 
 \begin{equation}
-V_{out}=2\cdot{V_{ref}}\,\frac{Code}{2^{n}}\,\volt
+V_{out}^{DAC}=2\cdot{V_{ref}^{DAC}}\,\frac{Code}{2^{n}}\,\volt
 \end{equation}
 
-where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at fullscale input,
+where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value sent over SPI ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at fullscale input,
+\nomenclature{$V_{ref}^{DAC}$}{Voltage reference for the digital to analogue converter on the Engine and Transmission module.}
 
 \begin{equation}
-2\cdot{V_{ref}}\,\frac{2^{7}}{2^{8}}=V_{ref}=\unit{5}{\volt}
+2\cdot{V_{ref}^{DAC}}\,\frac{2^{7}}{2^{8}}=V_{ref}^{DAC}=\unit{5}{\volt}
 \end{equation}.
 
-The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}\approx\unit{155}{\kilo\ohm}$. The output current of the DAC therefore will be at most $I_{out}=\frac{5v}{155k}\approx\unit{32.26}{\micro\ampere}$.
+The $V_{ref}$ pin on the DAC was therefore connected to VCC.
+
+The DC input resistance $R_{in}^{ECU}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}^{ECU}\approx\unit{155}{\kilo\ohm}$. The output current of the DAC therefore will be at most $I_{out}^{DAC}=\frac{5v}{155k}\approx\unit{32.26}{\micro\ampere}$.
 
 \subsection{Software}
 
-<Software interface map>
+During the implementation phase, the integral portions of the system software for the Engine and Transmission module was written, however tying everything together was not completed. In this section, each of those integral portions will be described, as well as its intended interaction with the other portions.
 
 
 \subsubsection{Transmission Manager}
 
+Implements the clutch controller
 
 \subsubsection{Intake Manager}
 
-
-\subsubsection{Starter Manager}
-
+Implements the intake controller
 
 \subsubsection{Event Scheduler}
 
@@ -90,7 +94,10 @@ The DC input resistance $R_{in}$ on the traction cut input pin on the ECU was me
 
 \subsubsection{PWM Generator}
 
-An efficient method was devised to generate 2 synchronized PWM signals from the L9822E driver chip. The $32\, kHz$ external crystal was used as the input to the 8-bit TIM2 timer periferal on the microcontroller. The input to the timer was first scaled by 8 which provided a timebase:
+An efficient method was devised to generate 2 synchronized PWM signals, $PWM_A$ and $PWM_B$, from the L9822E driver chip. First, a timer periferal on the microcontroller was programmed to allow generating precise interrupts. Then, different combinations of the PWM duty cycles of both channels were identified.
+
+\paragraph{Interrupt}
+The $32\, kHz$ external crystal was used as the input to the 8-bit TIM2 timer periferal on the microcontroller. The input to the timer was first scaled by 8 which provided a timebase:
 \begin{equation}
 TB=\frac{32.768\, kHz}{8}=4.096\, kHz
 \end{equation}
@@ -100,18 +107,20 @@ The timebase period is then given by:
 \frac{1}{TB}\approx244\,\mu{S}
 \end{equation}
 
-We then define a constant scaling factor for the PWM generator:
+We then defined a constant scaling factor in software for the PWM generator:
 \begin{equation}
-{PWM\_DUTY\_SCALE}=\frac{T_{PWM}}{TB}\approx205
+{PWM\_DUTY\_SCALE}=\frac{1}{TB\cdot{f_{PWM}}}\approx205,
 \end{equation}
 
-By loading the timers compare register with with a value scaled with the constant scaling factor, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
+where $f_{PWM}$ is the PWM frequency desired, in our case \unit{20}{\hertz}.
 
-When generating 2 waveforms with the same timer periferal, 8 combinations of duty cycles of channels A and B were identified, and can be seen in Figure \ref{fig:pwm_cases}.
+By loading the timers' compare register with with a value scaled by ${PWM\_DUTY\_SCALE}$, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
 
-Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. 2 cases are also apparent when no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
+\paragraph{Algorithm}
 
-An efficient generating routine was constructed to effect the level transitions and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
+Figure \ref{fig:pwm_cases} shows 8 different combinations of the duty cycles of two synchronized PWM channels. Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. 2 cases are also apparent when no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}. In the cases shown in Figs. \ref{fig:pwm_cases_1, fig:pwm_cases_2}, where both channels have a different duty-cycle between 0 and 100\%, three transitions per PWM period are required: one at the beginning, and two for falling edges of both channels. The other cases 3 to 8 require fewer transitions.
+
+An efficient generating routine was constructed to effect the level transitions by sending new data to the Solenoid Driver, and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
 
 \input{implementation/figures/pwm_cases.tex}
 

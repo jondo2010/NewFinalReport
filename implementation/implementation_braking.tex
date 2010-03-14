@@ -43,10 +43,14 @@ R_{sense}=\frac{0.5}{I_{TRIP}max}
 \end{equation}
 where $I_{TRIP}max$ is the maximum current allowed to flow into the motor before the PWM circuit shuts the output stage off.
 
+The actual value of $R_{sense}$ used for bench testing the Braking module was \unit{2}{\ohm}, which allows \unit{250}{\milli\ampere} output current. This was suitable for the stepper motor used in testing.
+
 \subsubsection{Analogue-to-Digital Converter}
 
+The AT90CAN128's built-in analogue-to-digital converter was used to measure the analogue signals from the brake pressure transducers.
 
 \subsubsection{End-of-Travel Microswitches}
+
 
 \subsection{Software}
 

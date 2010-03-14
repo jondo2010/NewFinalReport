@@ -1,0 +1,22 @@
+\begin{tikzpicture}[auto, node distance=1.25cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node [block, blue shiny, text width=5cm] (module) {Driver Interface Module};
+  \node [block, above of=module, text width=1cm, right=-2.5cm] (knobs) {Knobs};
+  \node [block, above of=module, text width=1.25cm] (buttons) {Buttons};
+  \node [block, above of=module, text width=1cm, left=-2.5cm] (paddles) {Paddles};
+
+  \node [block, below of=module, text width=3cm] (panel) {Information Display Panel};
+
+  \draw [->, thick] (knobs.south) -- ($(module.north west)!(knobs.south)!(module.north east)$);
+  \draw [->, thick] (buttons.south) -- ($(module.north west)!(buttons.south)!(module.north east)$);
+  \draw [->, thick] (paddles.south) -- ($(module.north west)!(paddles.south)!(module.north east)$);
+
+  \draw [->, thick] (module) -- (panel);
+
+  \draw [<->, thick] (module.east) -- ++(1cm,0) node[coordinate,label={[rotate=90]below:CAN Bus}](can){};
+  \draw [-, line width=3pt] ($(can)+(0,-1cm)$) -- ++(0,2cm);
+
+  \draw ($(knobs.north west)+(-0.2cm,0.2cm)$) node[coordinate] (x1) {};
+  \draw ($(paddles.south east)+(0.2cm,-0.2cm)$) node[coordinate] (x2) {};
+  \path [draw, thick, dashed] (x1) rectangle (x2);
+  \node at (x1) [anchor=south west] {Driver Controls};
+\end{tikzpicture}

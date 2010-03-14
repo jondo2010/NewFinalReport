@@ -4,9 +4,9 @@ Getting the software implementation of the Telemetry module to work successufull
 
 \subsection{Wireless Data Link}
 
-We had originally planned to run the wireless link's data rate higher than \unit{115,200}{\bit\per\second}. The XBee documentation states that the modem is capable of running up to \unit{250,000}{\bit\per\second}, and the XBee modems allow for a continuous range of baud rates to be selected. Unfortunately it was determined when we started testing the Telemetry module software that the XBee could not in fact set it's baud rate to the highest possible with the MAX3100 was capable of: \unit{230,400}{\bit\per\second}.
+We had originally planned to run the wireless link's data rate higher than \unit{115.2}{\kilo\bit\per\second}. The XBee documentation states that the modem is capable of running up to \unit{250}{\kilo\bit\per\second}, and the XBee modems allow for a continuous range of baud rates to be selected. Unfortunately it was determined when we started testing the Telemetry module software that the XBee could not in fact set it's baud rate to the highest possible with the MAX3100 was capable of: \unit{230.4}{\kilo\bit\per\second}.
 
-The MAX3100 was therefore configured to operate at \unit{115,200}{\bit\per\second}, and the XBee modem's interface rate was matched. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the MAX3100's driver's software transmit buffer. A fixed-length 32 byte software buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyser on the TX pin of the MAX3100.
+The MAX3100 was therefore configured to operate at \unit{115.2}{\kilo\bit\per\second}, and the XBee modem's interface rate was matched. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the MAX3100's driver's software transmit buffer. A fixed-length 32 byte software buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyser on the TX pin of the MAX3100.
 
 The range of the modems was not tested. Since the output power of the Telemetry module's transmitter depends on the antenna and how it is mounted on the car, this would need to be tested after the car has been built.
 
@@ -51,9 +51,7 @@ Simultaneous data streams from both the DAC and ECU were successfully bench test
 
 The DAC was configured to output all analogue channels at a maximum of \unit{10}{\hertz} at an RS-232 baud rate of \unit{38}{\kilo\bit\per\second}, while the ECU was operated at it's fixed \unit{56.7}{\kilo\bit\per\second
 
-The ECU connection to the DTASWin software worked the same as with a hard line connection, and without any hiccups.
-
-The DAC connection to the DAC software on the PC worked without reporting any errors, but the refresh rate of the 
+The ECU connection to the DTASWin software worked the same as with a hard line connection, and without any hiccups. The DAC connection to the DAC software on the PC worked without the software reporting any synchronization errors, but the refresh rate of the data was lower than expected. Inspection of the serial links in and out of the Telemetry module with a logic analyzer confirmed the suspicion that not every packet received from the DAC was being transmitted, however no corrupt or partial packets were being transmitted either. Since
 
 \subsubsection{ECU}
 

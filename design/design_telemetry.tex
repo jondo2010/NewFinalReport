@@ -88,10 +88,12 @@ A \emph{module initializer} brings the entire system into a known state. Unlike 
 The data manager receives new data from the ECU and DAC, and multiplexes the two streams for transmission over the wireless modem. Incoming data from the ECU and DAC arrive from the UART interface. DAC data is merged with any injected packets, and also sent to the decoder for broadcast. The modified DAC stream is then merged with the ECU stream and packetized and broadcast with the wireless modem interface. Incoming data from the ECU software is directed oppositely from the wireless modem interface to the ECU's UART interface.
 
 \subsubsection{Packet Decoder}
+\label{sec:design_telemetry_decoder}
 
 The packet decoder can read the incoming DAC data stream and rebuild the packets being sent to the DAC in real-time. The various sensor readings that are captured are then fed to the CAN interface for broadcast to the other modules.
 
 \subsubsection{Packet Injector}
+\label{sec:design_telemetry_injector}
 
 The packet injector is the dual of the packet decoder. It can take arbitrary data from other modules over the CAN interface and create new DAC packets to be injected into the DAC data stream. The process is entirely transparent to the DAC software.
 

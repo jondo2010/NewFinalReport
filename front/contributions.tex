@@ -1,4 +1,84 @@
 \chapter*{Contributions}
 \addcontentsline{toc}{chapter}{Contributions}
-Contributions
 
+We (John Hughes and Michael Jean) made every effort possible to divide the project work-load evenly, sharing the design process and approaching the implementation with a divide-and-conquer approach. However, this project required the collaboration of several external people to be realized. Contributions from our fellow UMSAE team members, our academic staff, and our technical staff provided the knowledge and tools required to make our project a success. This section seeks to outline the contributions of both the internal thesis team and our external partners.
+
+\section*{Shared Contributions}
+
+Both thesis team members collaborated over the summer and early fall of 2009 to target new possibilities in electronic control for the Formula vehicle, and to create a working design to meet these goals. The {}``hands-on'' aspect of the project was also shared by both team members. Shared contributions include:
+
+\begin{itemize}
+
+\item Identification of performance goals for the various vehicle systems;
+\item Design of the four electronic control modules;
+\item Component population of the printed circuit boards;
+\item Debugging and testing of the module hardware; and
+\item Bench-testing of the electro-pneumatic system and four modules.
+
+\end{itemize}
+
+\section*{John Hughes}
+
+John Hughes has been the electrical section head for the Formula SAE team since 2008. Many of the project goals came from his knowledge and experience with the vehicle over the past several years. John served as the primary hardware lead on the project, but also spent a great deal of time working with the software side of the project. John's contributions include:
+
+\begin{itemize}
+
+\item Implementation of the module hardware;
+\item Implementation of the electro-pneumatic system;
+\item Assistance with the implementation of the module software; and
+\item Acquisition of sponsorship for printed circuit board manufacturing.
+
+\end{itemize}
+
+\section*{Michael Jean}
+
+Michael Jean joined the Formula Hybrid SAE team in 2008 as the engine control section head, but changed to the Formula team in 2009 to work with John on this project. Michael served as the primary software lead on the project, but also assisted John with perspective and a {}``second-eye'' during the hardware implementation phase. Michael's contributions include:
+
+\begin{itemize}
+
+\item Implementation of the module software;
+\item Implementation of the low-level hardware drivers;
+\item Design and implementation of the CAN bus injector; and
+\item Assistance with the implementation of the module hardware.
+
+\end{itemize}
+
+\section*{Formula SAE Members}
+
+Both John and Michael make up the entire electrical section for the team, but a core crew of nearly fifteen mechanical engineers make up the mechanical sections of the team. Several team members have made valuable contributions to the project and this report.
+
+\begin{description}
+
+\item[Kevin Ginter] provided the rendering of the intake seen in Fig. \ref{fig:background_intake_diagram}, in Sec. \ref{sec:background_intake}.
+
+\item[Daniel Nychuk] provided simulation data for intake runner lengths seen in Fig. \ref{fig:irl_effect}, in Sec. \ref{sec:background_intake}. 
+
+\item[Hose M. Ricon Ruiz] designed the gear position sensor for the transmission shift drum, introduced in Sec. \ref{sec:background_trans_shiftdrum}.
+
+\item[Dave Schilling] provided a prototype implementation of the DAC decoder and injector, as described in Secs. \ref{sec:design_telemetry_decoder} and \ref {sec:design_telemetry_injector}.
+
+\end{description}
+
+\section*{Academic Staff}
+
+Several academic staff members provided valuable input to both our design and implementations. Especially important, they provided us with expensive debugging tools we would not have access to otherwise.
+
+\begin{description}
+
+\item[Dr. Witold Kinsner], our advisor, guided our entire project, providing both technical and philosophical mentoring. He acquired an in-circuit debugger for our micro-controllers, which greatly reduced software debugging time.
+
+\item[Dr. Dean McNeill] provided suggestions for the CAN implementation used on all four modules, and also provided us with an oscilloscope and logic analyzer to aide our implementation process.
+
+\end{description}
+
+\section*{ECE Support Staff}
+
+The ECE support staff provided advice and assistance during the prototyping and population phases of the project. Their knowledge and skill helped us through the most difficult part of the implementation process.
+
+\begin{description}
+
+\item[Sinisa Janjic] provided us with access to a high-quality reworking station to verify and correct mistakes on our circuit boards. He also gave us valuable advice and best-practices for debugging our implementation.
+
+\item[Zoran Trajkoski] manufactured an adapter for the LCD module to enable us to prototype our design before creating a circuit board layout. 
+
+\end{description}

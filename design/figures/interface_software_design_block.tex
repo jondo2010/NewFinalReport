@@ -1,0 +1,25 @@
+\tikzstyle{big arrow} = [>=latex, line width=4pt, gray]
+
+\begin{tikzpicture}[auto, node distance=1.75cm, draw=black!70, >=stealth', font=\scriptsize]
+  \node [block, grey shiny, minimum width=4cm, inner xsep=0, text width=4cm] (vdm_manager) {VDM Manager};
+  \node [block, grey shiny, minimum width=4cm, inner xsep=0, text width=4cm, below of=vdm_manager] (controls_manager) {Controls Manager};
+  \node [block, grey shiny, minimum width=4cm, inner xsep=0, text width=4cm, below of=controls_manager] (ui_manager) {User Interface Manager};
+  \node [block, grey shiny, minimum width=4cm, inner xsep=0, text width=4cm, below of=ui_manager] (diag_manager) {Diagnostic Manager};
+
+  \node [block, left of=vdm_manager, text width=1.5cm, node distance=4cm] (nv_storage) {NV Storage Interface};
+  \node [block, left of=controls_manager, text width=1.5cm, node distance=4cm] (gpio) {GPIO Interface};
+  \node [block, left of=ui_manager, text width=1.5cm, node distance=4cm] (lcd) {LCD Interface};
+
+  \node [block, right of=controls_manager, node distance=4cm, text width=1.5cm] (can_interface) {CAN Interface};
+
+  \draw [<->, big arrow] (vdm_manager) -- (nv_storage);
+  \draw [<->, big arrow] (controls_manager) -- (gpio);
+  \draw [<->, big arrow] (ui_manager) -- (lcd);
+
+  \draw [<->, big arrow] (controls_manager) -- (ui_manager);
+  \draw [<->, big arrow] (ui_manager) -- (diag_manager);
+
+  \draw [<->, big arrow] (controls_manager) -- (can_interface);
+  \draw [<->, big arrow] (can_interface) |- (vdm_manager);
+  \draw [<->, big arrow] (can_interface) |- (diag_manager);
+\end{tikzpicture}

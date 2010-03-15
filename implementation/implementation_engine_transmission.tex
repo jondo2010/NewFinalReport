@@ -1,19 +1,22 @@
 \section{Engine and Transmission Module}
 
-The engine and transmission module implements the design specified in Sec.\ \ref{sec:engine_transmission_design}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:engine_transmission_pcb} shows a photo of the completely populated and debugged Engine and Transmission module hardware.
+The engine and transmission module implements the design specified in Sec.\ \ref{sec:engine_transmission_design}. Figure \ref{fig:engine_transmission_pcb} shows a photo of the module after being populated and debugged.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=1]{implementation/figures/engine_transmission_pcb}
-\caption{Populated Engine and Transmission module PCB.}
+\caption{Photograph of the populated engine and transmission module PCB.}
 \label{fig:engine_transmission_pcb}
 \end{figure}
 
 \subsection{Hardware}
+\nomenclature{SPI}{Serial Peripheral Interface}
+\nomenclature{CMOS}{Complimentary Metal-Oxide-Semiconductor}
+\nomenclature{DAC}{Digital-to-Analog Converter}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, 3 additional hardware components were added. The high-current solenoid drivers specified in the design in Sec. \ref{sec:design_engine_transmission_hardware} were implemented with a single SPI capable octal \emph{low-side solenoid driver}. This driver chip responds to commands over SPI, and switches the low side output pins accordingly. It includes flyback protection circuitry to squash voltage spikes from the inductive load of the solenoid, and can also detect electrical shorts. Additionally, a CMOS buffer chip was added to interface the discrete pins on the ECU (described in Sec.\ \ref{sec:ecu_background_discrete_inputs}), and an SPI capable DAC was added to output the \unit{0-5}{\volt} signal required for setting the traction control slip percentage.
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, three additional hardware components were required. A single \emph{serial peripheral interface} (SPI) capable \emph{low-side solenoid driver} implements the solenoid driver requirement laid out in Sec. \ref{sec:design_engine_transmission_hardware}. A \emph{complimentary metal-oxide-semiconductor} (CMOS) buffer chip was added to interface the discrete pins on the ECU (as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}). An SPI capable \emph{digital-to-analog converter} (DAC) was added to provide the \unit{0-5}{\volt} output signal required to set the traction control slip percentage.
 
-Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the imlementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}. Descriptions of these components are in the following sections.
+Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the implementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}.
 
 \begin{figure}[H]
 \centering
@@ -22,7 +25,7 @@ Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardw
 \label{fig:engine_system_overview}
 \end{figure}
 
-\begin{table}
+\begin{table}[H]
   \caption{Engine and Transmission module components.\label{tab:engine_transmission_module_components}}
   \centering
   \begin{tabular}{|c|c|c|}
@@ -38,30 +41,25 @@ Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardw
   \end{tabular}
 \end{table}
 
-
 \subsubsection{High Current Solenoid Driver}
 
-In order to meet the requirement of being able to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface for the microcontroller to talk to, and also takes care of possible flyback from the solenoids with built-in clamping diodes. Using this single component strongly reduces the complexity of the output stage of the circuit, since multiple discrete high-current transistors were not needed.
-
-The maximum operating frequency of the LT9822E, listed in the datasheet, is $f_{op}^{LT9822E}=\unit{2}{\mega\hertz}$. This specifies the SPI data rate used to communicate with the driver. The outputs of the driver are changed after clocking in 8 bits of data into the chips shift register. With the SPI clock running at \unit{2}{\mega\hertz}, it should therefore possible to update the outputs of the driver at $f_{op}^{LT9822E}/8=\unit{250}{\kilo\hertz}$. This is far more than the required \unit{20}{\hertz} output to the solenoids.
+In order to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface, and also has built-in clamping diodes to eliminate the effects of fly-back. This driver reduces the complexity of the output stage of the circuit by eliminating the need for multiple high-current transistors.
 
 \subsubsection{CMOS Buffer}
 
-A standard 74-series CMOS buffer chip was used to buffer the GPIO output lines from the microprocessor from the discrete input pins on the ECU.
+A standard 74LVC07A CMOS buffer chip was used to buffer the GPIO lines on the microprocessor to the discrete input pins on the ECU. The buffer serves to isolate the two systems. 
 
 \subsubsection{Traction Control Analogue Output}
 
 In order to generate the \unit{0-5}{\volt} analogue signal for the ECU's traction slip percent input, as was described in Sec. \ref{sec:ECU}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs a \unit{0-5}{\volt} analogue signal that varies with the digital input.
 
-According to the datasheet, the output voltage from the DAC $V_{out}^{DAC}$ can be determined by the following equation \cite{TLV5623}:
-\nomenclature{$V_{out}^{DAC}$}{Voltage output from the digital to analogue converter on the Engine and Transmission module.}
+The output voltage from the DAC can be determined by the following equation: \cite{TLV5623}
 
 \begin{equation}
 V_{out}^{DAC}=2\cdot{V_{ref}^{DAC}}\,\frac{Code}{2^{n}}\,\volt
 \end{equation}
 
-where $V_{ref}$ is the reference voltage input to the chip, $n=8\,(bits)$, and $Code$ is the digital input value sent over SPI ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at fullscale input,
-\nomenclature{$V_{ref}^{DAC}$}{Voltage reference for the digital to analogue converter on the Engine and Transmission module.}
+where $V_{ref}$ is the reference voltage input to the chip, $n=8$, and $Code$ is the digital input value sent over SPI ranging from $0$ to $2^{n-1}$. Since we want to output $\unit{5}{\volt}$ at full-scale input,
 
 \begin{equation}
 2\cdot{V_{ref}^{DAC}}\,\frac{2^{7}}{2^{8}}=V_{ref}^{DAC}=\unit{5}{\volt}
@@ -73,55 +71,64 @@ The DC input resistance $R_{in}^{ECU}$ on the traction cut input pin on the ECU 
 
 \subsection{Software}
 
-During the implementation phase, the integral portions of the system software for the Engine and Transmission module was written, however tying everything together was not completed. In this section, each of those integral portions will be described, as well as its intended interaction with the other portions.
-
-
-\subsubsection{Transmission Manager}
-
-Implements the clutch controller
-
-\subsubsection{Intake Manager}
-
-Implements the intake controller
+During the implementation phase, the low-level portions of the module software were written, but integrating these portions together was not completed. In this section, each of those integral portions will be described, as well as its intended interaction with the other portions.
 
 \subsubsection{Event Scheduler}
 
+The event scheduler allows the module software to request that a particular function be called at some particular time in the future. It works by allocating an array of \emph{tasks} that describe:
 
-\subsubsection{CAN Interface}
+\begin{itemize}
+	\item the time (in milliseconds) to execute the task;
+	\item the function to be executed; and
+	\item arguments to the function.
+\end{itemize}
 
-<Data flow diagram>
+Tasks flow from the scheduler into a \emph{task queue}, where they wait until they become current. They are then moved into a \emph{pending queue}, where they wait for \emph{task execution} by the module software. A maximum of fifty tasks can be scheduled or pending at any given time. Task structures are pre-allocated to avoid the use of dynamic memory allocation techniques.
 
+\paragraph{Task Queue} The module software can request a new task be scheduled, and specifies the execution time as an offset from the current system time. The scheduler then calculates the actual time of the task and slots the task into the task queue. This queue is indexed by execution time, with the earliest time at the head.
+
+\nomenclature{FIFO}{First-In First-Out}
+
+\paragraph{Pending Queue}  The scheduler interrupts the program every millisecond to increment it's internal clock. Every interrupt, it checks to see if any events are pending execution. If so, they are appended to the pending queue, which is a standard \emph{first-in first-out} (FIFO) queue. 
+
+\paragraph{Task Execution} The module software may request the next pending task from the scheduler. If there are tasks in the pending queue, the head of the queue is passed to the software for execution, and the head is updated to the next pending task. If no tasks are pending, the module software is notified. This scheme allows the module software to execute pending tasks as processing time becomes available.
 
 \subsubsection{PWM Generator}
 
-An efficient method was devised to generate 2 synchronized PWM signals, $PWM_A$ and $PWM_B$, from the L9822E driver chip. First, a timer periferal on the microcontroller was programmed to allow generating precise interrupts. Then, different combinations of the PWM duty cycles of both channels were identified.
+An efficient method was devised to generate two synchronized PWM signals, $PWM_A$ and $PWM_B$, from the L9822E driver chip. First, a timer peripheral on the micro-controller was programmed to generate periodic interrupts. Different combinations of the PWM duty cycles of both channels were identified.
 
-\paragraph{Interrupt}
-The $32\, kHz$ external crystal was used as the input to the 8-bit TIM2 timer periferal on the microcontroller. The input to the timer was first scaled by 8 which provided a timebase:
+\paragraph{Interrupt} The \unit{32}{\kilo\hertz} external crystal was used as the input to an 8-bit timer peripheral on the micro-controller. The input to the timer was first scaled by 8 to provided a timebase $TB$:
+
 \begin{equation}
 TB=\frac{32.768\, kHz}{8}=4.096\, kHz
 \end{equation}
 
 The timebase period is then given by:
+
 \begin{equation}
 \frac{1}{TB}\approx244\,\mu{S}
 \end{equation}
 
 We then defined a constant scaling factor in software for the PWM generator:
+
 \begin{equation}
 {PWM\_SCALE}=\frac{1}{TB\cdot{f_{PWM}}}\approx205,
 \end{equation}
 
-where $f_{PWM}$ is the PWM frequency desired, in our case \unit{20}{\hertz}.
+In this case, $f_{PWM}$ is the PWM frequency desired, in our case \unit{20}{\hertz}.
 
-By loading the timers' compare register with with a value scaled by ${PWM\_SCALE}$, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
+By loading the timers \emph{compare register} with with a value scaled by ${PWM\_SCALE}$, we can cause the timer to generate an interrupt precisely when a level change in the PWM is required.
 
 \paragraph{Algorithm}
 
-Figure \ref{fig:pwm_cases} shows 8 different combinations of the duty cycles of two synchronized PWM channels. Since the waveforms are synchronized, it can be seen that there are only 2 cases where 3 transitions per period are required: one at the beginning, and two for falling edges of both channels, corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}. This happens when both channels have $0<Duty<100\%$. Two cases are also visible where no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
+Figure \ref{fig:pwm_cases} shows 8 different combinations of the duty cycles of two synchronized PWM channels. Since the waveforms are synchronized, there are only two cases where three transitions per period are required: one at the beginning, and two for falling edges of both channels (corresponding to \ref{fig:pwm_cases_1} and \ref{fig:pwm_cases_2}.) This happens when both channels have $0\%<Duty<100\%$. Two cases are also visible where no transitions are required, shown in \ref{fig:pwm_cases_7} and \ref{fig:pwm_cases_8}.
 
-An efficient generating routine was constructed to effect the level transitions by sending new data to the Solenoid Driver, and to reset the timer to interrupt at the next transition. For the two cases requiring 3 transitions per period, the timer interrupts 3 times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
+An efficient generating routine was constructed to effect the level transitions by sending new data to the solenoid driver, and to reset the timer to interrupt at the next transition. For the two cases requiring three transitions per period, the timer interrupts three times per period. For the two cases where both channels have duty cycle between 0 and 100\%, the routine still interrupts once to allow for a change in duty cycle. For the rest of the cases described, the timer only interrupts twice per PWM period.
 
 \input{implementation/figures/pwm_cases.tex}
 
-\subsubsection{Main Control Loop}
+\subsubsection{Solenoid Driver}
+
+The low-level solenoid driver uses the SPI library described in Sec. \label{sec:impl_spi_driver} to communicate with the LT9822E solenoid driver IC. The LT9822E uses a simple one-byte command format: each bit represents one of the eight solenoid outputs. A zero bit turns the solenoid off, while a one bit turns the solenoid on. 
+
+The solenoid driver maintains the current state of the solenoids and allows the module software to toggle the solenoid outputs individually. When toggling a solenoid, the original solenoid state undergoes an ``exclusive-or'' with the bit position of the desired solenoid. This new command byte is then pushed out over the SPI interface, and saved for the next transition.

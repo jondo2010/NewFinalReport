@@ -11,7 +11,7 @@ The Braking module implements the design specified in Sec.\ \ref{sec:Braking-Mod
 
 \subsection{Hardware}
 
-The braking module implementation was the simplest of the 4 modules in terms of electrical design. Only one special component on the board was required, a stepper motor controller/driver, and the interface to the microcontroller only required a handful of i/o lines. Additionally, a pressure transducer was also specified to facilitate measuring the hydraulic pressure in the brake lines. The components chosen for the braking module are listed in Table \ref{table:braking_module_components}.
+The braking module implementation was the simplest of the 4 modules in terms of electrical design. Only one special hardware component was required, namely the stepper motor driver. This is summarized in Table \ref{table:braking_module_components}.
 
 Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module circuit board, with all components soldered on. The simplicity of the electrical design is reflected in the fact that no additional corrections (other than for the CAN transceiver) were required for the module to be 100\% operational.
 
@@ -31,7 +31,7 @@ Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module 
 
 In order to meet the design goal of having the implementation be flexible in terms of which stepper motor would be used in the system, a current-sensing stepper motor controller/driver component was used in the circuit design. The current sense capability allows us to fix the input voltage in the circuit design, and afterwards adjust the current drive by changing resistor values in the current-sense feedback loop. 
 
-The A3967 "Microstepping Driver with Translator" was chosen to drive the stepper motor for several reasons. The A3967 integrates a microstepping controller with dual H-Bridge output stages into one package. This simplified the potential circuit design. The H-Bridge output transistors can supply up to $\pm\unit{750}{\milli\ampere}$ of current at up to \unit{30}{\volt} \cite{A3967}. This flexibility was desirable.
+The A3967 ``Micro-stepping Driver with Translator'' was chosen to drive the stepper motor for several reasons. The A3967 integrates a micro-stepping controller with dual H-Bridge output stages into one package. This simplified the potential circuit design. The H-Bridge output transistors can supply up to $\pm\unit{750}{\milli\ampere}$ of current at up to \unit{30}{\volt} \cite{A3967}. 
 
 \paragraph{Current Control}
 \nomenclature{$R_{sense}$}{Value of the current sense resistors in the Braking Module's stepper motor circuit.}
@@ -52,6 +52,7 @@ The actual value of $R_{sense}$ used for bench testing the Braking module was \u
 The AT90CAN128's built-in analogue-to-digital converter was used to measure the analogue signals from the brake pressure transducers.
 
 \subsubsection{End-of-Travel Microswitches}
+
 
 
 \subsection{Software}

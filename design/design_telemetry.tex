@@ -41,13 +41,13 @@ At the time of writing, the mechanical team has not identified what data they wo
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in Fig. \ref{fig:telemetry_hardware_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
+A high-level overview of the module's hardware design is shown in Fig. \ref{fig:design_telemetry_hardware_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
 \begin{figure}[H]
 \centering
 \input{design/figures/telemetry_hardware_block}
 \caption{Block diagram of the telemetry module hardware.}
-\label{fig:telemetry_hardware_block}
+\label{fig:design_telemetry_hardware_block}
 \end{figure}
 
 \nomenclature{UART}{Universal Asynchronous Receiver-Transmitter}
@@ -70,13 +70,13 @@ The wireless modem converts a logic-level serial stream from the one of the UART
 
 \subsection{Software}
 	
-A block-diagram overview of the software design is shown in Fig. \ref{fig:telemetry_software_block}. Data streams from the ECU and DAC are dealt with by the \emph{data manager}. The DAC stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
+A block-diagram overview of the software design is shown in Fig. \ref{fig:design_telemetry_software_block}. Data streams from the ECU and DAC are dealt with by the \emph{data manager}. The DAC stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
 
 \begin{figure}[H]
 	\centering
 	\input{design/figures/telemetry_software_block}
 	\caption{Block diagram of the telemetry module software.}
-	\label{fig:telemetry_software_block}
+	\label{fig:design_telemetry_software_block}
 \end{figure}
 
 As is typical with our design, the high-level systems interact with a set of hardware abstraction interfaces to speak with the low-level systems. The CAN interface is exactly as described earlier, and is not mentioned here.

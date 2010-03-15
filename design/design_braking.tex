@@ -2,7 +2,6 @@
 
 The braking module adjusts the brake bias electronically as requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
 
-\vspace{1em}
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_overview_block}
@@ -20,7 +19,6 @@ The major processes of the braking module are \emph{brake bias adjustment}, \emp
 
 The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. The module performs a series of safety checks before rotating the balance bar to adjust the relative force distribution between the two brake master cylinders.
 
-\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_adjust_flow}
@@ -34,7 +32,6 @@ Of prime importance is that the vehicle is not in motion and the brakes are not 
 
 A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from through it's range of motion, we can determine the correct centre point for the bias bar. 
 
-\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_calibration_flow}
@@ -48,7 +45,6 @@ The first step in calibrating the brake bias is to rotate the balance bar to it'
 
 The pressure sensor calibration routine is outlined in Fig. \ref{fig:brake_pressure_calibration_flow}. The module keeps track of the minimum and maximum pressures that will be present in both the front and rear systems. This allows it to determine when the brakes are engaged, and to what extent.
 
-\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_pressure_calibration_flow}
@@ -62,7 +58,6 @@ The first step of pressure calibration is to ask the driver to apply minimum pre
 
 A high-level overview of the module's hardware design is shown in Fig. \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
-\vspace{1em}
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_hardware_design_block}
@@ -88,7 +83,6 @@ Two end-of-travel switches are tripped whenever the balance bar reaches it's lef
 
 A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_software_design_block}. The functionality of the system is separated into a \emph{bias manager} and a \emph{pressure manager}. Like the engine and transmission module, the managers interact with a set of hardware abstraction interfaces to perform their tasks, and the entire process is overseen by a \emph{module coordinator}.
 
-\vspace{1em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_software_design_block}

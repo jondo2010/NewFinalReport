@@ -15,7 +15,7 @@ The driver module receives driver input from \emph{driver controls}, which are t
 \subsection{Vehicle Dynamics Mode (VDM)}
 \nomenclature{VDM}{Vehicle Dynamics Mode}
 
-The driver interface system provides a method of quickly modifying several dynamic vehicle parameters quickly and easily. We have called this feature \emph{Vehicle Dynamics Mode} (VDM). 
+The driver interface system provides a method of quickly modifying several dynamic vehicle parameters quickly and easily. We have called this feature \emph{vehicle dynamics mode} (VDM). 
 
 For example, an acceleration event calls for launch control, auto-upshift, and a heavy forward brake bias. It is possible to enable all of these features in one step by changing the VDM mode to {}``acceleration''. 
 
@@ -101,7 +101,6 @@ The buttons and paddles described in Sec. \ref{sec:interface_controls} are conne
 
 A block-diagram overview of the software design is shown in Fig. \ref{fig:interface_software_design_block}. Like with other designs, various managers oversee operation of the module, and interact with hardware through abstraction interfaces.
 
-\vspace{1em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/interface_software_design_block}

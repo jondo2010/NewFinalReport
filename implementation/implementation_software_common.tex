@@ -11,7 +11,8 @@ Code re-usability was a primary target of the software implementation. However, 
 
 Because of the limited resources of the micro-controller, code efficiency was also of the utmost concern. The AT90CAN128 has \unit{4}{\kilo\byte} of \emph{random-access memory} (RAM). Data sizes were kept to a minimum, and buffers were also carefully managed. The use of dynamically allocated memory was avoided to reduce the possibility of memory leaks. The micro-controller features \unit{128}{\kilo\byte} of \emph{read-only memory} (ROM). Effort was made to place as much statically allocated data into the ROM as possible, such as string constants.
 
-\subsection{Tool-Chain}
+\subsection{Tool Chain}
+\nomenclature{IDE}{Integrated Development Environment}
 
 Atmel offers their own tool-chain and \emph{integrated development environment} (IDE) for Windows. Neither author uses Windows, but open-source support for the Atmel 8-bit micro-controllers is mature and capable. The development environment is documented in detail in Appendix \ref{apx:environment}.
 
@@ -19,7 +20,7 @@ Atmel offers their own tool-chain and \emph{integrated development environment} 
 
 As mentioned in Sec. \ref{sec:imp_software_meth}, several hardware abstraction libraries exist to simplify access to the peripherals of the micro-controller. These libraries are shared amongst the modules. 
 
-\subsection{ADC Driver}
+\subsubsection{ADC Driver}
 
 The ADC driver provides access to the on-board analog-to-digital converter hardware. The driver provides the ability to:
 
@@ -32,6 +33,7 @@ The ADC driver provides access to the on-board analog-to-digital converter hardw
 In blocking mode, the micro-controller waits for the sampling process to complete before returning control to the program. In non-blocking mode, control returns back to the program immediately after the sampling begins. The user specifies a specific function to be called when sampling completes. 
 
 \subsubsection{CAN Driver}
+\label{sec:impl_can_driver}
 
 The CAN driver provides a simplified interface to the functionality of the AT90CAN128's on-board CAN controller. The key features of the driver are:
 
@@ -59,6 +61,7 @@ The EEPROM driver provides a transparent interface to the 1024 bytes of EEPROM l
 \end{itemize}
 
 \subsubsection{SPI Driver}
+\label{sec:impl_spi_driver}
 
 The AT90CAN128 comes with a built-in SPI interface that generates the necessary signals required to communicate with SPI-capable devices. This interface is made available to the user through the SPI driver. Some aspects of the driver are:
 

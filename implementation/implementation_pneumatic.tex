@@ -19,7 +19,7 @@ The three major components of the electro-pneumatic system are the \emph{PWM gen
 
 \subsubsection{PWM Generator Model}
 
-The PWM generator is used to provide the electrical control signals required by the solenoid valves to open and close. A model of the PWM generator was developed using the instantaneous model presented by \citet{valve_models}. This model compares a generated saw-tooth signal $V_{saw}$ with the input signal $V_{in}$ over a time period $T_{saw}$ to obtain the pulse-width-modulated signal $U(t)$. The relationship is illustrated in Eq. \ref{eq:pwm_generation}.
+The PWM generator is used to provide the electrical control signals required by the solenoid valves to open and close. Our model of the PWM generator uses the instantaneous model presented by \citet{valve_models}. This model compares a generated saw-tooth signal $V_{saw}$ with the input signal $V_{in}$ over a time period $T_{saw}$ to obtain the pulse-width-modulated signal $U(t)$. The relationship is illustrated in Eq. \ref{eq:pwm_generation}.
 
 \begin{equation}
 \label{eq:pwm_generation}
@@ -39,14 +39,14 @@ The Simulink model which implements Eq. \ref{eq:pwm_generation} can be seen in F
 \label{fig:pneumatics_pwm}
 \end{figure}
 
-A saturation block was added to limit the input signal $V_{in}$ to the range of \unit{[0..1]}{\volt}. A dead-zone block was added to account for the dead-zone present in the solenoid valve response to a PWM signal. If the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal, known as $d_{min}$. This value can be calculated as:
+A saturation block limits the input signal $V_{in}$ to the range of \unit{[0..1]}{\volt}. A dead-zone block is present to account for the dead-zone present in the solenoid valve response to a PWM signal. If the pulse width is too short, the current through the solenoid cannot generate enough force to open the poppet, so the valve stays shut. This is a parameter of the solenoid valve, and was quantified experimentally by \cite{valve_models} as the minimum input signal $V_{in}$ required to open the valve. \Citet{accurate_position} also account for a minimum possible duty cycle in the solenoid valve input signal, known as $d_{min}$. This value can be calculated as:
 
 \begin{equation}
   \label{eq:pwm_duty_min}
   d_{min}=\left(T_{vr}/T_{PWM}\right)\cdot100\%
 \end{equation}
 
-In this case, $T_{vr}$ is the he time required by a solenoid valve to respond to an input, and $T_{PWM}$ the period of the PWM signal.
+In this case, $T_{vr}$ is the time required by a solenoid valve to respond to an input, and $T_{PWM}$ the period of the PWM signal.
 
 \nomenclature{$d_{min}$}{The minimum possible duty cycle of a solenoid's drive signal that will cause the valve to open.}
 \nomenclature{$T_{vr}$}{The time required by a solenoid valve to respond to an input.}

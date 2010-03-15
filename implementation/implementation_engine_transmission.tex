@@ -14,19 +14,19 @@ The engine and transmission module implements the design specified in Sec.\ \ref
 \nomenclature{CMOS}{Complimentary Metal-Oxide-Semiconductor}
 \nomenclature{DAC}{Digital-to-Analog Converter}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, three additional hardware components were required. A single \emph{serial peripheral interface} (SPI) capable \emph{low-side solenoid driver} implements the solenoid driver requirement laid out in Sec. \ref{sec:design_engine_transmission_hardware}. A \emph{complimentary metal-oxide-semiconductor} (CMOS) buffer chip was added to interface the discrete pins on the ECU (as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}). An SPI capable \emph{digital-to-analog converter} (DAC) was added to provide the \unit{0-5}{\volt} output signal required to set the traction control slip percentage.
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, three additional hardware components are required. A single \emph{serial peripheral interface} (SPI) capable \emph{low-side solenoid driver} implements the solenoid driver requirement laid out in Sec. \ref{sec:design_engine_transmission_hardware}. A \emph{complimentary metal-oxide-semiconductor} (CMOS) buffer chip is used to interface the discrete pins on the ECU (as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}). An SPI capable \emph{digital-to-analog converter} (DAC) provides the \unit{0-5}{\volt} output signal required to set the traction control slip percentage.
 
 Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the implementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}.
 
 \begin{figure}[H]
 \centering
 \input{implementation/figures/engine_transmission_overview_block.tex}
-\caption{Engine and transmission module hardware overview.}
+\caption{Overview of the engine and transmission module hardware.}
 \label{fig:engine_system_overview}
 \end{figure}
 
 \begin{table}[H]
-  \caption{Engine and Transmission module components.\label{tab:engine_transmission_module_components}}
+  \caption{List of components used by the engine and transmission module.}
   \centering
   \begin{tabular}{|c|c|c|}
     \hline 
@@ -39,21 +39,20 @@ Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardw
     Hex CMOS Buffer & Texas Instruments & 74LVC07A \tabularnewline
     \hline
   \end{tabular}
+  \label{tab:engine_transmission_module_components}
 \end{table}
 
 \subsubsection{High Current Solenoid Driver}
 
-In order to energize the multiple solenoids specified in the design, an 8-way solenoid driver component from ST Microelectronics was chosen. The LT9822E provides a simple SPI interface, and also has built-in clamping diodes to eliminate the effects of fly-back. This driver reduces the complexity of the output stage of the circuit by eliminating the need for multiple high-current transistors.
+An 8-way solenoid driver component from ST Microelectronics called the LT9822E is used to energize the multiple solenoids of the electro-pneumatic system. The LT9822E provides a simple SPI interface and also has built-in clamping diodes to eliminate the effects of fly-back. This driver reduces the complexity of the output stage of the circuit by eliminating the need for multiple high-current transistors.
 
 \subsubsection{CMOS Buffer}
 
-A standard 74LVC07A CMOS buffer chip was used to buffer the GPIO lines on the microprocessor to the discrete input pins on the ECU. The buffer serves to isolate the two systems. 
+A standard 74LVC07A CMOS buffer chip is used to buffer the GPIO lines on the microprocessor and the discrete input pins on the ECU. The buffer isolates the two systems and protects the micro-controller from risk of damage via shock.
 
-\subsubsection{Traction Control Analogue Output}
+\subsubsection{Traction Control Analog Output}
 
-In order to generate the \unit{0-5}{\volt} analogue signal for the ECU's traction slip percent input, as was described in Sec. \ref{sec:ECU}, a simple SPI interfaced digital to analogue converter (DAC) from Texas Instruments was introduced. The TLV5623 outputs a \unit{0-5}{\volt} analogue signal that varies with the digital input.
-
-The output voltage from the DAC can be determined by the following equation: \cite{TLV5623}
+The TLV5623C SPI-interfaced DAC from Texas Instruments generates the \unit{0-5}{\volt} analog signal for the ECU's traction slip percent input (described in Sec. \ref{sec:ECU}.) The TLV5623 outputs a \unit{0-5}{\volt} analog signal that varies with the digital input. The output voltage from the DAC is determined by the following equation: \cite{TLV5623}
 
 \begin{equation}
 V_{out}^{DAC}=2\cdot{V_{ref}^{DAC}}\,\frac{Code}{2^{n}}\,\volt
@@ -67,11 +66,9 @@ where $V_{ref}$ is the reference voltage input to the chip, $n=8$, and $Code$ is
 
 The $V_{ref}$ pin on the DAC was therefore connected to VCC.
 
-The DC input resistance $R_{in}^{ECU}$ on the traction cut input pin on the ECU was measured using a series resistor with the input terminal to be $R_{in}^{ECU}\approx\unit{155}{\kilo\ohm}$. The output current of the DAC therefore will be at most $I_{out}^{DAC}=\frac{5v}{155k}\approx\unit{32.26}{\micro\ampere}$.
-
 \subsection{Software}
 
-During the implementation phase, the low-level portions of the module software were written, but integrating these portions together was not completed. In this section, each of those integral portions will be described, as well as its intended interaction with the other portions.
+The low-level portions of the engine and transmission module software exist, but have yet to be integrated into the high-level managers described in the design. Each of those integral portions are described below.
 
 \subsubsection{Event Scheduler}
 
@@ -95,7 +92,7 @@ Tasks flow from the scheduler into a \emph{task queue}, where they wait until th
 
 \subsubsection{PWM Generator}
 
-An efficient method was devised to generate two synchronized PWM signals, $PWM_A$ and $PWM_B$, from the L9822E driver chip. First, a timer peripheral on the micro-controller was programmed to generate periodic interrupts. Different combinations of the PWM duty cycles of both channels were identified.
+The PWM generator is capable of outputting two synchronized PWM signals, $PWM_A$ and $PWM_B$, to the L9822E driver chip. A timer peripheral on the micro-controller is configured to generate periodic interrupts. Different combinations of the PWM duty cycles can be modulated within the interrupt cycle, as described below.
 
 \paragraph{Interrupt} The \unit{32}{\kilo\hertz} external crystal was used as the input to an 8-bit timer peripheral on the micro-controller. The input to the timer was first scaled by 8 to provided a timebase $TB$:
 
@@ -109,7 +106,7 @@ The timebase period is then given by:
 \frac{1}{TB}\approx244\,\mu{S}
 \end{equation}
 
-We then defined a constant scaling factor in software for the PWM generator:
+We then define a constant scaling factor in software for the PWM generator:
 
 \begin{equation}
 {PWM\_SCALE}=\frac{1}{TB\cdot{f_{PWM}}}\approx205,

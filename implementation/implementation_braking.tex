@@ -5,18 +5,18 @@ The Braking module implements the design specified in Sec.\ \ref{sec:Braking-Mod
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{implementation/figures/braking_pcb}
-\caption{Populated Braking module PCB.}
+\caption{Photograph of the populated braking module PCB.}
 \label{fig:braking_pcb}
 \end{figure}
 
 \subsection{Hardware}
 
-The braking module implementation was the simplest of the 4 modules in terms of electrical design. Only one special hardware component was required, namely the stepper motor driver. This is summarized in Table \ref{table:braking_module_components}.
+The braking module implementation is the simplest of the four modules in terms of electrical design. Only one special hardware component is required, namely the stepper motor driver. This is summarized in Table \ref{table:braking_module_components}.
 
-Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module circuit board, with all components soldered on. The simplicity of the electrical design is reflected in the fact that no additional corrections (other than for the CAN transceiver) were required for the module to be 100\% operational.
+Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module circuit board, with all components soldered on. The simplicity of the electrical design is reflected in the fact that no additional corrections (other than for the CAN transceiver) are required for the module to be 100\% operational.
 
 \begin{table}
-  \caption{Braking module components.\label{table:braking_module_components}}
+  \caption{List of components used by the braking module.}
   \centering
   \begin{tabular}{|c|c|c|}
     \hline 
@@ -25,35 +25,36 @@ Figure \ref{fig:braking_pcb} shows a photograph of the completed braking module 
     Stepper Motor Controller/Driver & Allegro Microsystems & A3967 \tabularnewline
     \hline
   \end{tabular}
+  \label{table:braking_module_components}
 \end{table}
 
 \subsubsection{Stepper Motor Driver}
 
-In order to meet the design goal of having the implementation be flexible in terms of which stepper motor would be used in the system, a current-sensing stepper motor controller/driver component was used in the circuit design. The current sense capability allows us to fix the input voltage in the circuit design, and afterwards adjust the current drive by changing resistor values in the current-sense feedback loop. 
-
-The A3967 ``Micro-stepping Driver with Translator'' was chosen to drive the stepper motor for several reasons. The A3967 integrates a micro-stepping controller with dual H-Bridge output stages into one package. This simplified the potential circuit design. The H-Bridge output transistors can supply up to $\pm\unit{750}{\milli\ampere}$ of current at up to \unit{30}{\volt} \cite{A3967}. 
+The Allegro Microsystems A3967 Micro-stepping Stepper Driver is used to drive the stepper motor. The A3967 integrates a micro-stepping controller with dual H-Bridge output stages into one package. The H-Bridge output transistors can supply up to $\pm\unit{750}{\milli\ampere}$ of current at up to \unit{30}{\volt} \cite{A3967}. The A3967 also provides a current-sensing feature for dynamically modifying the current supplied to the stepper motor. A current-sensing stepper motor driver allows us to adjust the current provided to the stepper motor by changing resistor values in the current-sense feedback loop. This allows us to remain flexible in terms of which stepper motor can be used in the final implementation.
 
 \paragraph{Current Control}
+
 \nomenclature{$R_{sense}$}{Value of the current sense resistors in the Braking Module's stepper motor circuit.}
 \nomenclature{$I_{TRIP}max$}{Maximum current allowed to flow into the Braking Module's stepper motor before the PWM circuit shuts the output stage off.}
 
 The current control feature of the A3967 works by sensing the current through a sense resistor, $R_{sense}$, and varies the duty cycle of a fixed off-time PWM circuit, which controls the output from the H-Bridge stages.
 
-The value of the sense resistor was determined by an equation recommended in the manufacturer's data-sheet:
+The value of the sense resistor is determined by an equation recommended in the manufacturer's data-sheet:
+
 \begin{equation}
 R_{sense}=\frac{0.5}{I_{TRIP}max}
 \end{equation}
 where $I_{TRIP}max$ is the maximum current allowed to flow into the motor before the PWM circuit shuts the output stage off.
 
-The actual value of $R_{sense}$ used for bench testing the Braking module was \unit{2}{\ohm}, which allows \unit{250}{\milli\ampere} output current. This was suitable for the stepper motor used in testing.
+The actual value of $R_{sense}$ used for bench testing the braking module is \unit{2}{\ohm}, which allows \unit{250}{\milli\ampere} output current. This is suitable for the stepper motor used in testing.
 
 \subsection{Software}
 
-The entire module software was written for the braking module. 
+The module software is entirely complete and all functionality is implemented. The brake module was the first to have it's software fully implemented, and served as the genesis for many of the low-level drivers.
 
 \subsubsection{Bias Manager}
 
-The bias library configures the CAN interface to listen for new adjustment and calibration requests over the network. Once a request arrives, the manager validates the request against the current state of the system and proceeds.
+The bias library configures the CAN interface to listen for new adjustment and calibration requests over the network. Once a request arrives, the manager validates the request against the current state of the system and proceeds. 
 
 \paragraph{Bias Adjustment Request}
 \label{sec:impl_braking_bar}
@@ -62,7 +63,7 @@ The bias adjustment routine follows the flow chart illustrated in Fig. \ref{fig:
 
 First, the current front and rear brake pressures is requested from the pressure manager. If these pressures indicate the brakes are engaged, the procedure is aborted and an error message is broadcast over the CAN bus. Secondly, the current engine speed is captured over the CAN bus. If the engine RPM indicates the vehicle is in motion, the process is also aborted. Finally, the adjustment request is validated against the range of possible adjustments. If the request is out of range, the process is aborted and an error message is broadcast.
 
-The number of offset steps $steps_{offset}$ is calcaulted from the desired bias position ``$pos_{desired}$'' and the current bias position. The manager is aware of how many steps are required to adjust the bias by one-half a percentage (``$steps_{half}$''). Moving the balance bar to the right increases the front-to-rear bias ratio. Therefore:
+The number of offset steps $steps_{offset}$ is calculated from the desired bias position ``$pos_{desired}$'' and the current bias position. The manager is aware of how many steps are required to adjust the bias by one-half a percentage (``$steps_{half}$''). Moving the balance bar to the right increases the front-to-rear bias ratio. Therefore:
 
 \[
 steps_{offset} = (pos_{desired} - pos_{current}) * 2 * steps_{half}
@@ -107,4 +108,4 @@ The stepper driver drives the discrete control lines required by the A3967 to en
 
 The function toggles the direction line of the A3967 based on the desired direction. It then triggers the step signal to advance the motor. This process repeats for each step desired. 
 
-The A3967 has strict timing requirements for how long the signal lines must be held and what sort of delay is required between signal changes. As well, the inertia of the balance bar requires we do not attempt to rotate the bar too fast. The driver introduces an automatic 50 ms delay between steps, allowing for a maximum rotation speed of 50 RPM for a 24-tooth stepper motor.
+The A3967 has strict timing requirements for how long the signal lines must be held and what sort of delay is required between signal changes. We cannot rotate the bar too fast because of the inertia of the balance bar. The driver introduces an automatic 50 ms delay between steps, allowing for a maximum rotation speed of 50 RPM for a 24-tooth stepper motor.

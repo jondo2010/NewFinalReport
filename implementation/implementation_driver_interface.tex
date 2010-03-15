@@ -101,7 +101,7 @@ The system software running on the Telemetry module acts as a source of commands
 
 An LCD module library was written to implement the entire command set of the SED1335. The functionality covers initializing the LCD Controller and screen from reset as well as setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations were implemented specifically to meet the requirements of the Driver Interface module, such as progress bars, underlines, a clock at the top of the screen, and the signal strength indicator. The parameter menu system was also implemented that allows the driver to scroll through the list of vehicle parameters to tune.
 
-\subsubsection{Font Loading}
+\subsubsection{Font Loading\label{sec:lcd_module_font_loading}}
 
 The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficult to read. To display more readable text on the LCD screen, a custom 16x16 pixel fixed-width font for the character generator was developed in a series of steps:
 \begin{enumerate}

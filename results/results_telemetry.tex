@@ -1,5 +1,7 @@
 \section{Telemetry}
 
+The electronic hardware for the driver interface module was completely constructed and debugged. Additionally, all low-level drivers and system software were completed. Successful transmission tests were conducted between the telemetry module, ECU, DAC, and a laptop running the software for the ECU and DAC.
+
 Getting the software implementation of the Telemetry module to work successufully was far more difficult than originally imagined. The individual components of the system software would run as expected on their own, but fail when coupled together. For example, the ECU data link and the DAC data link were at one point in the software development process relatively stable in operation by themselves, but enabling both would cause data loss, or one of the two links to drop. A large amount of time was invested in investigating the causes of these problems, and will be discussed in this section.
 
 \subsection{Wireless Data Link}
@@ -10,44 +12,17 @@ The MAX3100 was therefore configured to operate at \unit{115.2}{\kilo\bit\per\se
 
 The range of the modems was not tested. Since the output power of the Telemetry module's transmitter depends on the antenna and how it is mounted on the car, this would need to be tested after the car has been built.
 
-\subsection{Software Race Conditions}
-
-Multiple race conditions were caused by the large degree of asynchronous behaviour in the system, the large number of common resources used, and the multiple producer/consumer layers. These issues appeared in code that had been in use for a while on other modules, but only caused problems on the Telemetry Module. The majority of these were solved by ensuring that atomic sections were placed around critical code.
-
-\subsection{Interrupt Starvation}
-
-Although initial average data throughput rates for both the DAC and the ECU were measured as part of the research done at the beginning of the project, non-trivial buffering issues did arise in the implementation of the telemetry module software. After several weeks of work spent debugging throughput problems with the module software, and with the aide of a protocol analyser, the root of the problem was tracked down. The AT90CAN microcontroller's interrupt vectors are fixed at the factory, therefore the priority of interrupts on the microcontroller is fixed. Unfortunately this lead to a resource starvation issue. The MAX3100 UART uses an external interrupt line, which has priority over the internal UART interrupts. When there is data in the MAX3100's transmit buffer, the MAX3100's interrupt handler will starve the internal UART interrupt to a certain extent. This was investigated by saturating the MAX3100 output buffer with a constant stream of data, and then inputting some bytes to the internal UART. Single input bytes were read properly, but any long stream of incoming bytes (more than 4 in a row) would cause hardware input buffer overruns in the built-in UART, and incoming data would be lost.
-
-\begin{figure}[ht]
-  \centering
-  \label{fig:ecu_data}
-  \begin{tikztimingtable} %[timing/nice tabs]
-    $ECU_{Rx}$ & Z 10D{Polling sequence (7 bytes)} 14F Z \\
-    $ECU_{Tx}$ & 12Z 6D{Reply sequence} ;[dotted] 2D{...}; 5D{(539 bytes)} Z\\
-    \extracode
-      %\tableheader{Signal}{Timing}
-      \tablerules
-  \end{tikztimingtable}
-  \caption{ECU Serial Data Example}
-  \label{fig:ecu_serial_data}
-\end{figure}
-
-Based on this knowledge, we were able to classify conditions where the software would be unable to accurately process the incoming data. Unfortunately the method that the ECU transmits it's data falls within this characterization. When the ECU is communicating with the DTASWin software, the software will send a handful of bytes (around 7) to the ECU, and the ECU will respond with one large packet of approximately 540 bytes, as shown in Fig.\ \ref{fig:ecu_serial_data}. If the MAX3100 is transmitting a large amount of data when this large packet comes in, bytes will be lost from the interrupt starvation issue.
-
-Having determined the problem, several options lay before us to resolve the issue:
-\begin{itemize}
-  \item By lumping the ISR handlers for both the internal UART and the MAX3100 together, it would be possible to conditionally alter the priority of the processing to allow the incoming data to take precedence. This would however override the natural encapsulation that the two drivers had, and would require writing specialized drivers for use only on the telemetry module;
-  \item Throttling the transmission of data to the MAX3100 by sequenced enabling and disabling of the interrupt could also reduce the starvation issue, but getting the sequencing and timing right would be difficult and more than likely result in further problems;
-  \item Finally, the method successfully used in the implementation was to enabled nested interrupts from the MAX3100 interrupt handler. This is done in two steps at the beginning of the interrupt handler:
-  \begin{itemize}
-   \item First, the MAX3100 external interrupt is disabled, to prevent it recursively firing;
-    \item then, global interrupts are re-enabled. This allows the UART to interrupt the MAX3100 interrupt when it receives a byte.
-  \end{itemize}
-\end{itemize}
-
 \subsection{Wireless Link Bench Testing}
 
-Simultaneous data streams from both the DAC and ECU were successfully bench tested using two seperate end modems connected to the same laptop. The laptop, running Ubuntu Linux, used Sun Virtualbox to host a session of Windows XP in order to run the proprietary ECU and DAC software.
+\begin{figure}[htp]
+ \centering
+ \includegraphics[width=5in,keepaspectratio]{results/figures/telemetry_module_test_bench.eps}
+ \caption{Debugging the telemetry module with a protocol analyzer}
+ \label{fig:telemetry_bench_test}
+\end{figure}
+
+
+Simultaneous data streams from both the DAC and ECU were successfully bench tested using two seperate end modems connected to the same laptop. The laptop, running Ubuntu Linux, used Sun Virtualbox to host a session of Windows XP in order to run the proprietary ECU and DAC software. Figure \ref{fig:telemetry_bench_test} shows the telemetry module being monitored with a logic analyzer, and communicating with another modem (the blue module on the right.)
 
 The DAC was configured to output all analogue channels at a maximum of \unit{10}{\hertz} at an RS-232 baud rate of \unit{38}{\kilo\bit\per\second}, while the ECU was operated at it's fixed \unit{56.7}{\kilo\bit\per\second}.
 

@@ -1,6 +1,6 @@
 \chapter{System Design\label{cha:design}}
 
-As mentioned in Sec. \ref{sec:intro_strategy}, the overall target of this project is to develop four electronic modules and an electro-pneumatic actuation system for the 2010 Formula SAE vehicle. This chapter describes the design of these modules and the electro-pneumatic system, and provides context for design choices. The electrical portions of the design will be discussed in more detail than the mechanical portions, as the main focus of the thesis is electrical. 
+As mentioned in Sec. \ref{sec:intro_strategy}, the overall target of this project is to develop four electronic modules and an electro-pneumatic actuation system for the 2010 Formula SAE vehicle. This chapter describes rationale behind the four module architecture, as well as the design of these modules and the design of the electro-pneumatic system, and provides context for design choices. The electrical portions of the design will be discussed in more detail than the mechanical portions, as the main focus of the thesis is electrical. 
 
 Figure \ref{fig:design_overview} shows the electrical and mechanical interrelations between the 4 custom modules (in blue) and the systems they interact with. All of the modules communicate over a shared CAN bus network, which eliminates point-to-point wiring between them. The use of a CAN-based network was dictated by the use of the ECU, which uses a CAN interface to output data required by the modules. 
 
@@ -10,6 +10,18 @@ Figure \ref{fig:design_overview} shows the electrical and mechanical interrelati
 \caption{Overview of the interactions between the modules and the vehicle.}
 \label{fig:design_overview}
 \end{figure}
+
+\section{Architectural Rationale}
+
+A 4 module architecture for the system design was chosen for several specific reasons:
+\begin{itemize}
+  \item Splitting the architecture into smaller chunks simplifies design and development, since individual complexity is reduced.
+  \item A multi-module architecture allows for individual testing of modules.
+  \item A multi-module architecture is inherently more resiliant, since a problem in one module won't neccessarily bring down the other modules.
+  \item Cheaper, simpler microcontrollers can be used,
+  \item Modules can be designed to be in close proximity to the devices they are interfacing with. This minimizes wiring.
+  \item A CAN Bus network was needed regardless to be able to communicate with the ECU.
+\end{itemize}
 
 \input{design/design_pneumatic_system}
 \input{design/design_engine_transmission}

@@ -1,6 +1,6 @@
 \section{Telemetry Module}
 
-The Telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:telemetry_pcb} shows a photo of the completely populated and debugged Telemetry module hardware.
+The telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry-Module-Design}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:telemetry_pcb} shows a photo of the completely populated and debugged telemetry module hardware.
 
 \begin{figure}[H]
 \centering
@@ -10,16 +10,16 @@ The Telemetry module implements the design specified in Sec.\ \ref{sec:Telemetry
 
 \subsection{Hardware}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, several additional components were required in the implementation of the Telemetry module. A block diagram of the Telemetry module hardware implementation is shown in Fig.\ \ref{fig:telemetry_hardware_block}. The additional components are an XBee-PRO wireless mode, MAX232 RS-232 transceiver, MAX3100 external UART, an LTI1521 \unit{3.3}{\volt} linear voltage regulator, and an ST2378E 8-bit level translator. These additional components are listed in Table \ref{tab:telemetry_module_components} and will be described further in this chapter.
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, several additional components were required in the implementation of the telemetry module. A block diagram of the telemetry module hardware implementation is shown in Fig.\ \ref{fig:telemetry_hardware_block}. The additional components are an XBee-PRO wireless mode, MAX232 RS-232 transceiver, MAX3100 external UART, an LTI1521 \unit{3.3}{\volt} linear voltage regulator, and an ST2378E 8-bit level translator. These additional components are listed in Table \ref{tab:telemetry_module_components} and will be described further in this chapter.
 
 \begin{figure}[H]
 \centering
 \input{implementation/figures/telemetry_hardware_block}
-\caption{Block Diagram, Wireless Telemetry Module.\label{fig:telemetry_hardware_block}}
+\caption{Telemetry module hardware block diagram.\label{fig:telemetry_hardware_block}}
 \end{figure}
 
 \begin{table}[H]
-  \caption{Wireless Telemetry Module Components\label{tab:telmetry_module_components}}
+  \caption{Telemetry module components\label{tab:telmetry_module_components}}
   \centering
     \begin{tabular}{|c|c|c|}
       \hline 
@@ -53,16 +53,16 @@ Since the XBee, MAX3100, and AT90CAN128 are operating at different logic levels,
 
 \subsection{Software}
 
-The primary objective of the software running on the Telemetry Module is to push data around from various sources to various sinks. An overview of the Telemetry module's system software can be seen in Fig.\ \ref{fig:telemetry_software_implementation}. A layer of software drivers interacts directly with the hardware, providing an easy-to-use interface for the specific system software to use. Interrupt-driven USART drivers were written for the on-board USARTs of the AT90CAN128, as well as the MAX3100 external UART.
+The primary objective of the software running on the telemetry module is to push data around from various sources to various sinks. An overview of the telemetry module's system software can be seen in Fig.\ \ref{fig:telemetry_software_implementation}. A layer of software drivers interacts directly with the hardware, providing an easy-to-use interface for the specific system software to use. Interrupt-driven USART drivers were written for the on-board USARTs of the AT90CAN128, as well as the MAX3100 external UART.
 
 Three major libraries 
 
-Nearly 3000 lines of c code were written by us for the Telemetry modules' system software. 3800 lines of code were also contributed by David Schilling for the DAC library.
+Nearly 3000 lines of c code were written by us for the telemetry modules' system software. 3800 lines of code were also contributed by David Schilling for the DAC library.
 
 \begin{figure}[H]
 \centering
 \input{implementation/figures/telemetry_software_block.tex}
-\caption{Telemetry software overview.}
+\caption{Telemetry module software overview.}
 \label{fig:telemetry_software_implementation}
 \end{figure}
 
@@ -96,7 +96,7 @@ When the mainline software wants to send a packet, it calls the \verb|xbee_send_
 
 Receiving packets is more complicated, since individual bytes arrive at the MAX3100 drivers's RX buffer asynchronously. A state machine was constructed that waits for a full packet to be available in the RX buffer, and then pushes it into a seperate, incoming packet buffer. This incoming packet buffer can then be read by the mainline code.
 
-Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the Telemetry Module are listed in Table \ref{tab:xbee_commands}.
+Managing the modem's state was implemented as a state machine. Since minimal functionality was required, only a handful of modem commands were implemented. The driver is able to push the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the telemetry module are listed in Table \ref{tab:xbee_commands}.
 
 \begin{table}
 \caption{Implemented XBee modem commands.\label{tab:xbee_commands}}
@@ -131,7 +131,7 @@ Transmission of DAC data over the wireless link is synchronized with the DAC Lib
 
 \subsubsection{Main Control Loop}
 
-Once all of the hardware on the module is initialized and the XBee has successfully entered API mode, the Telemetry module's main control loop repeatedly calls the \verb|telemetry_process()| function. This function runs through three seperate processes:
+Once all of the hardware on the module is initialized and the XBee has successfully entered API mode, the telemetry module's main control loop repeatedly calls the \verb|telemetry_process()| function. This function runs through three seperate processes:
 \begin{enumerate}
   \item The RX buffer of the USART that the ECU is connected to is polled for data. If there is any incoming data waiting, send it over the ECU link by passing it to the packetizer;
   \item all decoded packets in the incoming packet buffer are dealt with, by calling\\ \verb|xbee_digest_incoming_packets()|;

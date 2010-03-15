@@ -1,6 +1,6 @@
 \section{Driver Interface Module}
 
-The Driver Interface module implements the design specified in Sec.\ \ref{sec:Driver-Interface-Module}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:driver_interface_pcb} shows a photo of the completely populated and debugged Driver Interface module hardware.
+The driver interface module implements the design specified in Sec.\ \ref{sec:Driver-Interface-Module}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:driver_interface_pcb} shows a photo of the completely populated and debugged driver interface module hardware.
 
 \begin{figure}[h]
 \centering
@@ -10,9 +10,9 @@ The Driver Interface module implements the design specified in Sec.\ \ref{sec:Dr
 
 \subsection{Hardware}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, the Driver Interface module provides all of the support hardware needed for the LCD module to function. An FPC connector, LCD bias boost converter, \unit{+3.3}{\volt} power supply, latch for the interface to the microcontroller, as well as level translators to translate from the microcontroller's \unit{+5}{\volt} logic to the LCD Controller's \unit{+3.3}{\volt} logic are all included in the module. Additionally, 3 rotary encoders are soldered on the board. On the back of the PCB are connectors to the steering wheel-mounted push buttons and paddles.
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, the driver interface module provides all of the support hardware needed for the LCD module to function. An FPC connector, LCD bias boost converter, \unit{+3.3}{\volt} power supply, latch for the interface to the microcontroller, as well as level translators to translate from the microcontroller's \unit{+5}{\volt} logic to the LCD Controller's \unit{+3.3}{\volt} logic are all included in the module. Additionally, 3 rotary encoders are soldered on the board. On the back of the PCB are connectors to the steering wheel-mounted push buttons and paddles.
 
-The LCD module used in the Driver Interface implementation is a packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
+The LCD module used in the driver interface implementation is a packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
 
 \subsubsection{LCD Module Bias Circuit}
 
@@ -99,7 +99,7 @@ The system software running on the Telemetry module acts as a source of commands
 
 \subsubsection{LCD Module Library}
 
-An LCD module library was written to implement the entire command set of the SED1335. The functionality covers initializing the LCD Controller and screen from reset as well as setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations were implemented specifically to meet the requirements of the Driver Interface module, such as progress bars, underlines, a clock at the top of the screen, and the signal strength indicator. The parameter menu system was also implemented that allows the driver to scroll through the list of vehicle parameters to tune.
+An LCD module library was written to implement the entire command set of the SED1335. The functionality covers initializing the LCD Controller and screen from reset as well as setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations were implemented specifically to meet the requirements of the driver interface module, such as progress bars, underlines, a clock at the top of the screen, and the signal strength indicator. The parameter menu system was also implemented that allows the driver to scroll through the list of vehicle parameters to tune.
 
 \subsubsection{Font Loading\label{sec:lcd_module_font_loading}}
 
@@ -110,7 +110,7 @@ The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficul
   \item then, using The Gimp's python scripting interface, a small python script was written to pull the bitmap data out of the image and format it in such a way as could be placed in a standard c include file as a \emph{const char} array.
 \end{enumerate}
 
-A library was written for the Driver Interface module that at runtime loads this constant font data into the appropriate character generator ram on the LCD. Now, ASCII characters written to the character buffer in the LCD memory are drawn by the character generator and show up on the screen in the custom font. An image of the font used is shown in Fig.\ \ref{fig:driver_interface_font}.
+A library was written for the driver interface module that at runtime loads this constant font data into the appropriate character generator ram on the LCD. Now, ASCII characters written to the character buffer in the LCD memory are drawn by the character generator and show up on the screen in the custom font. An image of the font used is shown in Fig.\ \ref{fig:driver_interface_font}.
 
 \begin{figure}[htp]
  \centering
@@ -134,6 +134,6 @@ A small I/O Library was written to set up and manage the interrupts generated by
 
 \subsubsection{CAN Interface}
 
-A CAN Interface library was written to interface the rest of the Driver Interface module system software with events happening on the network. In particular, the CAN Interface library sends out upshift and downshift requests to the Transmission module when the I/O library indicates that a paddle has been pulled. The start and neutral find buttons operate in the same fashion. The Driver Interface module receives incoming dashboard data from the other modules, such as vehicle wheel speed, and Telemetry signal strength.
+A CAN Interface library was written to interface the rest of the driver interface module system software with events happening on the network. In particular, the CAN Interface library sends out upshift and downshift requests to the Transmission module when the I/O library indicates that a paddle has been pulled. The start and neutral find buttons operate in the same fashion. The driver interface module receives incoming dashboard data from the other modules, such as vehicle wheel speed, and Telemetry signal strength.
 
 \subsubsection{Main Control Loop}

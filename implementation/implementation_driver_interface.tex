@@ -1,46 +1,35 @@
 \section{Driver Interface Module}
 
-The driver interface module implements the design specified in Sec.\ \ref{sec:Driver-Interface-Module}. The hardware and software aspects of this module's implementation are discussed in this section. Figure \ref{fig:driver_interface_pcb} shows a photo of the completely populated and debugged driver interface module hardware.
+The driver interface module implements the design specified in Sec.\ \ref{sec:Driver-Interface-Module}. The hardware and software are discussed in this section. Figure \ref{fig:driver_interface_pcb} shows a photo of the completely populated and debugged driver interface module PCB.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{implementation/figures/driver_interface_pcb.eps}
-\caption{Populated telemetry module PCB.}\label{fig:driver_interface_pcb}
+\caption{Photograph of the populated driver interface module PCB.}\label{fig:driver_interface_pcb}
 \end{figure}
 
 \subsection{Hardware}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, the driver interface module provides all of the support hardware needed for the LCD module to function. An FPC connector, LCD bias boost converter, \unit{+3.3}{\volt} power supply, latch for the interface to the microcontroller, as well as level translators to translate from the microcontroller's \unit{+5}{\volt} logic to the LCD Controller's \unit{+3.3}{\volt} logic are all included in the module. Additionally, 3 rotary encoders are soldered on the board. On the back of the PCB are connectors to the steering wheel-mounted push buttons and paddles.
+The driver interface module provides all of the support hardware needed for the LCD module to function. An \emph{FPC} connector, \emph{LCD bias boost converter}, \unit{+3.3}{\volt} power supply, latch, and level translators are all included in the module. Additionally, three rotary encoders are soldered onto the board. Connectors are soldered onto the back of the PCB to connect the steering wheel-mounted push buttons and paddles.
 
-The LCD module used in the driver interface implementation is a packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
+\subsubsection{LCD Module}
 
-\subsubsection{LCD Module Bias Circuit}
+The LCD module used in the driver interface implementation is a pre-packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
 
-According to the datasheet, the LCD screen requires a large bias voltage of \unit{+22}{\volt} \cite{LCD_Module}. A Linear Technology LT1615 step-up DC/DC converter was chosen as the centre of a boost converter circuit to generate the bias voltage, shown in Fig.\ \ref{fig:lcd_boost_converter}.
+\subsubsection{LCD Bias Circuit}
+
+The LCD screen requires a large bias voltage of \unit{+22}{\volt} to operate \cite{LCD_Module}. A Linear Technology LT1615 step-up DC/DC converter is used as the heart of a boost converter circuit to generate this bias voltage. The circuit schematic for the boost converter is shown in Fig.\ \ref{fig:lcd_boost_converter}.
 
 \begin{figure}[htp]
  \centering
  \includegraphics[scale=0.8]{implementation/figures/driver_interface_lcd_bias_circuit.eps}
- \caption{Boost converter circuit}
+ \caption{Schematic of the LCD boost converter circuit.}
  \label{fig:lcd_boost_converter}
 \end{figure}
 
-\paragraph{Inductor Selection}
+The data-sheet provides formulas for calculating the value of the inductor $L_1$. We calculated an inductor value of \unit{10}{\micro\henry}, which worked perfectly with the module.
 
-According to the datasheet, the value of the inductor $L_1$ can be determined by the following equation:
-
-\begin{equation}
-L_1=\frac{V_{out}-V_{in(min)}+V_{D}}{I_{limit}}\cdot t_{off}\label{IndSel}
-\end{equation}
-
-Where $V_D$ is the diode D1's forward voltage drop, $V_{out}$ the desired output voltage of the converter, $V_{in(min)}$ the minimum expected suppy voltage, and $I_{limit}$ the switching current limit of the converter device, between \unit{300}{\milli\ampere} and \unit{400}{\milli\ampere}, and $t_{off}$ the switching off-time of the converter device, typically \unit{400}{\nano\second}.
-
-Using (\ref{IndSel}) with $V_{D}=\unit{0.4}{\volt}$, $I_{limit}=\unit{350}{\milli\ampere}$, $t_{off}=\unit{400}{\nano\second}$, $V_{out}=+\unit{22}{\volt}$, and $V_{in(min)}=\unit{11.5}{\volt}$ gives $L\approx\unit{12.45}{\micro\henry}$. The datasheet however suggests a value slightly smaller than calculated should be suitable with only slight decrease in maximum output current. Since the LCD requires very little current (estimated less than \unit{1}{\milli\ampere}, we used an inductor value of $\unit{10}{\micro\henry}$.
-
-
-\paragraph{Output Voltage}
-
-To obtain a $V_{bias}$ of $+\unit{22}{\volt}$, two resistors in the bias circuit provide a voltage divided feedback path from the output to the FB pin on the LT1615. The eqation relating the output voltage with the resistor values is
+To obtain a $V_{bias}$ of $+\unit{22}{\volt}$, two resistors in the bias circuit provide a voltage divided feedback path from the output to the \emph{FB} pin on the LT1615. The equation relating the output voltage with the resistor values is:
 
 \begin{equation}
 R_{3}=R_{4}\cdot\left(\frac{V_{bias}}{1.23}-1\right)
@@ -48,14 +37,12 @@ R_{3}=R_{4}\cdot\left(\frac{V_{bias}}{1.23}-1\right)
 
  $R_{3}$ was chosen to be $\unit{2}{\mega\ohm}$ to limit current flowing from the output to ground, and a suitable $R_{4}$ of $\unit{118}{\kilo\ohm}$ was found.
 
-
 \subsubsection{LCD Module Data Interface\label{sec:lcd_module_data_interface}}
+\nomenclature{ALE}{Address Latch Enable}
 
-The LCD's 8-bit interface was suitable to be connected to the AT90CAN128's external memory interface. This way the LCD becomes a memory-mapped periferal to the microcontroller, and all the control signals (Read and Write strobes, etc.), are handled by the memory controller.
+The LCD's 8-bit interface can be connected to an external memory interface, making the LCD a memory-mapped peripheral. All of the read and write strobes are handled by the memory controller. The AT90CAN128's external memory interface uses a bank of eight pins as a multiplexed data and address bus. This bus must be demultiplexed in order to offer the separate address and data buses required by the LCD module. In operation, the micro-controller first puts out the address on the combined bus, followed by the data. A \emph{address latch enable} (ALE) signal to interface with an external latch to store the address bits.\cite{AT90CAN}.
 
-The AT90CAN128's external memory interface uses Port A pins 0-7 as a multiplexed data and address bus which must be demultiplexed in order to offer seperate address and data busses. In operation, the external memory interface first puts out the address on the combined bus, followed by the data. The ALE (Address Latch Enable) signal signifies the difference \cite{AT90CAN}.
-
-In order to provide seperate address and data busses for the LCD controller, a fast octal D-Type latch from NXP was chosen to latch the address from the AT90CAN128. The width of the ALE pulse, $t_{LHLL}$, provided by the AT90, is specified in the datasheet as
+A fast octal D-Type latch from NXP, the 74LVC373A, is used to latch the address from the micro-controller. The width of the ALE pulse, $t_{LHLL}$, provided by the micro-controller is given as:
 
 \nomenclature{$t_{LHLL}$}{The Address Latch Enable pulse width on the AT90CAN128's external memory interface}
 
@@ -63,7 +50,7 @@ In order to provide seperate address and data busses for the LCD controller, a f
 t_{LHLL}=t_{CLCL}-15\, \nano\second
 \end{equation}
 
-where $t_{CLCL}$ is the main clock period. With the main clock running at $\unit{16}{\mega\hertz}$, $t_{LHLL}=\unit{48}{\nano\second}$.
+Here, $t_{CLCL}$ is the main clock period. With the main clock running at $\unit{16}{\mega\hertz}$, $t_{LHLL}=\unit{48}{\nano\second}$.
 
 \nomenclature{$t_{CLCL}$}{The main system clock period on the AT90CAN128.}
 
@@ -71,15 +58,12 @@ The 74LVC373A latch from NXP requires a minimum LE pulse width of $\unit{4.5}{\n
 
 The external memory on the AT90CAN128 starts at address 0x1100h, and there are two possible registers to read/write to on the LCD controller. The LCD controller therefore has it's single address select pin connected to the LSB of the address lines output from the latch. Since only two addresses are required, the upper 8 address lines of the external memory interface were not used.
 
-A logical combination of the lower byte address lines should be connected to the CS (Chip Select) line on the LCD controller. Since the external memory controller only outputs control signals when the requested memory operation is in external space, it is safe to ignore the upper byte address lines.
-
 \nomenclature{CS}{Chip Select}
 
-It was chosen to tie the 2nd bit of the address lines to CS. The resulting operations when interacting with the LCD controller are summarized in Table \ref{tab:lcd_memory_map}.
+A logical combination of the lower byte address lines are connected to the \emph{chip select} (CS) line on the LCD controller. Since the external memory controller only outputs it's control signals when the requested memory operation is referencing external memory, it is safe to ignore the upper byte address lines. The second bit of the address lines to the CS line on the LCD controller. The resulting operations when interacting with the LCD controller are summarized in Table \ref{tab:lcd_memory_map}.
 
 \begin{table}
-\caption{Memory-mapped LCD Interface}
-\label{tab:lcd_memory_map}
+\caption{List of memory addresses associated with the LCD interface.}
 \centering{}
 \begin{tabular}{|l|l|l|}
 \hline 
@@ -91,26 +75,24 @@ Address  & Read Function  & Write Function\tabularnewline
 0x1102  & Display dada and cursor address read  & Command write\tabularnewline
 \hline
 \end{tabular}
+\label{tab:lcd_memory_map}
 \end{table}
 
 \subsection{Software}
 
-The system software running on the Telemetry module acts as a source of commands to the other modules on the network, and serves to meet the design outlined in Sec.\ \ref{sec:Driver-Interface-Module}. The majority of the software implemented is in support of the LCD hardware. The software supporting the buttons, knobs, and paddles is in comparison very simple.
+The software running on the driver interface module acts as a major source and sink of data on the network, sending driver commands out and listening to incoming diagnostic information. The majority of the software implemented is to support the LCD hardware. The software supporting the buttons, knobs, and paddles is very simple in comparison. The actual user interface and vehicle diagnostic mode managers are in the process of being implemented, however the main priority of the team has been to finish debugging the electro-pneumatic system and finish the transmission control software.
 
 \subsubsection{LCD Module Library}
 
-An LCD module library was written to implement the entire command set of the SED1335. The functionality covers initializing the LCD Controller and screen from reset as well as setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations were implemented specifically to meet the requirements of the driver interface module, such as progress bars, underlines, a clock at the top of the screen, and the signal strength indicator. The parameter menu system was also implemented that allows the driver to scroll through the list of vehicle parameters to tune.
+The LCD module library implements the entire command set of the SED1335. It is capable of initializing the LCD controller and screen, setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations are capable, such as the rendering of progress bars, underlines, a clock, and the signal strength indicator. It is also capable of generating a parameter menu system that allows the driver to scroll through the list of vehicle parameters to tune.
 
-\subsubsection{Font Loading\label{sec:lcd_module_font_loading}}
+\subsubsection{Font Library}
 
-The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficult to read. To display more readable text on the LCD screen, a custom 16x16 pixel fixed-width font for the character generator was developed in a series of steps:
-\begin{enumerate}
- \item a 43 character subset of standard ASCII was chosen to be implemented, the capital letters A-Z, the numbers, and a few punctuation characters;
- \item next, a 688x16 pixel image was created in The Gimp image manipulation program. 16 pixel wide blocks were sectioned off, and using The Gimp's text tool, fixed width characters were drawn on the image at 16 pixel intervals;
-  \item then, using The Gimp's python scripting interface, a small python script was written to pull the bitmap data out of the image and format it in such a way as could be placed in a standard c include file as a \emph{const char} array.
-\end{enumerate}
+The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficult to read. To display more readable text on the LCD screen, a custom 16x16 pixel fixed-width font for the character generator was developed. This font library implements a 43-character subset of the standard ASCII library, namely the capital letters A-Z, the numbers, and a few punctuation characters.
 
-A library was written for the driver interface module that at runtime loads this constant font data into the appropriate character generator ram on the LCD. Now, ASCII characters written to the character buffer in the LCD memory are drawn by the character generator and show up on the screen in the custom font. An image of the font used is shown in Fig.\ \ref{fig:driver_interface_font}.
+An 688x16 pixel image was created with an image manipulation program. 16 pixel wide blocks were sectioned off, and fixed width characters were drawn on the image at 16 pixel intervals. A small ``python'' script was written to pull the bitmap data out of the image and convert it into a constant array of bits suitable for a ``C'' header file.
+
+The font library loads it's font data into the appropriate character generator RAM on the LCD at start-up. ASCII characters written to the character buffer in the LCD memory are drawn by the character generator and show up on the screen in the custom font. An image of the font used is shown in Fig.\ \ref{fig:driver_interface_font}.
 
 \begin{figure}[htp]
  \centering
@@ -121,19 +103,4 @@ A library was written for the driver interface module that at runtime loads this
 
 \subsubsection{I/O Library}
 
-A small I/O Library was written to set up and manage the interrupts generated by the buttons, knobs, and paddles on the steering wheel.
- 
-%\subsubsection{Vehicle Diagnostics Library}
-% 
-% 
-%\subsubsection{Vehicle Parameter Library}
-% 
-% 
-% \subsubsection{Vehicle Dynamic Mode}
-
-
-\subsubsection{CAN Interface}
-
-A CAN Interface library was written to interface the rest of the driver interface module system software with events happening on the network. In particular, the CAN Interface library sends out upshift and downshift requests to the Transmission module when the I/O library indicates that a paddle has been pulled. The start and neutral find buttons operate in the same fashion. The driver interface module receives incoming dashboard data from the other modules, such as vehicle wheel speed, and Telemetry signal strength.
-
-\subsubsection{Main Control Loop}
+A small I/O Library was written to set up and manage the interrupts generated by the buttons, knobs, and paddles on the steering wheel. This library periodically polls the various inputs for status changes, and can signal the module software when a change of state has occurred.

@@ -2,21 +2,14 @@
 
 This purpose of this chapter is to describe the testing prodecures, results, and implementation issues that were encountered during the implementation phase of the project. Whenever possible, concrete results will be compared with those described previously in Ch.\ \ref{cha:goals}.
 
-The Engine and Transmission, and Braking modules both require that the Formula SAE 2010 vehicle be at least partly complete for testing. Since the build schedule for the vehicle is to have it complete for the beginning of May, 2010, much of the final-stage testing and tuning of these modules was not yet possible as of writing.
-
-\section{CAN Transceiver Hardware Bug}
-
-After the first module, the Engine and Transmission module, was populated, we proceeded to inspect all solder joints and check for shorts between VCC and ground. Initially no problems were apparent, but when we first applied power to the module, using a current limiting bench power supply, a dynamic short circuit quickly appeared. The power supply immediately began limiting current, and the voltage dropped.
-
-After a lot of searching, inspecting all the components under a microscope, and hot air rework, it was determined that the problem was not with any of the solder joints or the PCB, but in fact a problem with the schematic. In error, the circuit design for the CAN Transceiver had got the VCC and GND lines to the chip swapped. Additionally, this CAN Transceiver schematic block had been duplicated to all four modules, which resulted in the same fate.
-
-A fix was quickly implemented, first on the Engine and Transmission module, and subsequently for the other modules. The copper traces to the VCC and GND pins on the CAN Transceiver were cut with an exacto knife, and rewired correctly with wire-wrap wire.
+The Engine and Transmission, and Braking modules both require that the Formula SAE 2010 vehicle be at least partly complete for testing. Since the build schedule for the vehicle is to have it complete for the beginning of May, 2010, much of the final-stage testing and tuning of these modules was not yet possible as of writing.0
 
 \input{results/results_transmission.tex}
 
 
 \section{Intake}
 
+As of writing, the Formula SAE team members responsible for designing and implementing the two stage intake-plenum were still in the design stages of that project. Our contributions to the variable intake-plenum project, namely the electronics to provide the control signal from the Engine and Transmission module, are complete. Completing the control software and testing this system will need to be done after the intake is fully designed and manufactured.
 
 \section{Braking}
 
@@ -90,7 +83,13 @@ Once all the hardware bugs with the Driver Interface module had been corrected, 
 \subsection{Hardware Implementation Issues}
 
 
-\subsubsection{CAN Transciever Schematic Error}
+\subsubsection{CAN Transceiver Hardware Bug}
+
+After the first module, the Engine and Transmission module, was populated, we proceeded to inspect all solder joints and check for shorts between VCC and ground. Initially no problems were apparent, but when we first applied power to the module, using a current limiting bench power supply, a dynamic short circuit quickly appeared. The power supply immediately began limiting current, and the voltage dropped.
+
+After a lot of searching, inspecting all the components under a microscope, and hot air rework, it was determined that the problem was not with any of the solder joints or the PCB, but in fact a problem with the schematic. In error, the circuit design for the CAN Transceiver had got the VCC and GND lines to the chip swapped. Additionally, this CAN Transceiver schematic block had been duplicated to all four modules, which resulted in the same fate.
+
+A fix was quickly implemented, first on the Engine and Transmission module, and subsequently for the other modules. The copper traces to the VCC and GND pins on the CAN Transceiver were cut with an exacto knife, and rewired correctly with wire-wrap wire.
 
 
 \subsubsection{Driver Interface LCD Reset Line}

@@ -39,7 +39,7 @@ The A3967 ``Micro-stepping Driver with Translator'' was chosen to drive the step
 
 The current control feature of the A3967 works by sensing the current through a sense resistor, $R_{sense}$, and varies the duty cycle of a fixed off-time PWM circuit, which controls the output from the H-Bridge stages.
 
-The value of the sense resistor was determined by an equation recommended in the datasheet:
+The value of the sense resistor was determined by an equation recommended in the manufacturer's data-sheet:
 \begin{equation}
 R_{sense}=\frac{0.5}{I_{TRIP}max}
 \end{equation}
@@ -47,44 +47,64 @@ where $I_{TRIP}max$ is the maximum current allowed to flow into the motor before
 
 The actual value of $R_{sense}$ used for bench testing the Braking module was \unit{2}{\ohm}, which allows \unit{250}{\milli\ampere} output current. This was suitable for the stepper motor used in testing.
 
-\subsubsection{Analogue-to-Digital Converter}
-
-The AT90CAN128's built-in analogue-to-digital converter was used to measure the analogue signals from the brake pressure transducers.
-
-\subsubsection{End-of-Travel Microswitches}
-
-
-
 \subsection{Software}
 
+The entire module software was written for the braking module. 
 
-\subsubsection{Bias Library}
+\subsubsection{Bias Manager}
 
+The bias library configures the CAN interface to listen for new adjustment and calibration requests over the network. Once a request arrives, the manager validates the request against the current state of the system and proceeds.
 
-\paragraph{Bias Position Request}
+\paragraph{Bias Adjustment Request}
+\label{sec:impl_braking_bar}
 
-<Position request flow chart>
+The bias adjustment routine follows the flow chart illustrated in Fig. \ref{fig:design-braking-bias-adjustment}. Safety validation checks must be performed before the routine can get underway. 
 
+First, the current front and rear brake pressures is requested from the pressure manager. If these pressures indicate the brakes are engaged, the procedure is aborted and an error message is broadcast over the CAN bus. Secondly, the current engine speed is captured over the CAN bus. If the engine RPM indicates the vehicle is in motion, the process is also aborted. Finally, the adjustment request is validated against the range of possible adjustments. If the request is out of range, the process is aborted and an error message is broadcast.
+
+The number of offset steps $steps_{offset}$ is calcaulted from the desired bias position ``$pos_{desired}$'' and the current bias position. The manager is aware of how many steps are required to adjust the bias by one-half a percentage (``$steps_{half}$''). Moving the balance bar to the right increases the front-to-rear bias ratio. Therefore:
+
+\[
+steps_{offset} = (pos_{desired} - pos_{current}) * 2 * steps_{half}
+\]
+
+If this value is negative, the stepper motor is turned clockwise to move the balance bar left. Otherwise, it is turned counter-clockwise to move the balance bar right. Once completed, the bias manager broadcasts a success message over the bus. If an error occurs during operation, such as an end-of-travel switch being triggered, an error message is broadcast detailing the problem. 
 
 \paragraph{Bias Calibration}
 
-<Calibration flow chart>
+The bias calibration routine follows the flow chart illustrated in Fig. \ref{fig:brake_bias_calibration_flow}. Like the bias adjustment request, the bias manager ensures the brakes are not engaged before proceeding.
 
+The calibration routine requests that it be interrupted when either end-of-travel switch is triggered. It then uses the stepper interface to rotate the balance bar to the left, until an interrupt occurs. The stepper interface is then used to rotate the balance bar all the way to the right, one step at a time. An index is incremented with each step. Once the right end-of-travel is reached, the bias manager stores the new number of steps required to travel the full-scale of the balance bar. It then divides the steps travelled by two and rotates the bar back by this many steps, thus centering the bar. Finally, the adjustment procedure is invoked to restore the original bias ratio, assuming the current bias is 50/50.
 
-\subsubsection{Pressure Library}
+\subsubsection{Pressure Manager}
 
+The pressure manager has two main tasks: to output the current brake pressure over the bus at a periodic interval, and to respond to requests for calibration. It uses the CAN interface to listen for calibration requests, much like the bias manager. 
 
 \paragraph{Periodic Pressure Output}
 
+The pressure manager uses an on-board timer on the micro-controller to periodically (every \unit{100}{\milli\second}) interrupt code execution to sample the current pressure with the ADC interface, and to broadcast it over the bus. 
+
+Each pressure value is a 10-bit number stored in an unsigned 16-bit number, so two CAN packets are broadcast:one for the front, and one for the rear. The first two data bytes correspond to the \emph{most significant byte} (MSB) and \emph{least significant byte} (LSB) of the current pressure reading. This is followed by the MSB and LSB of the minimum calibrated pressure, and the MSB and LSB of the maximum calibrated pressure.
 
 \paragraph{Pressure Calibration}
 
-<Calibration flow chart>
+The pressure calibration routine follows the flow chart illustrated in Fig. \ref{fig:brake_pressure_calibration_flow}. The vehicle must not be in motion while this takes place, so a check for vehicle speed similar to that in Sec. \ref{sec:impl_braking_bar} is carried out. 
 
+The pressure manager will broadcast a packet indicating that it is requires the driver to remove their foot from the brake. The driver then indicates this is done by pushing the diagnostic button on the driver interface. This causes a reply packet to be broadcast back to the pressure manager. Once received, the pressure manager uses the ADC interface to sample the front and rear pressures and stores them in a temporary value.
 
-\subsubsection{CAN Interface}
+A similar routine occurs for the maximum pressure value. Once received, the calibration function validates the temporary values it has sampled. The rules that must be followed are:
 
-<Data flow diagram>
+\begin{itemize}
+\item The minimum pressure must be less than the maximum pressure; and
+\item There must be a minimum pressure difference of 500 psi between the minimum and maximum pressures.
+\end{itemize}
 
+If the samples pass this validation, they are stored as new calibration values. Otherwise, an error message is broadcast.
 
-\subsubsection{Main Control Loop}
+\subsubsection{Stepper Driver}
+
+The stepper driver drives the discrete control lines required by the A3967 to enable stepper operation. The interface to the module software is simple: a single function allows the software to request the stepper move a particular number of steps in a particular direction.
+
+The function toggles the direction line of the A3967 based on the desired direction. It then triggers the step signal to advance the motor. This process repeats for each step desired. 
+
+The A3967 has strict timing requirements for how long the signal lines must be held and what sort of delay is required between signal changes. As well, the inertia of the balance bar requires we do not attempt to rotate the bar too fast. The driver introduces an automatic 50 ms delay between steps, allowing for a maximum rotation speed of 50 RPM for a 24-tooth stepper motor.

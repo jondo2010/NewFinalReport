@@ -2,7 +2,7 @@
 
 The Formula SAE 2010 vehicle uses a 6-speed manual sequential transmission to transmit power from the engine to the drivetrain. As in other types of manual transmissions, the sequential transmission works by engaging and disengaging several sets of gears with shift forks to obtain different gear ratios. The transmission contains a lever-actuated \emph{shift drum} that selects the current gear, a lever-actuated \emph{clutch} that connects and disconnects the engine from the drivetrain, and a \emph{neutral sensor} to determine when the transmission is in the neutral gear. 
 
-Operating a manual transmission is complicated process. There are several different modes of operation for the transmission, all of which require significant driver effort and skill to use. To ease the demand on the driver, an \emph{electro-pneumatic solution} was introduced in previous years.
+Operating a manual transmission is complicated process. There are several different modes of operation for the transmission, all of which require significant driver effort and skill to use. To ease the demand on the driver, an electro-pneumatic solution was introduced in 2007.
 
 \subsection{Shift Drum}
 \label{sec:background_trans_shiftdrum}
@@ -11,7 +11,7 @@ The transmission contains a cast steel drum called the \emph{shift drum}, which 
 
 \subsection{Clutch}
 
-The CBR600f4i is equipped with a multi-plate clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are separated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand-lever via cable. 
+The CBR600f4i is equipped with a multi-plate clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are separated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand-lever. 
 
 \subsection{Neutral Sensor}
 
@@ -27,7 +27,7 @@ When accelerating the car from a stand-still, two sub-cases need to be considere
 
 Manual clutch control requires a significant amount of skill on behalf of the driver. To launch the car with minimal tire slip, the driver must modulate the throttle as well as the clutch. Crawling a Formula SAE car is a similar operation, however it is very easy to stall the engine by engaging the clutch too quickly. It is often desirable to move the car slower than would be obtained by driving in first gear with the clutch fully engaged. To achieve this, the clutch state is alternated between slipping and fully disengaged.
 
-Down-shifting the transmission requires that the clutch be fully disengaged. In a purely manual system, the driver must disengage the clutch, shift the transmission, "blip" the throttle\footnote{``Blipping'' the throttle is a short increase in throttle used to increase the engine RPM in order to match it closer to the clutch plate RPM}, and then re-engage the clutch. This is required since the torque transmitted by the clutch (Eq. \ref{eq:clutch_slip}) can be in the reverse direction, from the wheels to the engine.
+Down-shifting the transmission requires that the clutch be fully disengaged. In a purely manual system, the driver must disengage the clutch, shift the transmission, "blip" the throttle\footnote{``Blipping'' the throttle is a short increase in throttle used to increase the engine RPM in order to match it closer to the clutch plate RPM}, and then re-engage the clutch. This is required since the torque transmitted by the clutch can be in the reverse direction, i.e., from the wheels to the engine.
 
 \subsection{Previous Electro-Pneumatic Implementation}
 
@@ -45,9 +45,9 @@ There are several disadvantages to a purely manual transmission:
 
 For these reasons, the Formula SAE team replaced the mechanically-actuated system with an electro-pneumatic one in 2007. This new implementation replaced a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. The driver used a set of paddle switches located on the steering wheel to change gears: an up-shift paddle and a down-shift paddle. A compressed air cylinder is used to feed air to linear pneumatic cylinders, which apply force to the clutch and shift levers. Binary 3-way solenoid valves are used to apply pressure to either side of the cylinders. 
 
-The clutch remained disengaged while the driver held down either paddle. This reduced the effort required to change gears, but still often resulted in missed shifts. It also caused heavy mechanical stress on the transmission as the actuators pressed hard on the shift levers.
+The clutch remained disengaged while the driver held down either paddle. This reduced the effort required to change gears, but still often resulted in missed shifts. It also caused heavy mechanical stress on the transmission as the clutch was essentially dumped\footnote{``Dumping'' the clutch refers to letting it out too quickly.} after each gear change.
 
-The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relays with high-current solid state drivers. The timing signals to the solenoid valves were precisely controlled with an ARM7 micro-controller. Shift timing was programmable, rather than depending on how long the paddles were held. This further reduced the effort required from the driver and also reduced driver error. 
+The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relays with high-current solid state drivers. The timing signals to the solenoid valves were precisely controlled with an ARM7 micro-controller. Shift timing became programmable, rather than being dependant on the duration the paddles were held. This further reduced the effort required from the driver, and also reduced driver error. 
 
 A serious drawback for either system is that it is only possible to engage or disengage the clutch at a constant rate. This rate is determined by the pressure in the system, the flow rate coefficient through the valves, and the diameter of the cylinder. Launching the car requires careful modulation of the clutch position, which is not possible with a binary pneumatic system. A hand-lever was required to launch the vehicle.
 

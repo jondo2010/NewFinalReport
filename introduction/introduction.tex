@@ -6,15 +6,17 @@ The purpose of this chapter is to provide a broad introduction to the project by
 
 Formula SAE\nomenclature{SAE}{Society of Automotive Engineers} is an engineering student design competition organized by the Society of Automotive Engineers dating back to 1978 \cite{fsaehistory}. Students from the University of Manitoba have participated in the competition almost every year since 1985. The competition consists of designing and constructing a small, open-wheeled, formula-style race car.
 
-The Formula SAE vehicle is a performance car built with the primary goal of doing well in the dynamic events at the yearly competitions. These events test the vehicles' abilities in acceleration, braking, and handling. 
+The Formula SAE vehicle is a performance car built with the primary goal of ranking highly in the dynamic events at the yearly competitions. These events test the vehicle's abilities in acceleration, braking, and handling. 
 
 \section{Motivation}
 
-Many of the issues that directly affect the teams' performance at competition relate to driver training, feedback, and the tunability of the car. Most of the mechanical systems on the car must currently be imprecisely hand-tuned, and are packaged in hard to reach places, and require body panels or the seat to be removed for access.
+Several important factors affect the team's performance at competition. Managing these factors is the key to performing well.
 
-Our overall goal is thus to improve the precision, adjustability, and repeatability of adjustment, of various important mechanical systems in the car, and to improve the efficiency of testing. Highly desirable is a shorter driver-feedback-tuning loop in order to eliminate overshoot and undershoot in tuning, and to avoid other external disturbances.
+One critical factor affecting the team's performance is the ability to tune the vehicle's mechanical systems for a particular event. Unfortunately, most of the mechanical systems are packaged in hard to reach places, and adjusting these systems involves imprecise hand-tuning. Data from the various sensors in the vehicle must be gathered in order to make good decisions about which parameters to adjust, and how to adjust them. However, acquiring this data while the vehicle is in motion and relaying it to the pit crew is not a trivial task.
 
-A second major goal is to improve upon the transmission control systems of previous years' designs.
+Another factor affecting the team's performance is the amount of effort required by the driver to operate the transmission. The driver is regularly required to divert all of their cognitive and physical energy into changing gears, which distracts from the task of driving. Reducing the cognitive load on the driver is a vital part of improving results on race day.
+
+Finally, the ability of the engine to provide as much power as the driver can control can make the difference between fifth place and first. Formula SAE vehicles are restricted in their top speed, so the most advantageous feature of an engine is not top speed but acceleration. An internal combustion engine is a complicated machine with a highly non-linear torque output. Exploiting these non-linearities can allow the team to gain an edge at competition.
 
 \section{Problem Definition}
 
@@ -40,7 +42,7 @@ Creating an easy-to-use driver interface will allow the driver to tune the dynam
  
 \section{Strategy \label{sec:intro_strategy}}
 
-Four networked electronic modules and an electro-pneumatic actuation system will be created to meet the goals outlined in the problem definition. The four modules are:
+Four networked electronic modules and an electro-pneumatic system will be created to meet the goals outlined in the problem definition. The four modules are:
 
 \begin{itemize}
 \item the transmission and engine control module;
@@ -49,7 +51,9 @@ Four networked electronic modules and an electro-pneumatic actuation system will
 \item the driver interface module.
 \end{itemize}
 
-The transmission and engine control module will interface with the electro-pneumatic actuation system to control the transmission. The design and implementation of the system requires several steps:
+The electro-pneumatic system will actuate the mechanical interface to the transmission. The transmission and engine control module will interface with the system to control this process.
+
+The design and implementation of the system requires several steps:
 
 \begin{enumerate}
 

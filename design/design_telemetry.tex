@@ -41,7 +41,7 @@ At the time of writing, the mechanical team has not identified what data they wo
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in figure \ref{fig:telemetry_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
+A high-level overview of the module's hardware design is shown in Fig. \ref{fig:telemetry_hardware_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
 \begin{figure}[H]
 \centering
@@ -66,11 +66,11 @@ The TIA/EIA-232-F standard for serial communications requires serial links use $
 
 \subsubsection{Wireless Modem}
 
-The wireless modem converts a logic-level serial stream from the one of the UARTs into a wireless signal stream, to be broadcast over an antenna and received by paired wireless modems connected to laptops in the pit. The wireless modem should be capable of handling the data throughput of both the ECU and DAC combined as specified in Secs. \ref{sec:goals_telemetry_ecu} and Secs. \ref{sec:goals_telemetry_dac}. As well, it must be capable of meeting the range requirements laid out in Sec. \ref{sec:goals_telemetry_range}.
+The wireless modem converts a logic-level serial stream from the one of the UARTs into a wireless signal stream, to be broadcast over an antenna and received by paired wireless modems connected to laptops in the pit. The wireless modem should be capable of handling the data throughput of both the ECU and DAC combined as specified in Secs. \ref{sec:goals_telemetry_ecu} and \ref{sec:goals_telemetry_dac}. It must also be capable of meeting the range requirements laid out in Sec. \ref{sec:goals_telemetry_range}.
 
 \subsection{Software}
 	
-A block-diagram overview of the software design is shown in Fig. \ref{fig:telemetry_software_design_block}. Data streams from the ECU and DAC are dealt with by the \emph{data manager}. The DAC stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
+A block-diagram overview of the software design is shown in Fig. \ref{fig:telemetry_software_block}. Data streams from the ECU and DAC are dealt with by the \emph{data manager}. The DAC stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
 
 \begin{figure}[H]
 	\centering

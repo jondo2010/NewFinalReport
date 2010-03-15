@@ -54,22 +54,15 @@ The modules communicate with each other over a two-wire CAN bus operating at 1 M
 
 Schematic capture and PCB layout were both accomplished with CADSoft's ``Eagle''. All four modules were laid out on two-layer PCBs with a ground fill on the bottom and a (\unit{+5}{\volt}) fill on the top. This technique reduces the possibility of ground loops by making all ground connections as short as possible, and increases overall noise immunity. Fig.\ \ref{fig:driver_interface_layout} shows the telemetry module layout exported from Eagle. Both top and bottom conducting layers are indicated on the figure.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=3.5in,keepaspectratio]{implementation/figures/driver_interface_layout.eps}
-  \caption{PCB Layout of the telemetry module.}
-  \label{fig:driver_interface_layout}
-\end{figure}
-
 \subsection{Module Construction}
 
 The printed circuit boards were manufactured by Alberta Printed Circuits (AP Circuits) Ltd., who kindly sponsored the project. Industry-standard GERBER-format files were generated from the PCB layouts and sent electronically to AP Circuits. Figure \ref{fig:empty_pcbs} shows a photograph of the four empty PCBs after they were manufactured.
 
 \begin{figure}[H]
- \centering
- \includegraphics[width=5in,keepaspectratio]{implementation/figures/empty_pcbs.eps}
- \caption[Photographs of the bare circuit boards after manufacturing.]{Photographs of the bare circuit boards after manufacturing. Clockwise: Braking module, telemetry module, driver interface module, and engine and transmission module.}
- \label{fig:empty_pcbs}
+  \centering
+  \includegraphics[width=3.5in,keepaspectratio]{implementation/figures/driver_interface_layout.eps}
+  \caption{PCB Layout of the telemetry module.}
+  \label{fig:driver_interface_layout}
 \end{figure}
 
 All four modules were populated with components and soldered by hand. Laser-cut mylar paste stencils were used to apply the solder. The process used to construct each module is as follows:
@@ -81,5 +74,12 @@ All four modules were populated with components and soldered by hand. Laser-cut 
   \item Individual components were placed on the pads with tweezers. The previously applied solder paste served as an adhesive.
   \item The board was placed into a toaster oven for approximately 7 minutes. 
 \end{enumerate}
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=4.25in,keepaspectratio]{implementation/figures/empty_pcbs.eps}
+ \caption[Photographs of the bare circuit boards after manufacturing.]{Photographs of the bare circuit boards after manufacturing. Clockwise: Braking module, telemetry module, driver interface module, and engine and transmission module.}
+ \label{fig:empty_pcbs}
+\end{figure}
 
 Two-minute warm up and cool-down periods were used before and after a 3 minute reflow phase. The warm-up period served to evaporate the solvents in the solder paste, while the gradual cool down was performed to avoid thermal shock.

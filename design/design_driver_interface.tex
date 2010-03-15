@@ -69,7 +69,7 @@ The interface display panel is a large monochrome \emph{Liquid Crystal Display} 
 
 \begin{itemize}
 \item the selected gear;
-\item the active \emph{vehicle dynamics mode} (VDM);
+\item the active vehicle dynamics mode;
 \item the telemetry signal strength;
 \item the engine RPM;
 \item the vehicle wheel speed; and
@@ -80,7 +80,7 @@ The list of available options and the current value for the selected option is d
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in figure \ref{fig:interface_hardware_design_block}. The driver interface module builds on the common architecture present in the other three modules. 
+A high-level overview of the module's hardware design is shown in Fig. \ref{fig:interface_hardware_design_block}. The driver interface module builds on the common architecture present in the other three modules. 
 
 \begin{figure}[H]
 \centering
@@ -95,12 +95,13 @@ The LCD module is a self-contained unit that consists of an easy-to-read LCD scr
 
 \subsubsection{Knobs, Buttons, and Paddles}
 
-The knobs and buttons described in Sec. \ref{sec:interface_controls} connect to the driver interface module. Appropriate de-bouncing and knob encoding circuitry is present to interface the controls with the module. 
+The buttons and paddles described in Sec. \ref{sec:interface_controls} are connected to the driver interface module through wiring to allow placement throughout the steering wheel. Appropriate de-bouncing and encoding circuitry is present to interface the controls with the module. 
 
 \subsection{Software}
 
 A block-diagram overview of the software design is shown in Fig. \ref{fig:interface_software_design_block}. Like with other designs, various managers oversee operation of the module, and interact with hardware through abstraction interfaces.
 
+\vspace{1em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/interface_software_design_block}
@@ -110,15 +111,15 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:interf
 
 \subsubsection{User Interface Manager}
 
-The user interface manager controls the content displayed on the information display panel, and implements a menu system for the driver to modify the various dynamic parameters of the vehicle. New input from the driver is directed to the interface for processing. Vehicle diagnostics are also relayed to the manager and displayed as appropriate. The user interface manager updates the information display panel through the \emph{LCD interface}.
+The user interface manager controls the content displayed on the information display panel, and implements a menu system for the driver to modify the various dynamic parameters of the vehicle. New input from the driver is directed to the interface for processing. Vehicle diagnostics are also relayed to the manager and displayed as appropriate. The user interface manager updates the information display panel through the LCD interface.
 
 \subsubsection{Diagnostics Manager}
 
 The diagnostics manager listens to the network for the information listed in Sec. \ref{sec:interface_diag}. It grabs important vehicle parameters and coordinates with the user interface manager to display them on the information display panel.
 
-\subsubsection{Vehicle Dynamic Mode (VDM) Manager}
+\subsubsection{VDM Manager}
 
-The vehicle dynamic mode manager handles requests from the driver control manager to change the current vehicle dynamic mode, and to overwrite the dynamic mode presets. It uses the CAN interface to communicate the new parameters over the network to the other modules. The non-volatile storage interface is utilized to load and save the parameters for each preset. 
+The VDM manager handles requests from the driver control manager to change the current vehicle dynamic mode, and to overwrite the dynamic mode presets. It uses the CAN interface to communicate the new parameters over the network to the other modules. The non-volatile storage interface is utilized to load and save the parameters for each preset. 
 
 \subsubsection{Driver Controls Manager}
 
@@ -128,7 +129,7 @@ The driver controls manager listens for new driver inputs on the knobs, buttons,
 
 The LCD interface abstracts the functionality of the LCD module for the user interface manager. It translates high-level drawing and text commands into the low-level memory operations required by the LCD module to draw on the screen.
 
-\subsubsection{General Purpose Input-Output (GPIO) Interface}
+\subsubsection{GPIO Interface}
 
 The GPIO interface monitors the knobs, buttons, and levers for activity. It notifies the driver control manager when a change of state occurs. 
 

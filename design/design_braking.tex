@@ -2,6 +2,7 @@
 
 The braking module adjusts the brake bias electronically as requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
 
+\vspace{1em}
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_overview_block}
@@ -19,6 +20,7 @@ The major processes of the braking module are \emph{brake bias adjustment}, \emp
 
 The brake bias adjustment procedure is shown in Fig. \ref{fig:design-braking-bias-adjustment}. The module performs a series of safety checks before rotating the balance bar to adjust the relative force distribution between the two brake master cylinders.
 
+\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_adjust_flow}
@@ -32,6 +34,7 @@ Of prime importance is that the vehicle is not in motion and the brakes are not 
 
 A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from through it's range of motion, we can determine the correct centre point for the bias bar. 
 
+\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_bias_calibration_flow}
@@ -45,6 +48,7 @@ The first step in calibrating the brake bias is to rotate the balance bar to it'
 
 The pressure sensor calibration routine is outlined in Fig. \ref{fig:brake_pressure_calibration_flow}. The module keeps track of the minimum and maximum pressures that will be present in both the front and rear systems. This allows it to determine when the brakes are engaged, and to what extent.
 
+\vspace{0.5em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_pressure_calibration_flow}
@@ -56,8 +60,9 @@ The first step of pressure calibration is to ask the driver to apply minimum pre
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in figure \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
+A high-level overview of the module's hardware design is shown in Fig. \ref{fig:brake_hardware_design_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
+\vspace{1em}
 \begin{figure}[H]
 \centering
 \input{design/figures/brake_hardware_design_block}
@@ -69,11 +74,11 @@ The module communicates over the bus using a CAN transceiver. A pair of analog-t
 
 \subsubsection{Stepper Motor Driver}
 
-The stepper motor driver generates the signals required to drive the stepper motor connected to the balance bar. It must be capable of  driving a bi-polar stepper motor in the clockwise or counter-clockwise direction. It must also supply enough current to generate the torque required to spin the balance bar, which is approximately \unit{150}{mA}\footnote{This figure was supplied by the team member responsible for the braking pedal assembly.}.
+The stepper motor driver generates the signals required to drive the stepper motor connected to the balance bar. It must be capable of  driving a bi-polar stepper motor in the clockwise or counter-clockwise direction. It must also supply enough current to generate the torque required to spin the balance bar, which is approximately\footnote{This figure was supplied by the team member responsible for the braking pedal assembly.} \unit{150}{mA}.
 
-\subsubsection{Analogue-to-Digital Converters}
+\subsubsection{Analogue-to-Digital Converters (ADC)}
 
-The analogue-to-digital converters sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}. To achieve resolution of \unit{10}{\kilo\pascal}, a 10-bit ADC is sufficient. The pressure values are sampled at \unit{10}{\hertz}.
+The ADCs sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}. To achieve resolution of \unit{10}{\kilo\pascal}, a 10-bit ADC is sufficient. The pressure values are sampled at \unit{10}{\hertz}.
 
 \subsubsection{End-of-Travel Sensing Switches}
 
@@ -83,6 +88,7 @@ Two end-of-travel switches are tripped whenever the balance bar reaches it's lef
 
 A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_software_design_block}. The functionality of the system is separated into a \emph{bias manager} and a \emph{pressure manager}. Like the engine and transmission module, the managers interact with a set of hardware abstraction interfaces to perform their tasks, and the entire process is overseen by a \emph{module coordinator}.
 
+\vspace{1em}
 \begin{figure}[H]
 	\centering
 	\input{design/figures/brake_software_design_block}
@@ -104,7 +110,7 @@ Bias calibration requires similar coordination to ensure a safe operating state.
 
 The pressure manager periodically outputs the front and rear brake pressures. It also implements the pressure calibration procedure and listens for calibration requests over the network, similar to the bias manager.
 
-The front and rear pressures are sampled through the analog-to-digital (ADC) interface. The pressure manager uses the CAN interface to output the samples over the network. Current pressure readings are made available to the bias manager to avoid adjusting or calibrating the bias while the brakes are engaged.
+The front and rear pressures are sampled through the ADC interface. The pressure manager uses the CAN interface to output the samples over the network. Current pressure readings are made available to the bias manager to avoid adjusting or calibrating the bias while the brakes are engaged.
 
 The pressure manager communicates with the driver interface through the CAN interface to coordinate the sequence of driver inputs required to calibrate the front and rear brake pressures. Like the pressure manager, calibration data is loaded at start-up and stored after calibration through the non-volatile storage interface.
 
@@ -116,15 +122,15 @@ Like the module coordinator for the engine and transmission module, the braking 
 
 The stepper motor interface takes motor movement commands from the program and converts them into commands for the stepper motor driver. It can direct the stepper motor driver to turn clockwise or counter-clockwise, and move an arbitrary number of steps. 
 
-\subsubsection{General Purpose Input-Output (GPIO) Interface}
+\subsubsection{GPIO Interface}
 
-The GPIO interface monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs. This interface operates in a similar manner to the GPIO interface specified in Sec. \ref{sec:design_engine_gpio}.
+The GPIO interface monitors the state of the end-of-travel buttons. It can asynchronously interrupt the program when a change of state occurs. 
 
-\subsubsection{Analog-to-Digital Converter (ADC) Interface}  
+\subsubsection{ADC Interface}  
 
-The ADC interface initiates a sampling cycle on either pressure sensor channel. The resulting sample is provided to  the program for further processing. This interface operates in a similar manner to the ADC interface specified in Sec. \ref{sec:design_engine_adc}.
+The ADC interface initiates a sampling cycle on either pressure sensor channel. The resulting sample is provided to  the program for further processing. 
 
 \subsubsection{Non-Volatile Storage Interface}
 
-The \emph{non-volatile storage interface} reads and writes calibration data to the non-volatile storage portion of the micro-controller. This interface operates in a similar manner to the non-volatile storage interface specified in Sec. \ref{sec:design_engine_nvsi}.
+The \emph{non-volatile storage interface} reads and writes calibration data to the non-volatile storage portion of the micro-controller. It is also used to keep track of the current position of the bias bar, so calibration is not required between start-ups.
 

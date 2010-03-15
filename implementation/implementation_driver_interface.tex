@@ -86,7 +86,7 @@ The software running on the driver interface module acts as a major source and s
 
 The LCD module library implements the entire command set of the SED1335. It is capable of initializing the LCD controller and screen, setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations are capable, such as the rendering of progress bars, underlines, a clock, and the signal strength indicator. It is also capable of generating a parameter menu system that allows the driver to scroll through the list of vehicle parameters to tune.
 
-\subsubsection{Font Library}
+\subsubsection{Font Library\label{sec:lcd_module_font_loading}}
 
 The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficult to read. To display more readable text on the LCD screen, a custom 16x16 pixel fixed-width font for the character generator was developed. This font library implements a 43-character subset of the standard ASCII library, namely the capital letters A-Z, the numbers, and a few punctuation characters.
 

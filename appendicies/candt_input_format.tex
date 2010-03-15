@@ -1,5 +1,6 @@
 
 \chapter{CAN Diagnostic Tool Input Format}
+\label{apx:candt}
 
 The CAN diagnostic tool can be programmed to output a sequence of messages onto the bus at pre-determined times. As mentioned in Sec. \ref{sec:implementation_candt}, the packet sequence is input via a serial link. This appendix describes the format of this input.
 
@@ -41,7 +42,7 @@ Both data packets and remote request packets can include data. CAN packets are l
 
 Bytes to be broadcast are specified as pairs of ascii characters representing the hexadecimal equivalent of the data byte, e.g., the corresponding data field for $1A2B3C4D_{16}$ would be {}``1A2B3C4D''.
 
-\section*{Input Termination}
+\subsection*{Input Termination}
 
 Input is terminated when a single exclamation mark (`!') followed by a new-line character is transmitted. 
 

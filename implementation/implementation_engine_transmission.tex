@@ -126,6 +126,6 @@ An efficient generating routine was constructed to effect the level transitions 
 
 \subsubsection{Solenoid Driver}
 
-The low-level solenoid driver uses the SPI library described in Sec. \label{sec:impl_spi_driver} to communicate with the LT9822E solenoid driver IC. The LT9822E uses a simple one-byte command format: each bit represents one of the eight solenoid outputs. A zero bit turns the solenoid off, while a one bit turns the solenoid on. 
+The low-level solenoid driver uses the SPI library described in Sec. \ref{sec:impl_spi_driver} to communicate with the LT9822E solenoid driver IC. The LT9822E uses a simple one-byte command format: each bit represents one of the eight solenoid outputs. A zero bit turns the solenoid off, while a one bit turns the solenoid on. 
 
 The solenoid driver maintains the current state of the solenoids and allows the module software to toggle the solenoid outputs individually. When toggling a solenoid, the original solenoid state undergoes an ``exclusive-or'' with the bit position of the desired solenoid. This new command byte is then pushed out over the SPI interface, and saved for the next transition.

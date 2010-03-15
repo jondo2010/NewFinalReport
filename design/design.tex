@@ -11,16 +11,17 @@ Figure \ref{fig:design_overview} shows the electrical and mechanical interrelati
 \label{fig:design_overview}
 \end{figure}
 
-\section{Architectural Rationale}
+\section{Distributed Module Approach}
 
-A 4 module architecture for the system design was chosen for several specific reasons:
+A distributed four-module architecture for the system design was chosen for several specific reasons:
+
 \begin{itemize}
-  \item Splitting the architecture into smaller chunks simplifies design and development, since individual complexity is reduced.
-  \item A multi-module architecture allows for individual testing of modules.
-  \item A multi-module architecture is inherently more resiliant, since a problem in one module won't neccessarily bring down the other modules.
-  \item Cheaper, simpler microcontrollers can be used,
-  \item Modules can be designed to be in close proximity to the devices they are interfacing with. This minimizes wiring.
-  \item A CAN Bus network was needed regardless to be able to communicate with the ECU.
+  \item Splitting the architecture into smaller chunks simplifies design and development, since individual complexity is reduced;
+  \item A multi-module architecture allows for individual testing of modules;
+  \item A multi-module architecture is inherently more resilient, as problem in one module won't necessarily bring down the other modules;
+  \item Cheaper, simpler micro-controllers can be used;
+  \item Modules can be designed to be in close proximity to the devices they are interfacing with, minimizing wiring; and
+  \item A CAN Bus network was required to be able to communicate with the ECU.
 \end{itemize}
 
 \input{design/design_pneumatic_system}

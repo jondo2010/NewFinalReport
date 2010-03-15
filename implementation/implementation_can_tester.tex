@@ -1,10 +1,170 @@
 \section{CAN Diagnostic Tool}
 \label{sec:implementation_candt}
 
-\subsection{Overview}
+It was recognized early in the implementation that a means of testing the modules in isolation would be required. Access to the vehicle is limited during construction, and isolating a problem between four modules is an arduous task. With this in mind, we developed a CAN diagnostic tool to facilitate isolated testing of four modules.
 
-\subsection{Scheduling}
+The CAN diagnostic tool is a piece of software run on a third-party development board that allows the user to schedule a sequence of packets to be broadcast over the CAN bus. It also has provisions for relaying the bus activity back to the user.
 
-\subsection{Injecting}
+\subsection{Hardware}
 
-\subsection{Snooping}
+Our group received an Olimex AT90CAN128-based development board as a sponsorship donation from Optimal Microsystems. Like the four modules, the Olimex development board supports a JTAG-interface, and has D-sub type connectors on either end for RS-232 and CAN. An annotated photograph of the development board is shown in Fig. \ref{fig:impl_avr_can}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{implementation/figures/avr_can}
+\caption{Photograph of the Olimex AT90CAN128 development module.}
+\label{fig:impl_avr_can}
+\end{figure}
+
+\subsection{CAN Interface}
+
+The CAN diagnostic tool communicates with the bus at a fixed 1 Mbit/s link speed, matching the standard used by the other modules. A standard D-sub type connector is used to interface with the bus. The pin-out for this connector is listed in table \ref{tbl:candt_pins}. 
+
+\begin{table}[H]
+  \caption{List of pins used by the DE-9 CAN connector.}
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline 
+    Pin & Function \\
+    \hline \hline
+    1 & No Connection\\
+    \hline    
+    2 & CAN Low\\
+    \hline    
+    3 & Ground\\
+    \hline    
+    4 & No Connection\\
+    \hline    
+    5 & No Connection\\
+    \hline    
+    6 & Ground\\
+    \hline    
+    7 & Can High\\                 
+    \hline    
+    8 & No Connection\\
+    \hline
+    9 & Voltage In\\        
+    \hline
+  \end{tabular}
+  \label{tbl:candt_pins}
+\end{table}
+
+By default, the board acts as a termination point for the CAN bus. The modules can be interfaced with the development module by connecting a bare female DE-9 shell with the appropriate leads soldered onto it. 
+
+\subsection{Serial Interface}
+
+The CAN diagnostic tool communicates with a user over the built-in serial interface. By default, the serial stream is configured to operate at 115,200 Kbps with 8 data bits, 1 stop bit, and no parity bit.
+
+A simple software library links standard ``C'' input-output functions like ``\verb|printf()|'' and ``\verb|scanf()|'' to the internal UART, avoiding the need for interaction with the complicated UART library required by the other modules. 
+
+Upon booting, the diagnostic tool outputs a welcome message over the serial link and indicates that it is waiting for a sequence to be input. Figure \ref{fig:candt_startup} shows a listing of this output as it would appear over the serial link.
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth]{\hrulefill}
+{\footnotesize	
+	\begin{verbatim}
+CAN-Tester 1.0 (c) 2009-2010 UMSAE
+==================================
+
+Ready for packet schedule.
+	\end{verbatim}
+}	
+	\makebox[\textwidth]{\hrulefill}
+	\caption{Output listing of the CAN diagnostic tool start-up sequence.}
+	\label{fig:candt_startup}
+\end{figure}
+
+The packet schedule may now be input over the serial interface.
+
+\subsection{User Interface}
+\label{ref:candt_ui}
+
+The packet schedule is a list of packets to be broadcast over the bus. A maximum of 100 packets can be scheduled at any given time. The parameters required for each packet are:
+
+\begin{itemize}
+	\item the \emph{packet type}, which specifies a data or remote request packet;
+	\item the \emph{injection time}, which indicates the time at which the packet should be broadcast;
+	\item the \emph{identifier mode}, which specifies if the packet uses the extended identifier feature;
+	\item the \emph{identifier}, which defines the ID with which the packet will be broadcast;
+	\item the \emph{data length}, which indicates how many bytes will be broadcast; and
+	\item the \emph{data}, which includes the actual data bytes to be broadcast.
+\end{itemize}
+
+A detailed outline of the CAN diagnostic input protocol is outlined in Appendix \ref{apx:candt}. 
+
+Once the packet schedule has been input by the user, it is relayed back over the serial link for verification by the user. Figure \ref{fig:candt_sched} shows a listing of the output seen for some arbitrary packet schedule.
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth]{\hrulefill}
+{\footnotesize	
+	\begin{verbatim}
+4 packets read from serial.
+
+Packet Schedule:
+
+ Time  (ms)   Direction    Format        ID        Type    DLC          Data                  
+============ =========== ========== ============ ======== ===== =====================
+ 0000001000     Output    Standard   0x00000100    Data     1    0x01 
+ 0000002000     Output    Standard   0x00000105    Data     5    0x0102030405
+ 0000003000     Output    Extended   0x1FFFFFFF   Remote    0    
+ 0000004000     Output    Standard   0x000000FF    Data     8    0xFFFFFFFF04091A1C    
+ 
+Press any key to start broadcasting.
+	\end{verbatim}
+}	
+	\makebox[\textwidth]{\hrulefill}
+	\caption{Output listing of an example packet scheduling interaction.}
+	\label{fig:candt_sched}
+\end{figure}
+
+The CAN diagnostic tool then waits for the user to send any character over the serial line. At this time, the schedule is output onto the bus. A real-time display of the bus activity is relayed back to the user over the serial link. Outbound packets are also relayed back to the user as they are output. Figure \ref{fig:candt_output} shows a typical run. The tester will continue to output bus activity after it finishes uploading it's sequence. 
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth]{\hrulefill}
+{\footnotesize	
+	\begin{verbatim}
+Broadcasting...
+
+Bus Activity:
+
+ Time  (ms)   Direction    Format        ID        Type    DLC          Data                  
+============ =========== ========== ============ ======== ===== =====================
+ 0000001000     Output    Standard   0x00000100    Data     1    0x01 
+ 0000001239     Input     Standard   0x000000AF    Data     3    0x1F999C  
+ 0000002000     Output    Standard   0x00000105    Data     5    0x0102030405
+ 0000003000     Output    Extended   0x1FFFFFFF   Remote    0    
+ 0000003004     Input     Extended   0x1FFFFFFF    Data     3    0x000000
+ 0000003099     Input     Extended   0x00000FFF    Data     1    0x0A 
+ 0000004000     Output    Standard   0x000000FF    Data     8    0xFFFFFFFF04091A1C    
+	\end{verbatim}
+}	
+	\makebox[\textwidth]{\hrulefill}
+	\caption{Output listing of an example CAN diagnostic tool run.}
+	\label{fig:candt_output}
+\end{figure}
+ 
+\subsection{Packet Scheduler}
+
+The packet scheduler handles the translation of input from the user into packets, and the actual queuing and dispatching of packets over the network. Each packet is described by a \emph{packet descriptor}, which is essentially a ``C'' structure that defines all of the packet parameters introduced in Sec. \ref{ref:candt_ui}. 
+
+At the heart of the packet scheduler is a statically-allocated array of packet descriptors, called the \emph{packet queue}. The packet queue contains all the packets that are to be broadcast over the network, arranged by time of broadcast.
+
+On start-up, the main software passes the serial input stream to the packet scheduler's main packet decoder function. Each new line of input is run through a decoding function that breaks the input format up into it's constituent parameters to form a packet descriptor. If the descriptor is valid, it is appended to the end of the packet queue.
+
+Once the user is finished inputting the schedule, or the packet queue is full, the packet scheduler passes control back to the main program to wait for the user to request the broadcast begins.
+
+Once broadcasting, the packet scheduler uses the internal timer of the micro-controller to interrupt the software every millisecond. During the interrupt service routine, the queue is checked to see if it is time to broadcast the next packet. If so, a message object is allocated on the CAN interface and is configured by the packet descriptor. Once the data payload is set, the packet is broadcast across the network. If any other packets are scheduled for the same time interval, they will be broadcast as well. 
+
+Once the packet scheduler runs out of packets to broadcast, it stops it's timer and becomes dormant. A new packet schedule requires a hard reset of the development module.
+
+\subsection{Bus Snooping}
+
+Once the broadcast process begins, the CAN interface is configured to listen for any incoming packets. A general purpose callback is attached to the message object used to listen for packets. This callback prints out the packet's parameters to the serial stream. 
+
+\subsection{Throughput Limitations}
+
+It is possible that too many packets may arrive at once and overload the input stream. The longest output text is 104 bytes, or 832 bits. This corresponds to 138 possible lines of output per second, corresponding to 138 possible CAN packets per second. The shortest possible CAN packet is 41 bits, and the longest possible CAN packet is 576 bits, so the serial output limits the true bus speed to between $41*138 = 5658$ bps and $576 * 138 = 79488$ bps. This problem is not significant, as the modules do not typically generate more than 15 or 20 messages per second.
+

@@ -1,30 +1,12 @@
 \chapter{Results and Discussion}
 
-This purpose of this chapter is to describe the testing prodecures, results, and implementation issues that were encountered during the implementation phase of the project. Whenever possible, concrete results will be compared with those described previously in Ch.\ \ref{cha:goals}. The amount of work accomplished with each module will also be discussed.
+This purpose of this chapter is to describe the testing procedures, results, and implementation issues that were encountered during the implementation phase of the project. Whenever possible, concrete results will be compared with those described previously in Ch.\ \ref{cha:goals}. The amount of work accomplished with each module will also be discussed.
 
 The Engine and Transmission, and Braking modules both require that the Formula SAE 2010 vehicle be at least partly complete for testing. Since the build schedule for the vehicle is to have it complete for the beginning of May, 2010, much of the final-stage testing and tuning of these modules was not yet possible as of writing. Additionally, a prototype of the full pneumatics system was not ready for writing.
 
 \input{results/results_transmission.tex}
 
-\section{Intake}
-
-As of writing, the Formula SAE team members responsible for designing and implementing the two stage intake-plenum were still in the design stages of that project. Our contributions to the variable intake-plenum project, namely the electronics to provide the control signal from the engine and transmission module, are complete. Completing the control software and testing this system will need to be done after the intake is fully designed and manufactured.
-
-\section{Braking}
-
-\begin{figure}[htp]
- \centering
- \includegraphics[width=5in,keepaspectratio]{results/figures/brake_module_test_bench.eps}
- \caption{Braking module bench testing.}
- \label{fig:brake_module_bench_test}
-\end{figure}
-
-
-\subsection{Bias Adjustment}
-
-
-\subsection{Calibration}
-
+\input{results/results_braking.tex}
 
 \input{results/results_telemetry.tex}
 
@@ -41,11 +23,11 @@ After the first module, the engine and transmission module, was populated, we pr
 
 After a lot of searching, inspecting all the components under a microscope, and hot air rework, it was determined that the problem was not with any of the solder joints or the PCB, but in fact a problem with the schematic. In error, the circuit design for the CAN Transceiver had got the VCC and GND lines to the chip swapped. Additionally, this CAN Transceiver schematic block had been duplicated to all four modules, which resulted in the same fate.
 
-A fix was quickly implemented, first on the engine and transmission module, and subsequently for the other modules. The copper traces to the VCC and GND pins on the CAN Transceiver were cut with an exacto knife, and rewired correctly with wire-wrap wire.
+A fix was quickly implemented, first on the engine and transmission module, and subsequently for the other modules. The copper traces to the VCC and GND pins on the CAN Transceiver were cut with an exact-o knife, and rewired correctly with wire-wrap wire.
 
 \subsection{Driver Interface LCD Reset Line}
 
-After populating the driver interface module, an issue persisted with the active low reset line that prevented the LCD Module from being pulled out of reset with the rest of the system. Upon probing the reset line on the LCD with an oscilliscope, it was found to be oscillating at \unit{60}{\mega\hertz}. Because the LCD module uses \unit{+3.3}{\volt} logic, reset line was isolated from the rest of the system with a direction-sensing level shifter. It is hypothesized that some circuitry on the LCD module was attempting to drive the reset line, and this was causing the oscillations. Adding a very strong (\unit{120}{\ohm}) pull-up resistor to the LCD module's reset line solved the issue.
+After populating the driver interface module, an issue persisted with the active low reset line that prevented the LCD Module from being pulled out of reset with the rest of the system. Upon probing the reset line on the LCD with an oscilloscope, it was found to be oscillating at \unit{60}{\mega\hertz}. Because the LCD module uses \unit{+3.3}{\volt} logic, reset line was isolated from the rest of the system with a direction-sensing level shifter. It is hypothesized that some circuitry on the LCD module was attempting to drive the reset line, and this was causing the oscillations. Adding a very strong (\unit{120}{\ohm}) pull-up resistor to the LCD module's reset line solved the issue.
 
 \subsection{CAN Driver Problems}
 
@@ -55,7 +37,7 @@ Multiple race conditions were caused by the large degree of asynchronous behavio
 
 \subsection{Telemetry Module Interrupt Starvation}
 
-Although initial average data throughput rates for both the DAC and the ECU were measured as part of the research done at the beginning of the project, non-trivial buffering issues did arise in the implementation of the telemetry module software. After several weeks of work spent debugging throughput problems with the module software, and with the aide of a protocol analyser, the root of the problem was tracked down. The AT90CAN microcontroller's interrupt vectors are fixed at the factory, therefore the priority of interrupts on the microcontroller is fixed. Unfortunately this lead to a resource starvation issue. The MAX3100 UART uses an external interrupt line, which has priority over the internal UART interrupts. When there is data in the MAX3100's transmit buffer, the MAX3100's interrupt handler will starve the internal UART interrupt to a certain extent. This was investigated by saturating the MAX3100 output buffer with a constant stream of data, and then inputting some bytes to the internal UART. Single input bytes were read properly, but any long stream of incoming bytes (more than 4 in a row) would cause hardware input buffer overruns in the built-in UART, and incoming data would be lost.
+Although initial average data throughput rates for both the DAC and the ECU were measured as part of the research done at the beginning of the project, non-trivial buffering issues did arise in the implementation of the telemetry module software. After several weeks of work spent debugging throughput problems with the module software, and with the aide of a protocol analyzer, the root of the problem was tracked down. The AT90CAN micro-controller's interrupt vectors are fixed at the factory, therefore the priority of interrupts on the micro-controller is fixed. Unfortunately this lead to a resource starvation issue. The MAX3100 UART uses an external interrupt line, which has priority over the internal UART interrupts. When there is data in the MAX3100's transmit buffer, the MAX3100's interrupt handler will starve the internal UART interrupt to a certain extent. This was investigated by saturating the MAX3100 output buffer with a constant stream of data, and then inputting some bytes to the internal UART. Single input bytes were read properly, but any long stream of incoming bytes (more than 4 in a row) would cause hardware input buffer overruns in the built-in UART, and incoming data would be lost.
 
 \begin{figure}[ht]
   \centering
@@ -67,7 +49,7 @@ Although initial average data throughput rates for both the DAC and the ECU were
       %\tableheader{Signal}{Timing}
       \tablerules
   \end{tikztimingtable}
-  \caption{ECU Serial Data Example}
+  \caption{Timing diagram for the ECU Serial Data Example}
   \label{fig:ecu_serial_data}
 \end{figure}
 

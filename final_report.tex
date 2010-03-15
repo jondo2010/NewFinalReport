@@ -15,7 +15,6 @@
 %%% Preamble
 
 \include{preamble}
-\renewcommand{\baselinestretch}{1.0}
 
 \begin{document}
 \pagenumbering{roman}
@@ -31,6 +30,8 @@
 \input{fancy_footers.tex}
 
 %%% Front Matter
+
+\onehalfspacing
 
 \input{front/visual}
 \input{front/abstract}
@@ -63,7 +64,7 @@
 
 \newpage
 \pagenumbering{arabic}
-\setstretch{1}
+%\setstretch{1}
 
 \include{fancy_headers}
 
@@ -80,13 +81,13 @@
 %%% References
 
 \clearpage
-\bibliographystyle{IEEEtranN}
+\bibliographystyle{IEEEtran}
 %\bibliographystyle{ieeetr}
 %\bibliographystyle{plainnat}
 %\renewcommand{\referencename}{References}
 \renewcommand{\bibname}{References}
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{reference/datasheets,reference/literature,IEEEfull}
+\bibliography{reference/datasheets,reference/literature}
 
 %%% Appendicies
 

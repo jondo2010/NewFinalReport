@@ -47,7 +47,7 @@ The CAN driver provides a simplified interface to the functionality of the AT90C
 
 Users can configure message objects to receive or send a particular type of packet with any particular identifiers. The callback feature lets the user schedule functions to be executed whenever a message object receives or transmits a new packet. This allows asynchronous interaction with the bus and avoids wasteful polling strategies.
 
-The auto-reply feature allows modules to automatically reply to incoming remote requests from particular identifiers. The data to be used for the reply can be udpated at any time, and the data must be flagged as ``valid'' by the user before transmission.
+The auto-reply feature allows modules to automatically reply to incoming remote requests from particular identifiers. The data to be used for the reply can be updated at any time, and the data must be flagged as ``valid'' by the user before transmission.
 
 The driver is capable of operating at the standard CAN baud rates of 100, 125, 250, 500, and 1000 KBps. The baud rate is set at initialization time.
 

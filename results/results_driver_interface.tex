@@ -1,11 +1,6 @@
 \section{Driver Interface}
 
 The electronic hardware for the driver interface module was completely constructed and debugged. Additionally, all low-level drivers for communicating with the LCD module have been written, and a subset of the high level system software has been written. Completion of the user interface software is recommended as future work.
-%\subsection{Driver Controls}
-
-
-%\subsection{Diagnostic Information}
-
 
 \subsection{LCD Interface}
 
@@ -25,7 +20,7 @@ To verify the LCD data interface circuitry before the final driver interface mod
   \label{fig:can_bench_test}
   \includegraphics[width=2.5in,keepaspectratio]{results/figures/can_bench_test.eps}
 }
-\caption{Bench experiments conducted during the implementation phase.}
+\caption{Photographs of the driver control module bench-test experiments.}
 \label{fig:bench_experiments}
 \end{figure}
 
@@ -33,20 +28,20 @@ To verify the LCD data interface circuitry before the final driver interface mod
 
 Once all the hardware bugs with the driver interface module had been corrected, it was possible to continue writing the LCD interfacing software that had been started during the initial LCD testing. The external memory interface circuitry described in Sec.\ \ref{sec:lcd_module_data_interface} worked without issue. Figure \ref{fig:driver_interface_lcd} shows the LCD displaying a sample bitmap from the manufacturer.
 
-\begin{figure}[h!]
+\begin{figure}[H]
  \centering
  \includegraphics[width=5in,keepaspectratio]{results/figures/driver_interface_lcd.eps}
- \caption{Testing the LCD on the driver interface module.}
+ \caption{Photograph of the LCD under test.}
  \label{fig:driver_interface_lcd}
 \end{figure}
 
 \subsection{Vehicle Dynamic Adjustment}
 
-A menu system for adjusting the vehicle dynmaic parameters was implemented. Turning the \emph{param} knob on the driver interface module scrolls through the list of parameters. Figure \ref{fig:driver_interface_menu} shows the LCD module displaying the parameter menu. Also visible is the system time, drawn at the top centre, the telemetry module signal strenght indicator in the top right. All text in Fig. \ref{fig:driver_interface_menu} is drawn using the custom 16x16 font described in Sec.\ \ref{sec:lcd_module_font_loading}.
+A menu system for adjusting the vehicle dynamic parameters was implemented. Turning the \emph{param} knob on the driver interface module scrolls through the list of parameters. Figure \ref{fig:driver_interface_menu} shows the LCD module displaying the parameter menu. Also visible is the system time, drawn at the top centre, the telemetry module signal strength indicator in the top right. All text in Fig. \ref{fig:driver_interface_menu} is drawn using the custom 16x16 font described in Sec.\ \ref{sec:lcd_module_font_loading}.
 
 \begin{figure}[h!]
  \centering
  \includegraphics[width=3in,keepaspectratio]{results/figures/driver_interface_menu.eps}
- \caption{Parameter menu on the driver interface module.}
+ \caption{Photograph of the driver interface module displaying the parameter menu.}
  \label{fig:driver_interface_menu}
 \end{figure}

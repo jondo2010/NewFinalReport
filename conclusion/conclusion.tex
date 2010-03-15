@@ -3,13 +3,14 @@
 
 \chapter{Conclusions and Recommendations}
 
-This chapter will outline the contributions made by the project, and summarise what was accomplished. Recommendations for future work for each of the four modules will also be made.
+This chapter will outline the contributions of the project and summarize what was accomplished. Recommendations for future work for each of the four modules will also be made.
 
-\section{Contributions}
+\section{Conclusions}
 
 In this thesis we have discussed the goals, designs, and implementations of a network of four modules for the 2010 Formula SAE vehicle.
 
 \begin{itemize}
+
   \item A novel pneumatic design was proposed to improve the actuation of the clutch and shift mechanisms of the transmission. A Simulink model was developed of this system, and the hardware and software basis for an on-car controller was designed and implemented. Additionally, driver interactions with the system have been detailed, and advanced controller functions designed.
 
   \item The first iteration of a braking module was designed and implemented allowing electronic control of the vehicles brake bias.
@@ -17,32 +18,37 @@ In this thesis we have discussed the goals, designs, and implementations of a ne
   \item A multiplexing telemetry module was designed and implemented allowing multiple data source on the vehicle to stream data to their proprietary PC software.
 
   \item The first iteration of a dynamic driver interface module was designed and implemented that allows drivers to control vehicle parameters at runtime.
+  
 \end{itemize}
 
-\section{Future Work}
+\section{Recommendations for Future Work}
 
-To further the goals set out in Ch.\ \ref{cha:goals}, and to generally improve upon what was accomplished during this project, the following items have been identified as reccommendations for future work:
+To further the goals set out in Ch.\ \ref{cha:goals}, and to generally improve upon what was accomplished during this project, the following items have been identified as recommendations for future work:
 
 \subsection{Engine and Transmission}
 
+Several engine and transmission goals are not realizable until the vehicle has been constructed. Once constructed, future work includes:
+
 \begin{itemize}
-  \item Further testing and integration of the Engine and Transmission module once the 2010 Formula SAE vehicle has been fully constructed.
-  \item Complete implementation of the electro-pneumatic actuation system, and connection with the Engine and Transmission module.
-  \item Complete implementation of the variable intake actuator, and connection with the Engine and Transmission module.
-  \item Take the Simulink model further by identifying the model parameters with the real electro-pneumatic system.
-  \item Tune the intake and clutch system controllers. The improved electro-pneumatic model could play a vital role in improving the clutch system controller.
+  \item Identification of the model parameters within the actual electro-pneumatic system;
+  \item Development of the electro-pneumatic controlling algorithms;
+  \item Physical implementation of the electro-pneumatic actuation system;
+  \item Physical implementation of the variable intake actuator.
 \end{itemize}
 
 \subsection{Braking}
 
+The brake module has yet to be tested with the brake pedal assembly, as it has not yet been fabricated. Future work includes testing the bias adjustment and calibration procedures with the actual balance bar.
+
 \subsection{Telemetry}
 
-\begin{itemize}
-  \item Test the range of the telemetry module and its resiliance to noise at the Formula SAE competitions.
-  \item Investigate why the DAC decoder is dropping data.
-\end{itemize}
+The telemetry module has yet to be field tested to determine if it meets the range requirements proposed. Future work includes testing the range of the telemetry module and its noise resilience at the Formula SAE competitions.
 
 \subsection{Driver Interface}
 
-Completion of dashboard
-completion of bitmap loading (run-lenght-encoding)
+At the time of project completion, the steering wheel had not yet been manufactured by the team. Two major targets remain for the driver interface:
+
+\begin{itemize}
+	\item Completion of the user interface and vehicle dynamic manager software; and
+	\item Testing of the user interface with the other modules while mounted to the vehicle.
+\end{itemize}

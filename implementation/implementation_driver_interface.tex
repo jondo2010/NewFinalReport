@@ -20,7 +20,7 @@ The LCD module used in the driver interface implementation is a pre-packaged LCD
 
 The LCD screen requires a large bias voltage of \unit{+22}{\volt} to operate \cite{LCD_Module}. A Linear Technology LT1615 step-up DC/DC converter is used as the heart of a boost converter circuit to generate this bias voltage. The circuit schematic for the boost converter is shown in Fig.\ \ref{fig:lcd_boost_converter}.
 
-\begin{figure}[htp]
+\begin{figure}[H]
  \centering
  \includegraphics[scale=0.8]{implementation/figures/driver_interface_lcd_bias_circuit.eps}
  \caption{Schematic of the LCD boost converter circuit.}
@@ -42,9 +42,8 @@ R_{3}=R_{4}\cdot\left(\frac{V_{bias}}{1.23}-1\right)
 
 The LCD's 8-bit interface can be connected to an external memory interface, making the LCD a memory-mapped peripheral. All of the read and write strobes are handled by the memory controller. The AT90CAN128's external memory interface uses a bank of eight pins as a multiplexed data and address bus. This bus must be demultiplexed in order to offer the separate address and data buses required by the LCD module. In operation, the micro-controller first puts out the address on the combined bus, followed by the data. A \emph{address latch enable} (ALE) signal to interface with an external latch to store the address bits.\cite{AT90CAN}.
 
-A fast octal D-Type latch from NXP, the 74LVC373A, is used to latch the address from the micro-controller. The width of the ALE pulse, $t_{LHLL}$, provided by the micro-controller is given as:
-
 \nomenclature{$t_{LHLL}$}{The Address Latch Enable pulse width on the AT90CAN128's external memory interface}
+A fast octal D-Type latch from NXP, the 74LVC373A, is used to latch the address from the micro-controller. The width of the ALE pulse, $t_{LHLL}$, provided by the micro-controller is given as:
 
 \begin{equation}
 t_{LHLL}=t_{CLCL}-15\, \nano\second
@@ -62,7 +61,7 @@ The external memory on the AT90CAN128 starts at address 0x1100h, and there are t
 
 A logical combination of the lower byte address lines are connected to the \emph{chip select} (CS) line on the LCD controller. Since the external memory controller only outputs it's control signals when the requested memory operation is referencing external memory, it is safe to ignore the upper byte address lines. The second bit of the address lines to the CS line on the LCD controller. The resulting operations when interacting with the LCD controller are summarized in Table \ref{tab:lcd_memory_map}.
 
-\begin{table}
+\begin{table}[H]
 \caption{List of memory addresses associated with the LCD interface.}
 \centering{}
 \begin{tabular}{|l|l|l|}
@@ -87,6 +86,7 @@ The software running on the driver interface module acts as a major source and s
 The LCD module library implements the entire command set of the SED1335. It is capable of initializing the LCD controller and screen, setting up different layers and cursors, and drawing strings and bitmaps. Additionally, more complex drawing operations are capable, such as the rendering of progress bars, underlines, a clock, and the signal strength indicator. It is also capable of generating a parameter menu system that allows the driver to scroll through the list of vehicle parameters to tune.
 
 \subsubsection{Font Library}
+\label{sec:lcd_module_font_loading}
 
 The built-in font in the SED1335 LCD controller is only 5x7 pixels, and difficult to read. To display more readable text on the LCD screen, a custom 16x16 pixel fixed-width font for the character generator was developed. This font library implements a 43-character subset of the standard ASCII library, namely the capital letters A-Z, the numbers, and a few punctuation characters.
 

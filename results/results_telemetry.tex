@@ -1,20 +1,20 @@
 \section{Telemetry}
 
-The electronic hardware for the driver interface module was completely constructed and debugged. Additionally, all low-level drivers and system software were completed. Successful transmission tests were conducted between the telemetry module, ECU, DAC, and a laptop running the software for the ECU and DAC.
+The electronic hardware for the driver interface module was completely constructed and debugged. Additionally, all low-level drivers and system software were completed. Successful transmission tests were conducted between the telemetry module, ECU, DAQ, and a laptop running the software for the ECU and DAQ.
 
-Getting the software implementation of the Telemetry module to work successfully was far more difficult than originally imagined. The individual components of the system software would run as expected on their own, but fail when coupled together. For example, the ECU data link and the DAC data link were at one point in the software development process relatively stable in operation by themselves, but enabling both would cause data loss, or one of the two links to drop. A large amount of time was invested in investigating the causes of these problems, and will be discussed in this section.
+Getting the software implementation of the telemetry module to work successfully was far more difficult than originally imagined. The individual components of the system software would run as expected on their own, but fail when coupled together. For example, the ECU data link and the DAQ data link were at one point in the software development process relatively stable in operation by themselves, but enabling both would cause data loss, or one of the two links to drop. A large amount of time was invested in investigating the causes of these problems, and will be discussed in this section.
 
 \subsection{Wireless Data Link}
 
-We had originally planned to run the wireless link's data rate higher than \unit{115.2}{\kilo\bit\per\second}. The XBee documentation states that the modem is capable of running up to \unit{250}{\kilo\bit\per\second}, and the XBee modems allow for a continuous range of baud rates to be selected. Unfortunately it was determined when we started testing the Telemetry module software that the XBee could not in fact set it's baud rate to the highest possible with the MAX3100 was capable of: \unit{230.4}{\kilo\bit\per\second}.
+We had originally planned to run the wireless link's data rate higher than \unit{115.2}{\kilo\bit\per\second}. The XBee documentation states that the modem is capable of running up to \unit{250}{\kilo\bit\per\second}, and the XBee modems allow for a continuous range of baud rates to be selected. Unfortunately it was determined that the XBee Pro can not set it's baud rate to \unit{230.4}{\kilo\bit\per\second}, which is the highest possible baud rate supported by the MAX3100.
 
 The MAX3100 was therefore configured to operate at \unit{115.2}{\kilo\bit\per\second}, and the XBee modem's interface rate was matched. A simple throughput stress test was performed that continuously wrote data in 16 byte chunks into the MAX3100's driver's software transmit buffer. A fixed-length 32 byte software buffer was never overrun with this test, and an actual data throughput of $\unit{8.251}{\kilo\byte\per\second}$ was observed with a logic analyzer on the TX pin of the MAX3100.
 
-The range of the modems was not tested. Since the output power of the Telemetry module's transmitter depends on the antenna and how it is mounted on the car, this would need to be tested after the car has been built.
+The range of the modems was not tested. Since the output power of the telemetry module's transmitter depends on the antenna and how it is mounted on the car, this will need to be tested after the car has been built in order to verify that this design improves upon the previous generation.
 
 \subsection{Wireless Link Bench Testing}
 
-Simultaneous data streams from both the DAC and ECU were successfully bench tested using two separate end modems connected to the same laptop. The laptop, running Ubuntu Linux, used Sun VirtualBox to host a session of Windows XP in order to run the proprietary ECU and DAC software. Figure \ref{fig:telemetry_bench_test} shows the telemetry module being monitored with a logic analyzer, and communicating with another modem (the blue module on the right.)
+Simultaneous data streams from both the DAQ and ECU were successfully bench tested using two separate end modems connected to the same laptop. The laptop, running Ubuntu Linux, used Sun VirtualBox to host a session of Windows XP in order to run the proprietary ECU and DAQ software. Figure \ref{fig:telemetry_bench_test} shows the telemetry module being monitored with a logic analyzer, and communicating with another modem (the blue module on the right.)
 
 \begin{figure}[H]
  \centering
@@ -23,12 +23,12 @@ Simultaneous data streams from both the DAC and ECU were successfully bench test
  \label{fig:telemetry_bench_test}
 \end{figure}
 
-The DAC was configured to output all analogue channels at a maximum of \unit{10}{\hertz} at an RS-232 baud rate of \unit{38}{\kilo\bit\per\second}, while the ECU was operated at it's fixed \unit{57.6}{\kilo\bit\per\second}.
+The DAQ was configured to output all analog channels at a maximum of \unit{10}{\hertz} at an RS-232 baud rate of \unit{38}{\kilo\bit\per\second}, while the ECU was operated at a fixed \unit{57.6}{\kilo\bit\per\second}.
 
-The ECU connection to the DTASWin software performed the same as with a hard line connection, and without any issues. The DAC connection to the DAC software on the PC worked without the software reporting any synchronization errors, but the refresh rate of the data was lower than expected. Inspection of the serial links in and out of the Telemetry module with a logic analyzer confirmed the suspicion that not every packet received from the DAC was being transmitted, however no corrupt or partial packets were being transmitted either.
+The ECU connection to the DTASWin software performed the same as with a hard line connection, and without any issues. The DAQ connection to the DAQ software on the PC worked without the software reporting any synchronization errors, but the refresh rate of the data was lower than expected. Inspection of the serial links in and out of the telemetry module with a logic analyzer confirmed the suspicion that not every packet received from the DAQ was being transmitted, however no corrupt or partial packets were being transmitted either.
 
-Since transmission of DAC data is synchronized with the decoder library successfully decoding a packet, as described in Sec.\ \ref{sec:dac_library}, incoming data from the DAC that the decoder isn't able to decode is discarded. Seeing a large amount of discarded data, as we were, would indicate an issue with the DAC library.
+Incoming data from the DAQ that the decoder is not able to decode is discarded. Seeing a large amount of discarded data, as we were, would indicate an issue with the DAQ library. This will be investigated further.
 
-\subsubsection{DAC Packet Injection}
+\subsubsection{DAQ Packet Injection}
 
-Additionally, a second test was performed with the DAC serial link by injecting data encoded on the Telemetry module using the DAC encoder. Every time a real incoming packet from the DAC was decoded, it was forwarded along with an artificial one. This test proved successful, and the DAC software was able to display the artificial ``analogue'' channel, even though no such physical channel existed on the DAC unit.
+Additionally, a second test was performed with the DAQ serial link by injecting data encoded on the telemetry module using the DAQ encoder. Every time a real incoming packet from the DAQ was decoded, it was forwarded along with an artificial one. This test proved successful, and the DAQ software was able to display the artificial ``analog'' channel, even though no such physical channel existed on the DAQ unit.

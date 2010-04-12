@@ -14,29 +14,29 @@ The settings for the ECU link are fixed by the manufacturer, so our design must 
 
 \end{itemize}
 
-\subsection{Data Acquisition Unit (DAC) \label{sec:goals_telemetry_dac}}
+\subsection{Data Acquisition Unit (DAQ) \label{sec:goals_telemetry_dac}}
 
-The settings for the DAC link are not fixed by the manufacturer, but a minimum throughput is required to transmit all of the data being logged. Like the ECU, the software expects a serial link connected to the target computer, so the connection must also be transparent to the software and the DAC.
+The settings for the DAQ link are not fixed by the manufacturer, but a minimum throughput is required to transmit all of the data being logged. Preliminary tests showed a baud rate of 38.4 KBps was satisfactory. Like the ECU, the software expects a serial link connected to the target computer, so the connection must also be transparent to the software and the DAQ.
 
 \begin{itemize}
 
-\item Provide a wireless uni-directional serial link between the DAC software and module.
+\item Provide a wireless uni-directional serial link between the DAQ software and module.
 \item The link must operate at 38.4 KBps, 8 data bits, no parity bit, and 1 stop bit.
 \item The link must be completely transparent to the software.
-\item Provide a means of injecting secondary data into the DAC stream, such as engine RPM and other parameters, for monitoring by the DAC software.
+\item Provide a means of injecting data into the DAQ stream, such as engine RPM and other parameters, for monitoring by the DAQ software.
 \item Provide a means of decoding the DAC stream on the vehicle itself to display information to the driver.
 
 \end{itemize}
 
 \subsection{Wireless Data Link \label{sec:goals_telemetry_range}}
 
-The crew will be stationed in the pit area while the vehicle is engaged in it's dynamic events at competition. The wireless link will need to be able to reach these laptops at all times. Most of the vehicles at competition will be using their own wireless telemetry systems. The possibility of interference requires a means of adjusting the broadcast channel while the vehicle is in motion. 
+The crew will be stationed in the pit area while the vehicle is engaged in its dynamic events at competition. The wireless link will need to be able to reach these laptops at all times. Most of the vehicles at competition will be using their own wireless telemetry systems. The possibility of interference requires a means of adjusting the broadcast channel while the vehicle is in motion. 
 
 \begin{itemize}
 
 \item Be able to interface with two laptops with a range of at least one kilometre.
 \item Provide on-the-fly resolution of interference conflicts with other teams running similar wireless systems.
-\item Indicate wireless signal strength to the driver and pit crew as a percentage with resolution of 1\% of maximum signal
+\item Indicate wireless signal strength to the driver and pit crew as a percentage with resolution of 10\% of maximum signal
 strength. 
 
 \end{itemize}

@@ -1,6 +1,6 @@
 \section{Telemetry Module\label{sec:Telemetry-Module-Design}}
 
-The \emph{telemetry module} provides a means for multiplexing the ECU and DAC data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAC and makes it available over the network to other modules, and injects data from other modules into the DAC stream. An overview of the telemetry module and it's environmental interactions is shown in Fig. \ref{fig:design_telemetry_overview_block}.
+The \emph{telemetry module} provides a means for multiplexing the ECU and DAQ data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAQ and makes it available over the network to other modules, and injects data from other modules into the DAQ stream. An overview of the telemetry module and its environmental interactions is shown in Fig. \ref{fig:design_telemetry_overview_block}.
 
 \begin{figure}[H]
 	\centering
@@ -9,7 +9,7 @@ The \emph{telemetry module} provides a means for multiplexing the ECU and DAC da
 	\label{fig:design_telemetry_overview_block}
 \end{figure}
 
-The vehicle-side of the telemetry system consists of the telemetry module itself, which gathers and multiplexes the data from the ECU and DAC over their serial links, and the \emph{wireless modem}, which transmits and receives data wirelessly from the remote laptops. The remote-side of the telemetry system consists of an off-the-shelf wireless receiver, which receives the data and makes it available on an RS-232 port on the laptop.
+The vehicle-side of the telemetry system consists of the telemetry module itself, which gathers and multiplexes the data from the ECU and DAQ over their serial links, and the \emph{wireless modem}, which transmits and receives data wirelessly from the remote laptops. The remote-side of the telemetry system consists of an off-the-shelf wireless receiver, which receives the data and makes it available on an RS-232 port on the laptop.
 
 \subsection{ECU Data Channel}
 
@@ -24,20 +24,20 @@ The ECU data channel is illustrated in Fig. \ref{fig:ecu_data_channel}. It is a 
 
 Data originating from the ECU over the serial link is multiplexed onto the wireless modem's data stream. The data is then broadcast over the modem to the laptop, where it is received by the remote wireless modem. The data is then fed to the laptop and eventually the ECU software. Packets originating from the ECU software flow in the opposite direction with a similar process.
 
-\subsection{DAC Data Channel}
+\subsection{DAQ Data Channel}
 
-The DAC data channel is illustrated in Fig. \ref{fig:dac_data_channel}. Unlike the ECU data channel, the DAC data channel is uni-directional, and data is injected and decoded from the data stream.
+The DAQ data channel is illustrated in Fig. \ref{fig:dac_data_channel}. Unlike the ECU data channel, the DAQ data channel is uni-directional, and data is injected and decoded from the data stream.
 
 \begin{figure}[H]
 	\centering
 	\input{design/figures/dac_data_channel_block}
-	\caption{Data flow of the DAC data channel.}
+	\caption{Data flow of the DAQ data channel.}
 	\label{fig:dac_data_channel}
 \end{figure}
 
-Data originating from the DAC is routed to the DAC software in a fashion similar to the ECU data channel. However, the module has the ability to inject data into the stream as it sees fit. This data must be in a format that the DAC software can understand. As well, data from the DAC can be decoded and output over the network to the other modules. 
+Data originating from the DAQ is routed to the DAQ software in a fashion similar to the ECU data channel. However, the module has the ability to inject data into the stream as it sees fit. This data must be in a format that the DAQ software can understand. As well, data from the DAQ can be decoded and output over the CAN bus to the other modules. 
 
-At the time of writing, the mechanical team has not identified what data they would like injected or decoded from the DAC. The injection and decoding features remain provisions for future use. Likely applications will be strain gauge data from stress-loaded members like the suspension, and throttle-brake-steering position data to analyze and improve driver performance.
+At the time of writing, the mechanical team has not identified what data they would like injected or decoded from the DAQ. The injection and decoding features remain provisions for future use. Likely applications will be strain gauge data from stress-loaded members like the suspension, and throttle-brake-steering position data to analyze and improve driver performance.
 
 \subsection{Hardware}
 
@@ -58,19 +58,19 @@ The telemetry module shares the same CAN transceiver used by the other modules. 
 
 The function of a UART is to frame data into serial packets for transmission, and to validate and decode received serial packets. The UART consists of a \emph{receiver} portion and a \emph{transmitter} portion. The receiver portion can be fed bits from a serial link, validate the structure of the serial frame, decode the data contained within the frame, and provide it to the micro-controller. Conversely, the transmitter portion can take data from the micro-controller, frame it for serial transmission, and output the bits to a transceiver for transmission.
 
-Three UARTs are required for the telemetry module; one for interfacing with the DAC, one for interfacing the ECU, and one for interfacing with the wireless modem. The UARTs must be configurable to meet the baud rate and frame formats laid out in Sec. \ref{sec:goals_telemetry}.
+Three UARTs are required for the telemetry module; one for interfacing with the DAQ, one for interfacing the ECU, and one for interfacing with the wireless modem. 
 
 \subsubsection{RS-232 Transceiver\label{sec:design_telemetry_rs232}}
 
-The TIA/EIA-232-F standard for serial communications requires serial links use $\pm \unit{10}{\volt}$ signalling levels. The RS-232 transceiver converts the logic-level bit stream from the UARTs into serial-level voltages, and visa-versa. The transceiver acts as the bridge between the UART, ECU, and DAC. Two separate receiver/transmitter channels are required, each for the ECU and DAC. The wireless modem does not require a transceiver, as it should be capable of using a logic-level serial stream.
+The RS-232 transceiver converts the logic-level bit stream from the UARTs into serial-level voltages, and visa-versa. The transceiver acts as the bridge between the UARTs and the ECU and DAQ. Two separate receiver/transmitter channels are required, one each for the ECU and DAQ. The wireless modem does not require a transceiver.
 
 \subsubsection{Wireless Modem}
 
-The wireless modem converts a logic-level serial stream from the one of the UARTs into a wireless signal stream, to be broadcast over an antenna and received by paired wireless modems connected to laptops in the pit. The wireless modem should be capable of handling the data throughput of both the ECU and DAC combined as specified in Secs. \ref{sec:goals_telemetry_ecu} and \ref{sec:goals_telemetry_dac}. It must also be capable of meeting the range requirements laid out in Sec. \ref{sec:goals_telemetry_range}.
+The wireless modem converts a logic-level serial stream from the one of the UARTs into a wireless signal stream, to be broadcast over an antenna and received by paired wireless modems connected to laptops in the pit. 
 
 \subsection{Software}
 	
-A block-diagram overview of the software design is shown in Fig. \ref{fig:design_telemetry_software_block}. Data streams from the ECU and DAC are dealt with by the \emph{data manager}. The DAC stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
+A block-diagram overview of the software design is shown in Fig. \ref{fig:design_telemetry_software_block}. Data streams from the ECU and DAQ are dealt with by the \emph{data manager}. The DAQ stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
 
 \begin{figure}[H]
 	\centering
@@ -79,31 +79,31 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:design
 	\label{fig:design_telemetry_software_block}
 \end{figure}
 
-As is typical with our design, the high-level systems interact with a set of hardware abstraction interfaces to speak with the low-level systems. The CAN interface is exactly as described earlier, and is not mentioned here.
+As is typical with our design, the high-level systems interact with a set of hardware abstraction interfaces to speak with the low-level systems. 
 
 A \emph{module initializer} brings the entire system into a known state. Unlike the other modules, once the system is initialized, all incoming and outgoing data is handled asynchronously. There is no need for intervention from a module coordinator. 
 
 \subsubsection{Data Manager}
 
-The data manager receives new data from the ECU and DAC, and multiplexes the two streams for transmission over the wireless modem. Incoming data from the ECU and DAC arrive from the UART interface. DAC data is merged with any injected packets, and also sent to the decoder for broadcast. The modified DAC stream is then merged with the ECU stream and packetized and broadcast with the wireless modem interface. Incoming data from the ECU software is directed oppositely from the wireless modem interface to the ECU's UART interface.
+The data manager receives new data from the ECU and DAQ, and multiplexes the two streams for transmission over the wireless modem. Incoming data from the ECU and DAQ arrive from the UART interface. DAQ data is merged with any injected packets, and also sent to the decoder for broadcast. The modified DAQ stream is then merged with the ECU stream and packetized and broadcast with the wireless modem interface. Incoming data from the ECU software is directed oppositely from the wireless modem interface to the ECU's UART interface.
 
 \subsubsection{Packet Decoder}
 \label{sec:design_telemetry_decoder}
 
-The packet decoder can read the incoming DAC data stream and rebuild the packets being sent to the DAC in real-time. The various sensor readings that are captured are then fed to the CAN interface for broadcast to the other modules.
+The packet decoder can read the incoming DAQ data stream and rebuild the packets being sent to the DAQ in real-time. The various sensor readings that are captured are then fed to the CAN interface for broadcast to the other modules.
 
 \subsubsection{Packet Injector}
 \label{sec:design_telemetry_injector}
 
-The packet injector is the dual of the packet decoder. It can take arbitrary data from other modules over the CAN interface and create new DAC packets to be injected into the DAC data stream. The process is entirely transparent to the DAC software.
+The packet injector is the dual of the packet decoder. It can take arbitrary data from other modules over the CAN interface and create new packets to be injected into the DAQ data stream going to the pit laptops. This process is entirely transparent to the DAQ software.
 
 \subsubsection{Link Manager}
 
-The link manager uses the wireless modem interface to configure the modem and monitor the status and strength of the wireless link. The link status is broadcast over the network for the driver interface to relay to the driver. The link manager can negotiate automatic channel switching if interference is degrading the link quality.
+The link manager uses the wireless modem interface to configure the modem and monitor the status and strength of the wireless link. The link status is broadcast over the network for the driver interface to relay to the driver. The link manager negotiates automatic channel switching if interference is degrading the link quality.
 
 \subsubsection{Module Initializer}
 
-The module initializer for the telemetry module handles the initial configuration of the module on start-up. It establishes the initial communication between the ECU, DAC, and modem. 
+The module initializer for the telemetry module handles the initial configuration of the module on start-up. It establishes the initial communication between the ECU, DAQ, and modem. 
 
 \subsubsection{UART Interface}
 
@@ -112,4 +112,4 @@ The UART interface allows a data byte to be framed and transmitted over the seri
 \nomenclature{API}{Application Programming Interface}
 \subsubsection{Wireless Modem Interface}
 
-It is expected that the wireless modem will have it's own \emph{application programming interface} (API) for configuration and data routing data between the two target serial ports on the laptop computer. The wireless modem interface is a window into this API for the telemetry module, so that the features of the modem can be exploited.
+The wireless modem has its own \emph{application programming interface} (API) for configuration and data routing data between the two target serial ports on the laptop computer. The wireless modem interface is a window into this API for the telemetry module, so that the features of the modem can be exploited.

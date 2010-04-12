@@ -55,7 +55,7 @@ By default, the board acts as a termination point for the CAN bus. The modules c
 
 The CAN diagnostic tool communicates with a user over the built-in serial interface. By default, the serial stream is configured to operate at 115,200 Kbps with 8 data bits, 1 stop bit, and no parity bit.
 
-A simple software library links standard ``C'' input-output functions like ``\verb|printf()|'' and ``\verb|scanf()|'' to the internal UART, avoiding the need for interaction with the complicated UART library required by the other modules. 
+A simple software library links standard C input-output functions like \verb|printf()| and \verb|scanf()| to the internal UART, avoiding the need for interaction with the complicated UART library required by the other modules. 
 
 Upon booting, the diagnostic tool outputs a welcome message over the serial link and indicates that it is waiting for a sequence to be input. Figure \ref{fig:candt_startup} shows a listing of this output as it would appear over the serial link.
 
@@ -148,11 +148,11 @@ Bus Activity:
  
 \subsection{Packet Scheduler}
 
-The packet scheduler handles the translation of input from the user into packets, and the actual queuing and dispatching of packets over the network. Each packet is described by a \emph{packet descriptor}, which is essentially a ``C'' structure that defines all of the packet parameters introduced in Sec. \ref{ref:candt_ui}. 
+The packet scheduler handles the translation of input from the user into packets, and the actual queuing and dispatching of packets over the network. Each packet is described by a \emph{packet descriptor}, which is essentially a C structure that defines all of the packet parameters introduced in Sec. \ref{ref:candt_ui}. 
 
 At the heart of the packet scheduler is a statically-allocated array of packet descriptors, called the \emph{packet queue}. The packet queue contains all the packets that are to be broadcast over the network, arranged by time of broadcast.
 
-On start-up, the main software passes the serial input stream to the packet scheduler's main packet decoder function. Each new line of input is run through a decoding function that breaks the input format up into it's constituent parameters to form a packet descriptor. If the descriptor is valid, it is appended to the end of the packet queue.
+On start-up, the main software passes the serial input stream to the packet scheduler's main packet decoder function. Each new line of input is run through a decoding function that breaks the input format up into its constituent parameters to form a packet descriptor. If the descriptor is valid, it is appended to the end of the packet queue.
 
 Once the user is finished inputting the schedule, or the packet queue is full, the packet scheduler passes control back to the main program to wait for the user to request the broadcast begins.
 

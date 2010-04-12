@@ -43,7 +43,7 @@ In addition to the base system hardware common to all modules described in Sec.\
 
 \subsubsection{MAX232 Dual RS-232 Transceiver}
 
-The ECU and the DAQ modules connect to the telemetry board with specialized cables that connect to the wiring harness. The ECU and DAQ interface with two built-in USART ports on the AT90CAN128 micro-controller. A Maxim brand MAX232 dual RS-232 transceiver chip is used to interface the built-in USARTs with the serial ports on the ECU and DAQ.
+The ECU and the DAQ modules connect to the telemetry board with specialized cables that connect to the wiring harness. The ECU and DAQ interface with two built-in UART ports on the AT90CAN128 micro-controller. A Maxim brand MAX232 dual RS-232 transceiver chip is used to interface the built-in UARTs with the serial ports on the ECU and DAQ.
 
 \subsubsection{XBee-PRO Wireless Modem}
 
@@ -60,7 +60,7 @@ Since the XBee-PRO, MAX3100, and AT90CAN128 all operate at different logic level
 
 \subsection{Software}
 
-The module software is concerned primarily with transferring data to and from the ECU, DAC, and their respective remote software applications with as much data throughput as possible. An overview of the telemetry module's system software can be seen in Fig.\ \ref{fig:telemetry_software_implementation}. As is common with all our implementations, a hardware abstraction layer provides an easy-to-use interface to the hardware for the module software.
+The module software is concerned primarily with transferring data to and from the ECU, DAQ, and their respective remote software applications with as much data throughput as possible. An overview of the telemetry module's system software can be seen in Fig.\ \ref{fig:telemetry_software_implementation}. As is common with all our implementations, a hardware abstraction layer provides an easy-to-use interface to the hardware for the module software.
 
 \begin{figure}[H]
 \centering
@@ -71,22 +71,22 @@ The module software is concerned primarily with transferring data to and from th
 
 \subsubsection{MAX3100 UART Driver}
 
-The software driver written for the MAX3100 shares it's interface and buffer code with the built-in AT90CAN128 USART driver described in Sec. \ref{sec:impl_spi_driver}. The statically-allocated circular buffer approach first introduced with the built-in USART is left unchanged. 
+The software driver written for the MAX3100 shares it's interface and buffer code with the built-in AT90CAN128 UART driver described in Sec. \ref{sec:impl_spi_driver}. The statically-allocated circular buffer approach first introduced with the built-in UART is left unchanged. 
 
 The MAX3100 provides asynchronous transmission and reception of data with an external hardware interrupt signal. A flow-chart of the hardware interrupt service routine is shown in Fig.\ \ref{fig:usart_driver_flow}. The MAX3100 driver allows the module software to define callback functions to be executed when new data arrives or has been transmitted. 
 
 \begin{figure}[H]
 \centering
 \input{implementation/figures/usart_driver_flow.tex}
-\caption{Flow-chart of the USART interrupt service routine.}
+\caption{Flow-chart of the UART interrupt service routine.}
 \label{fig:usart_driver_flow}
 \end{figure}
 
-The MAX3100 driver is configured to use a $\unit{4}{\mega\hertz}$ SPI clock to meet the data throughput requirements demanded from multiplexing the DAC and ECU streams. It interfaces directly with the SPI driver described in Sec. \ref{sec:impl_spi_driver}.
+The MAX3100 driver is configured to use a $\unit{4}{\mega\hertz}$ SPI clock to meet the data throughput requirements demanded from multiplexing the DAQ and ECU streams. It interfaces directly with the SPI driver described in Sec. \ref{sec:impl_spi_driver}.
 
 \subsubsection{XBee PRO Library}
 
-To route data to and from the ECU, DAC, and laptop, the module software must utilize the special ``API'' mode described in the XBee documentation \cite{XBeeManual}. The API mode allows the packetizing of data required to multiplex two serial streams onto one transmission channel. The XBee PRO library implements two critical functions:
+To route data to and from the ECU, DAQ, and laptop, the module software must utilize the special ``API'' mode described in the XBee documentation \cite{XBeeManual}. The API mode allows the packetizing of data required to multiplex two serial streams onto one transmission channel. The XBee PRO library implements two critical functions:
 
 \begin{enumerate}
 \item To send and receive packetized data to and from the user software ; and
@@ -97,9 +97,9 @@ The XBee library contains two major functions: one to packetize outgoing data fo
 
 The XBee library implements a binary packet protocol described in the XBee manual, and is able to send and receive unicast and multicast packets to addressable end-points. Each end-point corresponds to a virtual serial port on the receiving laptop. The modem supports full 64-bit addresses, but the driver only implements a 16-bit addressing mode as the extra address space is not required. The driver is also capable of sending commands to the modem and interpreting it's response.
 
-The module software can send a packet by supplying the driver with the target address, a pointer to the data, and the number of bytes. The driver automatically constructs the XBee packet and buffers the data for transmission. Receiving packets is more complicated, since individual bytes arrive at the MAX3100 drivers's RX buffer asynchronously. A receiver state machine waits for a full packet to be available in the RX buffer, and then pushes it into a separate incoming packet buffer. This incoming packet buffer can then be read by the module software.
+The module software can send a packet by supplying the driver with the target address, a pointer to the data, and the number of bytes. The driver automatically constructs the XBee packet and buffers the data for transmission. Receiving packets is more complicated, since individual bytes arrive at the MAX3100 drivers RX buffer asynchronously. A receiver state machine waits for a full packet to be available in the RX buffer, and then pushes it into a separate incoming packet buffer. This incoming packet buffer can then be read by the module software.
 
-Since minimal configuration functionality is required, only a handful of modem commands are implemented. The driver is able to place the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the telemetry Module are listed in Table \ref{tab:xbee_commands}.
+Since minimal configuration functionality is required, only a handful of modem commands are implemented. The driver is able to place the modem into API mode, after which all communication is done using the packet interface. The modem commands implemented by the telemetry module are listed in Table \ref{tab:xbee_commands}.
 
 \begin{table}[H]
 \caption{List of implemented XBee modem commands.}
@@ -123,23 +123,23 @@ MY & Set and read the modems local address. \tabularnewline
 
 The XBee modem can be controlled out of API mode by entering into it's command mode by sending a special string of bytes. A list of modem-style AT-commands, documented in the manual, are used to change the various settings of the modem. This command mode was used initially to set up the modems by hand, but is now only used by the software on startup to enable the API mode.
 
-The XBee library makes use of the familiar ``callback'' concept to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different USART on-the-fly.
+The XBee library makes use of the familiar ``callback'' concept to provide the user software with incoming data. Function pointers are used to connect the library to a UART, which makes it possible to reconfigure the library to use a different UART on-the-fly.
 
-\subsubsection{DAC Library}
+\subsubsection{DAQ Library}
 \label{sec:dac_library}
 
-Special routines for decoding the DAC data stream and constructing new DAC data packets are required to meet the requirements described in Section \ref{sec:Telemetry-Module-Design}. These routines are packaged into a DAC library for use by the module software.
+Special routines for decoding the DAQ data stream and constructing new DAQ data packets are required to meet the requirements described in Section \ref{sec:Telemetry-Module-Design}. These routines are packaged into a DAQ library for use by the module software.
 
-The DAC library maintains it's own buffer of incoming DAC data. Separate functions exist for buffering incoming data and for processing that data. The library uses the callback feature of the USART to pass incoming bytes to it's own buffer. Transmission of DAC data over the wireless link is synchronized with the DAC library decoder. Whenever an entire DAC packet is decoded by the library, that packet is then buffered for transmission by the modem.
+The DAQ library maintains its own buffer of incoming DAQ data. Separate functions exist for buffering incoming data and for processing that data. The library uses the callback feature of the UART to pass incoming bytes to its own buffer. Transmission of DAQ data over the wireless link is synchronized with the DAQ library decoder. Whenever an entire DAQ packet is decoded by the library, that packet is then buffered for transmission by the modem.
 
 \subsubsection{Main Control Loop}
 
 Once the module hardware has been initialized and the XBee has successfully entered API mode, the telemetry module's enters it's main control loop. This loop performs three tasks:
 
 \begin{enumerate}
-  \item The ECU USART receive buffer is polled for data. If there is any incoming data waiting, send it over the ECU link by passing it to the packetizer;
-  \item Any incoming packets in the XBee receive buffer are routed to the appropriate end-point, either the ECU USART or DAC driver; and
-  \item The DAC decoder function checks to see if any the data in the DAC's incoming data buffer can be decoded into a valid DAC packet.
+  \item The ECU UART receive buffer is polled for data. If there is any incoming data waiting, send it over the ECU link by passing it to the packetizer;
+  \item Any incoming packets in the XBee receive buffer are routed to the appropriate end-point, either the ECU UART or DAQ driver; and
+  \item The DAQ decoder function checks to see if any the data in the DAQ's incoming data buffer can be decoded into a valid DAQ packet.
 \end{enumerate}
 
 The main control loop runs these three tasks over and over, processing incoming data as it arrives, and routing outgoing data as needed. 

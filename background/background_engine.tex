@@ -20,9 +20,9 @@ As the intake valves on the engine open, they generate negative pressure waves t
 
 \nomenclature{RPM}{Revolutions Per Minute}
 
-A fair amount of research has been done in previous years on the intake and exhaust design for the Formula SAE car. Former UMSAE engine section head Lucas Groening wrote an undergraduate thesis on modelling of the engine package for the 2008 Formula car. Groening performed extensive research on the effect of the intake runner length on torque output versus engine speed \cite{LucasIntake}. 
+A fair amount of research has been done in previous years on the intake and exhaust design for the Formula SAE car. Former UMSAE engine section head Lucas Groening wrote an undergraduate thesis on the modelling of the engine package for the 2008 Formula car. Groening performed extensive research on the effect of the intake runner length on torque output versus engine speed \cite{LucasIntake}. 
 
-Engine speed is typically rated in \emph{revolutions per minute} (RPM). Figure \ref{fig:irl_effect} shows a simulated comparison of torque output versus engine RPM for two intake runner lengths. Different lengths cause the two torque curves to peak at different engine speeds. By switching runner lengths as the engine speed crosses 8500 RPM (as indicated with a dashed vertical line,) the effective torque curve will be maximum of the two curves over the entire operating range. This means the engine will deliver more torque over it's entire operating range.
+Engine speed is typically rated in \emph{revolutions per minute} (RPM). Figure \ref{fig:irl_effect} shows a simulated comparison of torque output versus engine RPM for two intake runner lengths. Different lengths cause the two torque curves to peak at different engine speeds. By switching runner lengths as the engine speed crosses 8500 RPM (as indicated with a dashed vertical line,) the effective torque curve will be maximum of the two curves over the entire operating range. This means the engine will deliver more torque over its entire operating range.
 
 \begin{figure}[H]
 \centering
@@ -44,7 +44,7 @@ The ECU features a traction control system that monitors wheel slip and cuts spa
 \nomenclature{RS-232}{Recommended Standard 232 for Byte-Oriented Communications}
 \nomenclature{CAN}{Controller Area Network}
 
-The ECU communicates with proprietary software on a Windows-based computer over an RS-232 link. The communication protocol used is undocumented and possibly encrypted. The ECU also broadcasts select sensor readings such as engine RPM over a \emph{Controller Area Network} (CAN) interface at a fixed frequency of \unit{10}{\hertz}.
+The ECU communicates with proprietary software on a Windows-based computer over an RS-232 link. The communication protocol used is undocumented. The ECU also broadcasts select sensor readings such as engine RPM over a \emph{Controller Area Network} (CAN) interface at a fixed frequency of \unit{10}{\hertz}.
 
 \subsubsection{Discrete Inputs\label{sec:ecu_background_discrete_inputs}}
 
@@ -54,9 +54,9 @@ As well as the aforementioned bus-based interfaces, the ECU provides several CMO
     \item Launch Control Enable, which allows the ECU to balance power distribution during acceleration;
     \item Shift Cut, which signals the ECU to reduce engine power before a downshift;
     \item Traction Control Enable, which reduces power output when the wheels begin to slip; and
-    \item Wet/Dry Selection, which switches between two different sets of traction control parameters.
+    \item Wet/Dry Selection, which allows the selection of two different sets of traction control parameters.
 \end{itemize}
 
-Detailed descriptions of the launch control, shift cut, and traction control features can be found in the S80Pro's user manual \cite{s80pro}.
+Detailed descriptions of these features can be found in the S80Pro's user manual \cite{s80pro}.
 
 

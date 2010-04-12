@@ -1,6 +1,6 @@
 \section{Electro-Pneumatic System}
 
-The electro-pneumatic system interfaces the engine and transmission module to the transmission's clutch and shift levers. The transmission controller portion of the engine and transmission module provide the control signals required to drive the electro-pneumatic system. The system design improves upon the previous generation discussed in Sec. \ref{sec:background_transmission} by targeting several of it's noted deficiencies while reusing aspects of the design that worked well.
+The electro-pneumatic system interfaces the engine and transmission module to the transmission's clutch and shift levers. The transmission controller portion of the engine and transmission module provide the control signals required to drive the electro-pneumatic system. The system design improves upon the previous generation discussed in Sec. \ref{sec:background_transmission} by targeting several of its noted deficiencies while reusing aspects of the design that worked well.
 
 Rather than adopt a previously designed electro-pneumatic system, and attempt to improve performance simply by designing a controller, we opted to expand the scope of the design of this subsystem to include the design of the pneumatic system. This allowed us to expand the goals of this part of the project.
 
@@ -10,15 +10,13 @@ The clutch actuation design incorporates a novel \emph{pulse-width modulation} (
 
 \subsection{Fully-Electronic Consideration}
 
-The possibility of using a fully electronic actuation system with geared DC motors was carefully considered. The control of such a system would be far simpler, as linear approximate models of DC motors are readily available. Reasonably priced gear-head motors from several suppliers were investigated. It was determined that any suitable fully-electronic system would be far heavier than it's pneumatic equivalent.
+The possibility of using a fully electronic actuation system with geared DC motors was carefully considered. The control of such a system would be far simpler, as linear approximate models of DC motors are readily available. Reasonably priced gear-head motors from several suppliers were investigated. It was determined that any suitable fully-electronic system would be far heavier than its pneumatic equivalent.
 
 \subsection{Literature Review}
 
 After deciding to keep a pneumatic actuation system, an improved valving scheme was proposed for the clutch, and sources of feedback were determined so that a closed-loop controller could be designed. Several academic papers were sourced that describe successful methods of pneumatic actuator control. \Citet{pneumatic_actuator} and \citet{adaptive_pneumatic} both use an electronically adjustable proportioning valve and a dual-acting cylinder. Proportioning valves are expensive (approximately \$300 from local suppliers) in comparison with binary solenoid valves (under \$50.)
 
 Another approach by \citet{accurate_position} uses PWM signalled 3-way solenoid valves to control the air in and out of both sides of a dual-acting cylinder. By varying the duty cycle of the input signals, they were able to modulate the effective mass air flow rate through the cylinder ports: with the valve open, air would tend to flow from the high-pressure source into the cylinder, and with the valve closed, air would flow from the pressurized cylinder out through the exhaust port of the valve. This valving scheme allowed for a high degree of positional accuracy, however a large amount of air would be consumed during operation, as air is constantly being exhausted.
-
-The dimensions of the pneumatic cylinders used in any implementation of this design are the same as those used in the previous designs. For this reason they will not be specified here.
 
 \subsection{Mechanical Components}
 
@@ -48,7 +46,7 @@ Both clutch solenoids are shown as 3-way (with exhaust ports) valves in Fig. \re
   \item When the pulse width modulated control signal $U_B$ to Clutch Solenoid B is non-zero, the valve will open, and any pressure differential between the cylinder and atmosphere will cause air to flow out of the cylinder to atmosphere at a rate proportional to the duty cycle. The clutch springs and the cylinders' internal spring work to return the actuator position to rest, and the clutch engages.
 \end{enumerate}
 
-An additional adjustable flow rate control valve (visible on the far right in Fig. \ref{fig:pneumatics_design}) was added to the design to allow additional tuning for during clutch engagement. This electro-pneumatic actuation system meets the controllability requirements outlined in Sec. \ref{sec:goals_transmission}. No air is wasted in disengaging the clutch and holding the position because the fill and exhaust operations are separately controlled with two valves.
+An additional adjustable flow rate control valve (visible on the far right in Fig. \ref{fig:pneumatics_design}) was added to the design to allow additional tuning for during clutch engagement. No air is wasted in disengaging the clutch and holding the position because the fill and exhaust operations are separately controlled with two valves.
 
 \subsection{Shift Lever Actuation}
 

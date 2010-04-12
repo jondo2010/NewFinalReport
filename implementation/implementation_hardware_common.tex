@@ -1,6 +1,6 @@
 \section{Common Hardware Implementation\label{sec:common_hardware_implementation}}
 
-The four modules share a base hardware platform that is expanded upon to meet the requirements of the individual module. This section details the base platform and provides a rationale for it's implementation. It also details the process of schematic capture, board layout, and construction used for each module.
+The four modules share a base hardware platform that is expanded upon to meet the requirements of the individual module. This section details the base platform and provides a rationale for its implementation. It also details the process of schematic capture, board layout, and construction used for each module.
 
 \nomenclature{PCB}{Printed Circuit Board}
 
@@ -32,7 +32,6 @@ All four modules are implemented on custom printed circuit boards (PCBs), and ut
 Several low cost micro-controllers specifically designed for automotive use are available. Specifically, our design calls for a micro-controller with:
 
 \begin{itemize}
-  \item a \unit{5}{\volt} power supply;
   \item an integrated CAN bus controller;
   \item in-circuit debugging and programming capabilities; and
   \item a flexible cross-platform tool-chain.
@@ -40,15 +39,15 @@ Several low cost micro-controllers specifically designed for automotive use are 
 
 \nomenclature{JTAG}{Joint Test and Action Group}
 
-The 8-bit AT90CAN128 from Atmel meets all of these requirements, with the additional benefit of being platform we have developed for in the past. This micro-controller includes a \emph{Joint Test Action Group} (JTAG) standard debugging interface. Most importantly, there exists a well developed open-source tool-chain and standard ``C'' library.
+The 8-bit AT90CAN128 from Atmel meets all of these requirements, with the additional benefit of being platform we have developed for in the past. This micro-controller includes a \emph{Joint Test Action Group} (JTAG) standard debugging interface. Most importantly, there exists a well developed open-source tool-chain and standard C library.
 
 \subsubsection{Voltage Regulator}
 
-The LT1129 from Linear Technology was chosen as voltage regulator. This particular regulator is capable of supplying up to \unit{700}{\milli\ampere} of current. It requires only a single \unit{3.3}{\micro\farad} output capacitor, and accepts input voltages up to \unit{30}{\volt}. It also has built-in thermal limiting \cite{LTC1129}.
+The LT1129 from Linear Technology was chosen as voltage regulator. This particular regulator is capable of supplying up to \unit{700}{\milli\ampere} of current. The advantages of this particular regulator are that it requires only a single \unit{3.3}{\micro\farad} output capacitor, accepts input voltages up to \unit{30}{\volt}, and has built-in thermal limiting \cite{LTC1129}. 
 
 \subsubsection{CAN Bus Transceiver}
 
-The modules communicate with each other over a two-wire CAN bus operating at 1 MBit/s. Each system module has a Microchip-brand MCP2551 CAN Transceiver IC to interface their local micro-controller to the bus. All modules are capable of being a termination point for the bus \cite{MCP2551}. 
+The modules communicate with each other over a two-wire CAN bus operating at 1 MBit/s. Each system module has a Microchip MCP2551 CAN Transceiver IC to interface their local micro-controller to the bus. All modules are capable of being a termination point for the bus \cite{MCP2551}. 
 
 \subsection{Schematic Capture and PCB Layout}
 

@@ -57,8 +57,6 @@ The signal generator block in Fig. \ref{fig:pneumatics_pwm} outputs a triangle w
 
 An initial Simulink model of a solenoid valve was constructed based on the modelling equations described by \citet{valve_models} and the standard orifice equations for laminar and choked flow described in \cite{fluid_power}. However, it was too difficult to identify the system parameters cited in \cite{fluid_power} for our specific solenoid valves. The solenoid's data-sheet was not detailed enough, and the straight-forward approach to system identification used by \cite{valve_models} required specialized measuring equipment (such as an instantaneous mass flow meter) that we did not have access to.
 
-The custom Simulink solenoid valve block was replaced with an approximate Simulink ``Simscape'' pneumatic valve block. This block could be configured with data obtained from the valve's data-sheets. 
-
 \subsubsection{Pneumatic Actuator Model}
 
 Simulink's pneumatic actuator subsystem is illustrated in Fig. \ref{fig:pneumatics_actuator}. Pre-built Simulink blocks from the Simscape package were used to model the dynamics of the actuator. \emph{Physical Port 1} (denoted by the octagonal port symbol with a ``1'' inside) in \ref{fig:pneumatics_actuator} represents the air inlet. \emph{Physical Ports 2 and 3} (denoted by the octagonal port symbols with a ``2'' and ``3'' inside, respectively) represent the displacement ports of the cylinder. \emph{Regular Port 1} (denoted by the rounded port symbol with a ``1'' inside) is used to display the displacement on a scope.
@@ -94,8 +92,9 @@ Solenoid valves and cylinders from SMC corp were chosen for the physical impleme
   \centering
 
   \begin{tabular}{|l|l|}
-  \hline
+  \hline 
   Part & VQZ115-6L1-N1-PR \tabularnewline
+  \hline
   \hline
   Coil Voltage & \unit{12}{\volt} \tabularnewline
   \hline
@@ -112,7 +111,7 @@ Solenoid valves and cylinders from SMC corp were chosen for the physical impleme
 
 \subsubsection{Pneumatic Actuators}
 
-The pneumatic actuators specified for implementation are the same as used in the previous design, and are only briefly mentioned in this report. Specifications can be found in Table \ref{tab:cylinder_specs}. The clutch cylinder is specified with an internal magnet on the piston that interfaces magnetically with a membrane potentiometer, discussed next.
+The pneumatic actuators specified for implementation are the same as used in the previous design, and are only briefly mentioned in this report. Specifications can be found in Table \ref{tab:cylinder_specs}. The clutch cylinder is specified with an internal magnet on the piston that interfaces magnetically with a membrane potentiometer.
 
 \begin{table}[H]
  \caption{Specifications of the pneumatic actuators used.\label{tab:cylinder_specs}}

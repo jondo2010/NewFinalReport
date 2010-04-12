@@ -50,7 +50,7 @@ The actual value of $R_{sense}$ used for bench testing the braking module is \un
 
 \subsection{Software}
 
-The module software is entirely complete and all functionality is implemented. The brake module was the first to have it's software fully implemented, and served as the genesis for many of the low-level drivers.
+The module software is entirely complete and all functionality is implemented. The brake module was the first to have its software fully implemented, and served as the genesis for many of the low-level drivers.
 
 \subsubsection{Bias Manager}
 
@@ -63,7 +63,7 @@ The bias adjustment routine follows the flow chart illustrated in Fig. \ref{fig:
 
 First, the current front and rear brake pressures is requested from the pressure manager. If these pressures indicate the brakes are engaged, the procedure is aborted and an error message is broadcast over the CAN bus. Secondly, the current engine speed is captured over the CAN bus. If the engine RPM indicates the vehicle is in motion, the process is also aborted. Finally, the adjustment request is validated against the range of possible adjustments. If the request is out of range, the process is aborted and an error message is broadcast.
 
-The number of offset steps $steps_{offset}$ is calculated from the desired bias position ``$pos_{desired}$'' and the current bias position. The manager is aware of how many steps are required to adjust the bias by one-half a percentage (``$steps_{half}$''). Moving the balance bar to the right increases the front-to-rear bias ratio. Therefore:
+The number of offset steps $steps_{offset}$ is calculated from the desired bias position $pos_{desired}$ and the current bias position. The manager is aware of how many steps are required to adjust the bias by one-half a percentage ($steps_{half}$). Moving the balance bar to the right increases the front-to-rear bias ratio. Therefore:
 
 \[
 steps_{offset} = (pos_{desired} - pos_{current}) * 2 * steps_{half}
@@ -85,7 +85,7 @@ The pressure manager has two main tasks: to output the current brake pressure ov
 
 The pressure manager uses an on-board timer on the micro-controller to periodically (every \unit{100}{\milli\second}) interrupt code execution to sample the current pressure with the ADC interface, and to broadcast it over the bus. 
 
-Each pressure value is a 10-bit number stored in an unsigned 16-bit number, so two CAN packets are broadcast:one for the front, and one for the rear. The first two data bytes correspond to the \emph{most significant byte} (MSB) and \emph{least significant byte} (LSB) of the current pressure reading. This is followed by the MSB and LSB of the minimum calibrated pressure, and the MSB and LSB of the maximum calibrated pressure.
+Each pressure value is a 10-bit number stored in an unsigned 16-bit number, so two CAN packets are broadcast: one for the front, and one for the rear. The first two data bytes correspond to the \emph{most significant byte} (MSB) and \emph{least significant byte} (LSB) of the current pressure reading. This is followed by the MSB and LSB of the minimum calibrated pressure, and the MSB and LSB of the maximum calibrated pressure.
 
 \paragraph{Pressure Calibration}
 

@@ -4,7 +4,7 @@
   \node [decision, right of=update, text width=1cm, inner sep=0pt, node distance=2.5cm] (ideal) {Ideal length?};
 
   \node [block, right of=ideal, text width=1.5cm, node distance=2.5cm] (switch) {Switch lengths};
-  \node [block, right of=switch, text width=1.5cm, node distance=2.5cm] (wait) {Wait for lockout};
+  \node [block, right of=switch, text width=1.5cm, node distance=2.5cm] (wait) {Adjust crossover};
 
   \draw [->, thick] (start) -- (update);
   \draw [->, thick] (update) -- (ideal);

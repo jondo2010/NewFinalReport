@@ -4,16 +4,16 @@
   \node [decision, right of=brakes_on, text width=1cm, inner sep=0pt, node distance=2.5cm] (valid_bias) {Valid bias?};
   \node [end, below of=start, node distance=1cm] (abort) {Abort};
 
-  \node [block, right of=valid_bias, text width=1.5cm, inner xsep=0pt, node distance=2.5cm] (calc) {Calculate offset steps};
+  \node [block, right of=valid_bias, text width=1.5cm, inner xsep=0pt, node distance=2.5cm] (calc) {Calculate offset};
   \node [block, right of=calc, text width=1.5cm, inner xsep=0pt, node distance=2.5cm] (step) {Step by offset};
   \node [block, right of=step, text width=1cm, inner xsep=0pt] (store) {Store new offset};
   \node [end, right of=store] (done) {Done};
 
   \draw [->, thick] (start) to (brakes_on);
   \draw [->, thick] (brakes_on) to (valid_bias);
-  \draw [->, thick] (brakes_on.south) |- node[below]{yes} (abort);
+  \draw [->, thick] (brakes_on.south) |- node[below]{no} (abort);
   \draw [->, thick] (valid_bias.south) |- node[below]{no} (abort);
-  \draw [->, thick] (brakes_on) to node[above]{no} (valid_bias);
+  \draw [->, thick] (brakes_on) to node[above]{yes} (valid_bias);
   \draw [->, thick] (valid_bias) to node[above]{yes} (calc);
   \draw [->, thick] (calc) to (step);
   \draw [->, thick] (step) to (store);

@@ -1,0 +1,22 @@
+\section{Braking}
+
+The entire hardware and software implementations of the brake module were completed. Testing of the module with a real stepper motor were completed, but the module has yet to be tested on the actual brake pedal assembly as it has not yet been manufactured. Initial bench testing of the module is promising. The bench testing rig is shown in Fig. \ref{fig:brake_module_bench_test}. The tests performed are explained in the following sections.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=5in,keepaspectratio]{results/figures/brake_module_test_bench.eps}
+ \caption{Photograph of the bench test setup used for the braking module.}
+ \label{fig:brake_module_bench_test}
+\end{figure}
+
+\subsection{Brake Bias}
+
+The stepper motor was connected to the correct pins on the brake module connection header. First, the stepper module was tested by writing test code to rotate the knob indefinitely. Once the low-level driver functionality was verified, the bias manager implementation was verified by using the CAN diagnostic tool to simulate a request to adjust the bias. Invalid adjustments were requested, and the module responded correctly by refusing to adjust the bias. A valid bias caused the stepper to rotate in the correct direction the correct number of steps.
+
+The CAN diagnostic tool was again used to simulate a request for bias calibration. Two push-buttons were used to simulate the end-of-travel switches. When a bias calibration request was broadcast, the stepper would begin to spin until the end-of-travel switch was pressed. It would then reverse direction, until the other end-of-travel switch was pressed. Finally, it would rotate in the other direction for half the time it had spent between end-of-travel events, then stopped. The motor then moved to the correct bias position originally established.
+
+\subsection{Pressure}
+
+Pressure sensor inputs were simulated with a pair of input potentiometers connected to the breadboard. These potentiometers could be adjusted to generate a voltage between \unit{0.5}{\volt} and \unit{4.5}{\volt}. The CAN diagnostic tool was used to simulate the sequence required to calibrate the pressure sensors.
+
+The module correctly rejected pressure calibrations if the minimum pressures were greater than the maximum pressures, or if the threshold limit was not reached. Once a calibration was validated, the module could be powered down and rebooted without losing the new values.

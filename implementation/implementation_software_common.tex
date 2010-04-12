@@ -1,11 +1,11 @@
 \section{Common Software Implementation\label{sec:common_software_implementation}}
 
-Hidden beneath the surface of the hardware is a substantial amount of system code written to implement the soft aspects of the design. In fact, thousands upon thousands of lines of code already exist. This section outlines the approach taken to control the complexity of the software, and details the tool-chain used. The hardware abstraction libraries shared by the four modules are also discussed.
+Hidden beneath the surface of the hardware is a substantial amount of system code written to implement the soft aspects of the design. This section outlines the approach taken to control the complexity of the software, and details the tool-chain used. The hardware abstraction libraries shared by the four modules are also discussed.
 
 \subsection{Methodology}
 \label{sec:imp_software_meth}
 
-Code re-usability is a primary target of the software implementation. However, this is tempered by the need to write concise code that solves only the problems that actually exist. Portability to other projects is not considered at all. Low-level hardware abstraction libraries for the various micro-controller peripherals are written as ``C'' libraries. These libraries are linked to module-specific code as needed. 
+Code re-usability is a primary target of the software implementation. However, this is tempered by the need to write concise code that solves only the problems that actually exist. Portability to other projects is not considered at all. Low-level hardware abstraction libraries for the various micro-controller peripherals are written as C libraries. These libraries are linked to module-specific code as needed. 
 
 \nomenclature{RAM}{Random-Access Memory}
 
@@ -53,7 +53,7 @@ The driver is capable of operating at the standard CAN baud rates of 100, 125, 2
 
 \subsubsection{EEPROM Driver}
 
-The EEPROM driver provides a transparent interface to the 1024 bytes of EEPROM locates on the micro-controller. Writing data to the EEPROM is a relatively slow process that requires the micro-controller remain uninterrupted. The driver takes care of these details for the user. Specifically, the EEPROM driver implements:
+The EEPROM driver provides a transparent interface to the 1024 bytes of EEPROM located on the micro-controller. Writing data to the EEPROM is a relatively slow process that requires the micro-controller remain uninterrupted. The driver takes care of these details for the user. Specifically, the EEPROM driver implements:
 
 \begin{itemize}
 \item The ability to read and write 8-bit values to and from the EEPROM transparently; and
@@ -63,7 +63,7 @@ The EEPROM driver provides a transparent interface to the 1024 bytes of EEPROM l
 \subsubsection{SPI Driver}
 \label{sec:impl_spi_driver}
 
-The AT90CAN128 comes with a built-in SPI interface that generates the necessary signals required to communicate with SPI-capable devices. This interface is made available to the user through the SPI driver. Some aspects of the driver are:
+The AT90CAN128 comes with a built-in SPI interface that generates the necessary clock and data signals required to communicate with SPI-capable devices. This interface is made available to the user through the SPI driver. Some aspects of the driver are:
 
 \begin{itemize}
 \item Single character and string based read and write functions; and
@@ -72,10 +72,10 @@ The AT90CAN128 comes with a built-in SPI interface that generates the necessary 
 
 Up to eight slave select lines can be utilized by the driver. The user specifies which line is to be toggled at any given time. The user may also specify a delay (in microseconds) to be observed after transitioning the slave select lines. This allows the design to meet the varying timing requirements dictated by different SPI-enabled hardware.
 
-\subsubsection{USART Driver}
+\subsubsection{UART Driver}
 
-The USART driver provides access to the receive and transmit functions of the AT90CAN128's built-in dual-channel USART. It also implements circular receive and transmit buffers to allow efficient data flow, and callback functions for asynchronously operation.
-Some features of the USART driver are:
+The UART driver provides access to the receive and transmit functions of the AT90CAN128's built-in dual-channel UART. It also implements circular receive and transmit buffers to allow efficient data flow, and callback functions for asynchronously operation.
+Some features of the UART driver are:
 
 \begin{itemize}
 	\item Two 64-byte circular receive and transmit buffers for each channel; and

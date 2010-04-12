@@ -11,7 +11,7 @@ The transmission contains a cast steel drum called the \emph{shift drum}, which 
 
 \subsection{Clutch}
 
-The CBR600f4i is equipped with a multi-plate clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are separated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand-lever. 
+The CBR600f4i is equipped with a multi-plate wet clutch which serves to transmit torque from the engine to the drivetrain. Layers of friction plates in the clutch are forced to rotate together when the clutch is engaged by a series of pre-tensioned springs. When the clutch is disengaged externally via the \emph{clutch lever}, the plates are separated and the drivetrain is allowed to spin freely from the engine. The clutch lever is actuated on the stock motorcycle with a hand-lever. 
 
 \subsection{Neutral Sensor}
 
@@ -43,12 +43,12 @@ There are several disadvantages to a purely manual transmission:
 
 \end{itemize}
 
-For these reasons, the Formula SAE team replaced the mechanically-actuated system with an electro-pneumatic one in 2007. This new implementation replaced a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. The driver used a set of paddle switches located on the steering wheel to change gears: an up-shift paddle and a down-shift paddle. A compressed air cylinder is used to feed air to linear pneumatic cylinders, which apply force to the clutch and shift levers. Binary 3-way solenoid valves are used to apply pressure to either side of the cylinders. 
+For these reasons, the Formula SAE team replaced the mechanically-actuated system with an electro-pneumatic one in 2007. This new implementation replaced a purely mechanical clutch pedal and gear shifter with pneumatic actuators linked directly to the clutch and gear selector levers. The driver used a set of paddle switches located on the steering wheel to change gears: an up-shift paddle and a down-shift paddle. A compressed air cylinder is used to feed air to linear pneumatic cylinders, which apply force to the clutch and shift levers. A set of relays activate binary 3-way solenoid valves to apply pressure to either side of the cylinders. 
 
 The clutch remained disengaged while the driver held down either paddle. This reduced the effort required to change gears, but still often resulted in missed shifts. It also caused heavy mechanical stress on the transmission as the clutch was essentially dumped\footnote{``Dumping'' the clutch refers to letting it out too quickly.} after each gear change.
 
-The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relays with high-current solid state drivers. The timing signals to the solenoid valves were precisely controlled with an ARM7 micro-controller. Shift timing became programmable, rather than being dependant on the duration the paddles were held. This further reduced the effort required from the driver, and also reduced driver error. 
+The 2008/2009 Formula SAE car improved on the 2007 design by replacing the relays with high-current solid state drivers. The timing signals to the solenoid valves were precisely controlled with a micro-controller. Shift timing became programmable, rather than being dependant on the duration the paddles were held. This further reduced the effort required from the driver, and also reduced driver error. 
 
-A serious drawback for either system is that it is only possible to engage or disengage the clutch at a constant rate. This rate is determined by the pressure in the system, the flow rate coefficient through the valves, and the diameter of the cylinder. Launching the car requires careful modulation of the clutch position, which is not possible with a binary pneumatic system. A hand-lever was required to launch the vehicle.
+A serious drawback for either system is that it is only possible to engage or disengage the clutch at a constant rate. This rate is determined by the pressure in the system, the flow rate coefficient through the valves, and the diameter of the cylinder. Launching the car requires careful modulation of the clutch position, which is not possible with a binary pneumatic system. A hand-lever was required to launch the vehicle and avoid dumping the clutch. 
 
 Another limitation is posed by the lack of gear position sensing in the stock transmission. Although the system is able to determine when the transmission is in neutral, there is no way to determine if the gears have meshed after up- or down-shifting, and the process of changing gears is not entirely reliable. 

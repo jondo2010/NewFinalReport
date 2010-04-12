@@ -1,6 +1,6 @@
 \section{Braking Module\label{sec:Braking-Module-Design}}
 
-The braking module adjusts the brake bias electronically as requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and a degree of component tolerance that may cause unwanted rotation of the balance bar. Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and it's interactions with the environment. 
+The braking module adjusts the brake bias electronically as requested by the driver. It also provides the ability to calibrate itself to account for mechanical wear and to account for a degree of component tolerance that may cause unwanted rotation of the balance bar. Figure \ref{fig:design_brake_overview_block} shows an overview of the braking module and its interactions with the environment. 
 
 \begin{figure}[H]
 \centering
@@ -9,7 +9,8 @@ The braking module adjusts the brake bias electronically as requested by the dri
 \label{fig:design_brake_overview_block}
 \end{figure}
 
-A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor is bi-directional and can provide the resolution required to allow a 0.5\% bias ratio adjustment. Two \emph{end-of-travel switches} are used to determine when the balance bar is at it's end of travel. \emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. These components were chosen as part of the mechanical design of the brake pedal assembly by another team member. The actual choice of stepper motor has yet to be determined.
+\nomenclature{EOT}{End of Travel}
+A \emph{stepper motor} is connected to the balance bar and used to rotate it to the desired position. The motor should be bi-directional. Two \emph{end-of-travel} (EOT) switches are used to determine when the balance bar is at its end of travel. \emph{Pressure sensors} on the front and rear braking cylinders are used to determine the current pressure in each system. These components were chosen as part of the mechanical design of the brake pedal assembly by another team member. The actual choice of stepper motor has yet to be determined.
 
 \subsection{Driver-Initiated Processes \label{sec:braking_processes}}
 
@@ -30,7 +31,7 @@ Of prime importance is that the vehicle is not in motion and the brakes are not 
 
 \subsubsection{Brake Bias Calibration}
 
-A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from through it's range of motion, we can determine the correct centre point for the bias bar. 
+A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:brake_bias_calibration_flow}. By recording the number of steps it takes to rotate the balance bar from through its range of motion, we can determine the correct centre point for the bias bar. 
 
 \begin{figure}[H]
 	\centering
@@ -39,7 +40,7 @@ A flow-chart of the brake bias calibration procedure is shown in Fig. \ref{fig:b
 	\label{fig:brake_bias_calibration_flow}
 \end{figure}
 
-The first step in calibrating the brake bias is to rotate the balance bar to it's leftmost point of travel, where it pushes on the left end-of-travel switch. This signals the module that the leftmost extreme has been reached. Next, the balance bar is rotated to it's rightmost point of travel, until it pushes on the right end-of-travel switch. The module counts the steps required to travel through it's range of motion and saves the count in non-volatile parameter storage. Finally, the brake bias ratio is adjusted back to it's previous value.
+The first step in calibrating the brake bias is to rotate the balance bar to its leftmost point of travel, where it pushes on the left end-of-travel switch. This signals the module that the leftmost extreme has been reached. Next, the balance bar is rotated to its rightmost point of travel, until it pushes on the right end-of-travel switch. The module counts the steps required to travel through its range of motion and saves the count in non-volatile parameter storage. Finally, the brake bias ratio is adjusted back to its previous value.
 
 \subsubsection{Pressure Calibration}
 
@@ -69,15 +70,15 @@ The module communicates over the bus using a CAN transceiver. A pair of analog-t
 
 \subsubsection{Stepper Motor Driver}
 
-The stepper motor driver generates the signals required to drive the stepper motor connected to the balance bar. It must be capable of  driving a bi-polar stepper motor in the clockwise or counter-clockwise direction. It must also supply enough current to generate the torque required to spin the balance bar, which is approximately\footnote{This figure was supplied by the team member responsible for the braking pedal assembly.} \unit{150}{mA}.
+The stepper motor driver generates the signals required to drive the stepper motor connected to the balance bar. Approximately \unit{150}{mA} of current are required to generate the torque required to spin the balance bar \footnote{This figure was supplied by the team member responsible for the braking pedal assembly.}.
 
 \subsubsection{Analogue-to-Digital Converters (ADC)}
 
-The ADCs sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}. To achieve resolution of \unit{10}{\kilo\pascal}, a 10-bit ADC is sufficient. The pressure values are sampled at \unit{10}{\hertz}.
+The ADCs sample the output voltage from pressure sensors attached to the front and rear brake master cylinders. The output voltage of the particular sensors used is \unit{0-5}{\volt}, corresponding to \unit{0-10}{\mega\pascal}. The expected maximum brake pressure is somewhere around \unit{7}{\mega\pascal}. To achieve resolution of \unit{100}{\kilo\pascal}, a 10-bit ADC is sufficient. The pressure values are sampled at \unit{10}{\hertz}.
 
 \subsubsection{End-of-Travel Sensing Switches}
 
-Two end-of-travel switches are tripped whenever the balance bar reaches it's leftmost or rightmost extremes. The switches are normally high-impedance, and become switched to ground. The micro-controller should have GPIO pins with weak internal pull-up resistors to detect the state of the switches.
+Two end-of-travel switches are tripped whenever the balance bar reaches its leftmost or rightmost extremes. The switches are normally high-impedance, and become switched to ground when they are pushed by a metal tab attached to the balance bar assembly. 
 
 \subsection{Software}
 
@@ -90,7 +91,7 @@ A block-diagram overview of the software design is shown in Fig. \ref{fig:brake_
 	\label{fig:brake_software_design_block}
 \end{figure}
 
-Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. Unique to the braking module is the \emph{stepper motor interface}. The CAN interface is exactly as described earlier, and is not mentioned here.
+Several hardware abstraction interfaces link the external hardware and micro-controller features to the bias and pressure managers. Unique to the braking module is the \emph{stepper motor interface}. 
 
 \subsubsection{Bias Manager}
 
@@ -98,7 +99,7 @@ The bias manager implements the bias adjustment and bias calibration processes. 
 
 When asked to adjust the brake bias, the bias manager coordinates with the pressure manager to determine if the brakes are being applied, and with the engine and transmission controller to determine if the vehicle is in motion. It performs the calculations required to calculate the new bias position, and adjusts the balance bar accordingly by sending motor step commands to the stepper motor interface.
 
-Bias calibration requires similar coordination to ensure a safe operating state. The bias manager again uses the stepper motor interface to move the balance bar between it's extremes. Calibration data is loaded at start-up and stored after calibration in NVRAM by way of the non-volatile storage interface.
+Bias calibration requires similar coordination to ensure a safe operating state. The bias manager again uses the stepper motor interface to move the balance bar between its extremes. Calibration data is loaded at start-up and stored after calibration in NVRAM by way of the non-volatile storage interface.
 
 \subsubsection{Pressure Manager}
 

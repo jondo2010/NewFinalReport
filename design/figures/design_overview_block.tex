@@ -11,7 +11,7 @@
   \draw [<->, thick, dashed] (engine) -- (ecu);
 
   \node [block, blue shiny, right of=bus1, text width=1.7cm] (telemetry_module) {Telemetry Module};
-  \node [block, right of=telemetry_module, text width=1.5cm, node distance=3cm] (dac) {DAC};
+  \node [block, right of=telemetry_module, text width=1.5cm, node distance=3cm] (dac) {DAQ};
   \draw [<->, thick] (telemetry_module) -- (bus1);
   \draw [<-, thick] (telemetry_module) -- (dac);
   \draw [->, thick] (ecu) -- (telemetry_module);

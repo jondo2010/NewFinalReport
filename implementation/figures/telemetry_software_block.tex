@@ -38,7 +38,7 @@
 
   % Usart1 section
   \node [blue shiny, rectangle, minimum width=2cm, right of=max3100, node distance=3cm] (usart1) {UART1};
-  \node [blue shiny, rectangle, above of=usart1, node distance=1cm] (dac) {DAC};
+  \node [blue shiny, rectangle, above of=usart1, node distance=1cm] (dac) {DAQ};
 
   \node [red shiny, rectangle, below of=usart1, right=-1cm, node distance=1cm] (usart1_rx) {Rx};
   \node [red shiny, rectangle, below of=usart1, left=-1cm, node distance=1cm, dashed] (usart1_tx) {Tx};
@@ -48,7 +48,7 @@
   \draw [->, dashed] (usart1_tx) -- ($(usart1.south west)!(usart1_tx.north)!(usart1.south east)$);
 
   \node [red shiny, rectangle split, rectangle split parts=4, below of=usart1, text centered, minimum width=2cm, anchor=base, text width=1.85cm, inner xsep=0pt, font=\scriptsize] (dac_library)
-    {DAC Library
+    {DAQ Library
       \nodepart{second} Buffer
       \nodepart{third} Decoder
       \nodepart{fourth} Encoder};

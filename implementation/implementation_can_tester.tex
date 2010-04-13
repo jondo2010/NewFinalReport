@@ -7,7 +7,7 @@ The CAN diagnostic tool is a piece of software run on a third-party development 
 
 \subsection{Hardware}
 
-Our group received an Olimex AT90CAN128-based development board as a sponsorship donation from Optimal Microsystems. Like the four modules, the Olimex development board supports a JTAG-interface, and has D-sub type connectors on either end for RS-232 and CAN. An annotated photograph of the development board is shown in Fig. \ref{fig:impl_avr_can}.
+Our group received an Olimex AT90CAN128-based development board as a sponsorship donation from Optimal Microsystems. Like the four modules, the Olimex development board supports a JTAG-interface, and has D-sub type connectors on either end for RS-232 and CAN. An annotated photograph of the development board is shown in Fig.\ \ref{fig:impl_avr_can}.
 
 \begin{figure}[H]
 \centering
@@ -53,7 +53,7 @@ By default, the board acts as a termination point for the CAN bus. The modules c
 
 \subsection{Serial Interface}
 
-The CAN diagnostic tool communicates with a user over the built-in serial interface. By default, the serial stream is configured to operate at 115,200 Kbps with 8 data bits, 1 stop bit, and no parity bit.
+The CAN diagnostic tool communicates with a user over the built-in serial interface. By default, the serial stream is configured to operate at \unit{115,200}{\kilo\bit\per\second} with 8 data bits, 1 stop bit, and no parity bit.
 
 A simple software library links standard C input-output functions like \verb|printf()| and \verb|scanf()| to the internal UART, avoiding the need for interaction with the complicated UART library required by the other modules. 
 
@@ -148,7 +148,7 @@ Bus Activity:
  
 \subsection{Packet Scheduler}
 
-The packet scheduler handles the translation of input from the user into packets, and the actual queuing and dispatching of packets over the network. Each packet is described by a \emph{packet descriptor}, which is essentially a C structure that defines all of the packet parameters introduced in Sec. \ref{ref:candt_ui}. 
+The packet scheduler handles the translation of input from the user into packets, and the actual queuing and dispatching of packets over the network. Each packet is described by a \emph{packet descriptor}, which is essentially a C structure that defines all of the packet parameters introduced in Sec.\ \ref{ref:candt_ui}. 
 
 At the heart of the packet scheduler is a statically-allocated array of packet descriptors, called the \emph{packet queue}. The packet queue contains all the packets that are to be broadcast over the network, arranged by time of broadcast.
 
@@ -166,5 +166,5 @@ Once the broadcast process begins, the CAN interface is configured to listen for
 
 \subsection{Throughput Limitations}
 
-It is possible that too many packets may arrive at once and overload the input stream. The longest output text is 104 bytes, or 832 bits. This corresponds to 138 possible lines of output per second, corresponding to 138 possible CAN packets per second. The shortest possible CAN packet is 41 bits, and the longest possible CAN packet is 576 bits, so the serial output limits the true bus speed to between $41*138 = 5658$ bps and $576 * 138 = 79488$ bps. This problem is not significant, as the modules do not typically generate more than 15 or 20 messages per second.
+It is possible that too many packets may arrive at once and overload the input stream. The longest output text is 104 bytes, or 832 bits. This corresponds to 138 possible lines of output per second, corresponding to 138 possible CAN packets per second. The shortest possible CAN packet is 41 bits, and the longest possible CAN packet is 576 bits, so the serial output limits the true bus speed to between $41*138 = \unit{5658}{\bit\per\second}$ and $576 * 138 = \unit{79488}{\bit\per\second}$. This problem is not significant, as the modules do not typically generate more than 15 or 20 messages per second.
 

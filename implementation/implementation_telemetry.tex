@@ -33,7 +33,7 @@ In addition to the base system hardware common to all modules described in Sec.\
       \hline 
       SPI-capable UART chip & Maxim Electronics & MAX3100\tabularnewline
       \hline 
-      300mA Low Dropout Regulator & Linear Technology & LT1521\tabularnewline
+      300mA Low Dropout Regulator \unit{3.3}{\volt} & Linear Technology & LT1521\tabularnewline
       \hline
       8-bit dual-supply level translator & ST Microelectronics & ST2378E\tabularnewline
       \hline
@@ -71,7 +71,7 @@ The module software is concerned primarily with transferring data to and from th
 
 \subsubsection{MAX3100 UART Driver}
 
-The software driver written for the MAX3100 shares it's interface and buffer code with the built-in AT90CAN128 UART driver described in Sec. \ref{sec:impl_spi_driver}. The statically-allocated circular buffer approach first introduced with the built-in UART is left unchanged. 
+The software driver written for the MAX3100 shares it's interface and buffer code with the built-in AT90CAN128 UART driver described in Sec.\ \ref{sec:impl_spi_driver}. The statically-allocated circular buffer approach first introduced with the built-in UART is left unchanged. 
 
 The MAX3100 provides asynchronous transmission and reception of data with an external hardware interrupt signal. A flow-chart of the hardware interrupt service routine is shown in Fig.\ \ref{fig:usart_driver_flow}. The MAX3100 driver allows the module software to define callback functions to be executed when new data arrives or has been transmitted. 
 
@@ -82,7 +82,7 @@ The MAX3100 provides asynchronous transmission and reception of data with an ext
 \label{fig:usart_driver_flow}
 \end{figure}
 
-The MAX3100 driver is configured to use a $\unit{4}{\mega\hertz}$ SPI clock to meet the data throughput requirements demanded from multiplexing the DAQ and ECU streams. It interfaces directly with the SPI driver described in Sec. \ref{sec:impl_spi_driver}.
+The MAX3100 driver is configured to use a $\unit{4}{\mega\hertz}$ SPI clock to meet the data throughput requirements demanded from multiplexing the DAQ and ECU streams. It interfaces directly with the SPI driver described in Sec.\ \ref{sec:impl_spi_driver}.
 
 \subsubsection{XBee PRO Library}
 

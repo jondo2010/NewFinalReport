@@ -17,7 +17,7 @@ The major processes of the engine and transmission module are \emph{up-shifting}
 
 \subsubsection{Up-Shifting}
 
-The up-shift procedure is illustrated in Fig. \ref{fig:transmission_upshift_flow}. Up-shifting does not require disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
+The up-shift procedure is illustrated in Fig.\ \ref{fig:transmission_upshift_flow}. Up-shifting does not require disengaging the clutch, merely a small decrease in engine RPM. The ECU provides a shift-cut feature to cut spark to the engine during a shift operation to avoid the driver having to manually modulate the throttle during a shift.
 
 \begin{figure}[H]
 	\centering
@@ -32,7 +32,7 @@ The up-shift process depends upon engine RPM and gear position, both of which ar
 
 \subsubsection{Down-Shifting}
 
-The down-shift procedure is illustrated in Fig. \ref{fig:transmission_downshift_flow}. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch. 
+The down-shift procedure is illustrated in Fig.\ \ref{fig:transmission_downshift_flow}. The downshift procedure differs from the upshift procedure in that the downshift requires use of the clutch. 
 
 \begin{figure}[H]
 	\centering
@@ -48,7 +48,7 @@ From the drivers perspective, down-shifting is a two-stage process:
   \item The driver releases the down-shift paddle to requests the clutch re-engage.
 \end{enumerate}
 
-Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage\footnote{"Blipping" was previously described in Sec. \ref{sec:background_transmission}.}. 
+Adding this extra clutch engagement request allows the driver to delay re-engagement of the clutch so that they can blip the throttle to avoid engine compression and the possibility of a spinout when the clutch plates re-engage\footnote{"Blipping" was previously described in Sec.\ \ref{sec:background_transmission}.}. 
 
 Once the driver requests a down-shift, the clutch is disengaged and the down-shift solenoid is engaged to change gears. Once the correct gear has engaged, the solenoid is disengaged and the controller waits for the driver to release the down-shift paddle. When the paddle is released, the clutch is re-engaged. A minimum clutch disengagement time $t_{c_{min}}$ is observed in the event the driver pulls the paddle and releases it without any delay. This parameter is adjustable on the module.
 
@@ -56,7 +56,7 @@ Once the driver requests a down-shift, the clutch is disengaged and the down-shi
 
 \subsubsection{Neutral Find}
 
-Neutral find can be used by the driver to quickly shift into neutral when entering the pit area, without having to manually cycle through gears. The procedure is illustrated in Fig. \ref{fig:transmission_neutralfind_flow}.
+Neutral find can be used by the driver to quickly shift into neutral when entering the pit area, without having to manually cycle through gears. The procedure is illustrated in Fig.\ \ref{fig:transmission_neutralfind_flow}.
 
 \begin{figure}[H]
 	\centering
@@ -69,7 +69,7 @@ When the driver engages the neutral find feature, the transmission controller di
 
 \subsection{Variable Intake}
 
-The length of the intake runners is modulated automatically to provide the optimal torque output for the current engine RPM. The control flow chart is shown in Fig. \ref{fig:engine_varintake_flow}. 
+The length of the intake runners is modulated automatically to provide the optimal torque output for the current engine RPM. The control flow chart is shown in Fig.\ \ref{fig:engine_varintake_flow}. 
 
 \begin{figure}[H]
 	\centering
@@ -98,7 +98,7 @@ Part-throttle launch is a feature designed to mimic an automatic transmission. B
 
 \subsection{Hardware \label{sec:design_engine_transmission_hardware}}
 
-A high-level overview of the module's hardware design is shown in Fig. \ref{fig:engine_hardware_design_block}. The module uses a \emph{micro-controller} to execute all of the controller software. 
+A high-level overview of the module's hardware design is shown in Fig.\ \ref{fig:engine_hardware_design_block}. The module uses a \emph{micro-controller} to execute all of the controller software. 
 
 \begin{figure}[H]
 	\centering
@@ -132,7 +132,7 @@ High-current solenoid drivers provide current to the solenoids that actuate the 
  
 \subsubsection{ECU Control Signals}
 
-The engine and transmission module design has several outputs to control the discrete input pins on the ECU as described in Sec. \ref{sec:ecu_background_discrete_inputs}:
+The engine and transmission module design has several outputs to control the discrete input pins on the ECU as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}:
 
 \begin{itemize}
   \item the launch control pin, which enables and disables the launch control feature;
@@ -144,7 +144,7 @@ The engine and transmission module design has several outputs to control the dis
 
 \subsection{Software}
 
-A block-diagram overview of the software design is shown in Fig. \ref{fig:engine_software_design_block}. The functionality of the system is separated into an \emph{intake manager} and a \emph{transmission manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. A \emph{PWM generator} provides the signals required to interact with the electro-pneumatic system. The entire process is overseen by a \emph{module coordinator}.
+A block-diagram overview of the software design is shown in Fig.\ \ref{fig:engine_software_design_block}. The functionality of the system is separated into an \emph{intake manager} and a \emph{transmission manager}. The managers interact with a set of \emph{hardware abstraction interfaces} to perform their tasks. A \emph{PWM generator} provides the signals required to interact with the electro-pneumatic system. The entire process is overseen by a \emph{module coordinator}.
 
 \begin{figure}[H]
 	\centering

@@ -1,6 +1,6 @@
 \section{Telemetry Module\label{sec:Telemetry-Module-Design}}
 
-The \emph{telemetry module} provides a means for multiplexing the ECU and DAQ data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAQ and makes it available over the network to other modules, and injects data from other modules into the DAQ stream. An overview of the telemetry module and its environmental interactions is shown in Fig. \ref{fig:design_telemetry_overview_block}.
+The \emph{telemetry module} provides a means for multiplexing the ECU and DAQ data streams, and sending them wirelessly to the crew's laptops. The module also decodes data from the DAQ and makes it available over the network to other modules, and injects data from other modules into the DAQ stream. An overview of the telemetry module and its environmental interactions is shown in Fig.\ \ref{fig:design_telemetry_overview_block}.
 
 \begin{figure}[H]
 	\centering
@@ -13,7 +13,7 @@ The vehicle-side of the telemetry system consists of the telemetry module itself
 
 \subsection{ECU Data Channel}
 
-The ECU data channel is illustrated in Fig. \ref{fig:ecu_data_channel}. It is a simple bi-directional pass-through channel. The module acts as a router for ECU data. The data stream is not modified in any way. 
+The ECU data channel is illustrated in Fig.\ \ref{fig:ecu_data_channel}. It is a simple bi-directional pass-through channel. The module acts as a router for ECU data. The data stream is not modified in any way. 
 
 \begin{figure}[H]
 	\centering
@@ -26,7 +26,7 @@ Data originating from the ECU over the serial link is multiplexed onto the wirel
 
 \subsection{DAQ Data Channel}
 
-The DAQ data channel is illustrated in Fig. \ref{fig:dac_data_channel}. Unlike the ECU data channel, the DAQ data channel is uni-directional, and data is injected and decoded from the data stream.
+The DAQ data channel is illustrated in Fig.\ \ref{fig:dac_data_channel}. Unlike the ECU data channel, the DAQ data channel is uni-directional, and data is injected and decoded from the data stream.
 
 \begin{figure}[H]
 	\centering
@@ -41,7 +41,7 @@ At the time of writing, the mechanical team has not identified what data they wo
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in Fig. \ref{fig:design_telemetry_hardware_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
+A high-level overview of the module's hardware design is shown in Fig.\ \ref{fig:design_telemetry_hardware_block}. Like the other modules, the heart of the brake module is a micro-controller that runs the software necessary to implement all of the required features. 
 
 \begin{figure}[H]
 \centering
@@ -70,7 +70,7 @@ The wireless modem converts a logic-level serial stream from the one of the UART
 
 \subsection{Software}
 	
-A block-diagram overview of the software design is shown in Fig. \ref{fig:design_telemetry_software_block}. Data streams from the ECU and DAQ are dealt with by the \emph{data manager}. The DAQ stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
+A block-diagram overview of the software design is shown in Fig.\ \ref{fig:design_telemetry_software_block}. Data streams from the ECU and DAQ are dealt with by the \emph{data manager}. The DAQ stream is decoded by the \emph{packet decoder} and modified by the \emph{packet injector}. The wireless link is overseen by the \emph{link manager}. 
 
 \begin{figure}[H]
 	\centering

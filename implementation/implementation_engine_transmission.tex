@@ -14,7 +14,7 @@ The engine and transmission module implements the design specified in Sec.\ \ref
 \nomenclature{CMOS}{Complimentary Metal-Oxide-Semiconductor}
 \nomenclature{DAC}{Digital-to-Analog Converter}
 
-In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, three additional hardware components are required. A single \emph{serial peripheral interface} (SPI) capable \emph{low-side solenoid driver} implements the solenoid driver requirement laid out in Sec. \ref{sec:design_engine_transmission_hardware}. A \emph{complimentary metal-oxide-semiconductor} (CMOS) buffer chip is used to interface the discrete pins on the ECU (as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}). An SPI capable \emph{digital-to-analog converter} (DAC) provides the \unit{0-5}{\volt} output signal required to set the traction control slip percentage.
+In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, three additional hardware components are required. A single \emph{serial peripheral interface} (SPI) capable \emph{low-side solenoid driver} implements the solenoid driver requirement laid out in Sec.\ \ref{sec:design_engine_transmission_hardware}. A \emph{complimentary metal-oxide-semiconductor} (CMOS) buffer chip is used to interface the discrete pins on the ECU (as described in Sec.\ \ref{sec:ecu_background_discrete_inputs}). An SPI capable \emph{digital-to-analog converter} (DAC) provides the \unit{0-5}{\volt} output signal required to set the traction control slip percentage.
 
 Figure \ref{fig:engine_system_overview} shows a block-level diagram of the hardware implementation of the engine and transmission module, including the specific components chosen for the implementation. A list of the components additional to the base system hardware can be found in Table \ref{tab:engine_transmission_module_components}.
 
@@ -52,7 +52,7 @@ A standard 74LVC07A CMOS buffer chip is used to buffer the GPIO lines on the mic
 
 \subsubsection{Traction Control Analog Output}
 
-The TLV5623C SPI-interfaced DAC from Texas Instruments generates the \unit{0-5}{\volt} analog signal for the ECU's traction slip percent input (described in Sec. \ref{sec:ECU}.) The TLV5623 outputs a \unit{0-5}{\volt} analog signal that varies with the digital input. The output voltage from the DAC is determined by the following equation: \cite{TLV5623}
+The TLV5623C SPI-interfaced DAC from Texas Instruments generates the \unit{0-5}{\volt} analog signal for the ECU's traction slip percent input (described in Sec.\ \ref{sec:ECU}.) The TLV5623 outputs a \unit{0-5}{\volt} analog signal that varies with the digital input. The output voltage from the DAC is determined by the following equation: \cite{TLV5623}
 
 \begin{equation}
 V_{out}^{DAC}=2\cdot{V_{ref}^{DAC}}\,\frac{Code}{2^{n}}\,\volt
@@ -126,6 +126,6 @@ An efficient generating routine was constructed to effect the level transitions 
 
 \subsubsection{Solenoid Driver}
 
-The low-level solenoid driver uses the SPI library described in Sec. \ref{sec:impl_spi_driver} to communicate with the LT9822E solenoid driver IC. The LT9822E uses a simple one-byte command format: each bit represents one of the eight solenoid outputs. A zero bit turns the solenoid off, while a one bit turns the solenoid on. 
+The low-level solenoid driver uses the SPI library described in Sec.\ \ref{sec:impl_spi_driver} to communicate with the LT9822E solenoid driver IC. The LT9822E uses a simple one-byte command format: each bit represents one of the eight solenoid outputs. A zero bit turns the solenoid off, while a one bit turns the solenoid on. 
 
 The solenoid driver maintains the current state of the solenoids and allows the module software to toggle the solenoid outputs individually. When toggling a solenoid, the original solenoid state undergoes an ``exclusive-or'' with the bit position of the desired solenoid. This new command byte is then pushed out over the SPI interface, and saved for the next transition.

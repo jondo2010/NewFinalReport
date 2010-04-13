@@ -59,7 +59,7 @@ The bias library configures the CAN interface to listen for new adjustment and c
 \paragraph{Bias Adjustment Request}
 \label{sec:impl_braking_bar}
 
-The bias adjustment routine follows the flow chart illustrated in Fig. \ref{fig:design-braking-bias-adjustment}. Safety validation checks must be performed before the routine can get underway. 
+The bias adjustment routine follows the flow chart illustrated in Fig.\ \ref{fig:design-braking-bias-adjustment}. Safety validation checks must be performed before the routine can get underway. 
 
 First, the current front and rear brake pressures is requested from the pressure manager. If these pressures indicate the brakes are engaged, the procedure is aborted and an error message is broadcast over the CAN bus. Secondly, the current engine speed is captured over the CAN bus. If the engine RPM indicates the vehicle is in motion, the process is also aborted. Finally, the adjustment request is validated against the range of possible adjustments. If the request is out of range, the process is aborted and an error message is broadcast.
 
@@ -73,7 +73,7 @@ If this value is negative, the stepper motor is turned clockwise to move the bal
 
 \paragraph{Bias Calibration}
 
-The bias calibration routine follows the flow chart illustrated in Fig. \ref{fig:brake_bias_calibration_flow}. Like the bias adjustment request, the bias manager ensures the brakes are not engaged before proceeding.
+The bias calibration routine follows the flow chart illustrated in Fig.\ \ref{fig:brake_bias_calibration_flow}. Like the bias adjustment request, the bias manager ensures the brakes are not engaged before proceeding.
 
 The calibration routine requests that it be interrupted when either end-of-travel switch is triggered. It then uses the stepper interface to rotate the balance bar to the left, until an interrupt occurs. The stepper interface is then used to rotate the balance bar all the way to the right, one step at a time. An index is incremented with each step. Once the right end-of-travel is reached, the bias manager stores the new number of steps required to travel the full-scale of the balance bar. It then divides the steps travelled by two and rotates the bar back by this many steps, thus centering the bar. Finally, the adjustment procedure is invoked to restore the original bias ratio, assuming the current bias is 50/50.
 
@@ -89,7 +89,7 @@ Each pressure value is a 10-bit number stored in an unsigned 16-bit number, so t
 
 \paragraph{Pressure Calibration}
 
-The pressure calibration routine follows the flow chart illustrated in Fig. \ref{fig:brake_pressure_calibration_flow}. The vehicle must not be in motion while this takes place, so a check for vehicle speed similar to that in Sec. \ref{sec:impl_braking_bar} is carried out. 
+The pressure calibration routine follows the flow chart illustrated in Fig.\ \ref{fig:brake_pressure_calibration_flow}. The vehicle must not be in motion while this takes place, so a check for vehicle speed similar to that in Sec.\ \ref{sec:impl_braking_bar} is carried out. 
 
 The pressure manager will broadcast a packet indicating that it is requires the driver to remove their foot from the brake. The driver then indicates this is done by pushing the diagnostic button on the driver interface. This causes a reply packet to be broadcast back to the pressure manager. Once received, the pressure manager uses the ADC interface to sample the front and rear pressures and stores them in a temporary value.
 

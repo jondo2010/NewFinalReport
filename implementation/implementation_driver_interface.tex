@@ -10,15 +10,38 @@ The driver interface module implements the design specified in Sec.\ \ref{sec:Dr
 
 \subsection{Hardware}
 
-The driver interface module provides all of the support hardware needed for the LCD module to function. An \emph{FPC} connector, \emph{LCD bias boost converter}, \unit{+3.3}{\volt} power supply, latch, and level translators are all included in the module. Additionally, three rotary encoders are soldered onto the board. Connectors are soldered onto the back of the PCB to connect the steering wheel-mounted push buttons and paddles.
+The driver interface module provides all of the support hardware needed for the LCD module to function. In addition to the base system hardware common to all modules described in Sec.\ \ref{sec:base_system_hardware}, an \emph{FPC} connector, \emph{LCD bias boost converter}, \unit{+3.3}{\volt} power supply, latch, and level translators are all included in the module. Additionally, three rotary encoders are soldered onto the board. Connectors are soldered onto the back of the PCB to connect the steering wheel-mounted push buttons and paddles. The additional components are summarized in in Table \ref{tab:driver_interface_module_components}.
+
+\begin{table}[H]
+  \caption{List of components used by the driver interface module.}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline 
+    Part & Manufacturer & Part Number\tabularnewline 
+    \hline \hline
+    Octal D-type latch & NXP Electronics & 74LVC373A \tabularnewline
+    \hline
+    300mA Low Dropout Regulator \unit{3.3}{\volt} & Linear Technology & LT1521\tabularnewline
+    \hline
+    8-bit dual-supply level translator & ST Microelectronics & ST2378E\tabularnewline
+    \hline
+    4-bit dual-supply level translator & Analog Devices Inc & ADG3304 \tabularnewline
+    \hline
+    DC-DC Boost Controller & Linear Technology & LT1615ES5 \tabularnewline
+    \hline
+    Rotary Encoder & Panasonic & EVE-GA1F2012B \tabularnewline
+    \hline
+  \end{tabular}
+  \label{tab:driver_interface_module_components}
+\end{table}
 
 \subsubsection{LCD Module}
 
-The LCD module used in the driver interface implementation is a pre-packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator.
+The LCD module used in the driver interface implementation is a pre-packaged LCD module from Newhaven Display. Along with the actual LCD panel, a built-in display controller chip and display RAM are included. Interfacing with the LCD module entails interfacing with it's controller chip, a SED1335 LCD controller IC from Seiko Epson Corporation. The controller chip handles all of the low level functionality of the LCD, such as generating pixel clocks and drawing to the screen from the LCD RAM. It also provides a character generator. The LCD module connects to the Driver Interface Module PCB with a ribbon cable. The connector is visible in Fig.\ \ref{fig:driver_interface_pcb} (the brown rectangle).
 
 \subsubsection{LCD Bias Circuit}
 
-The LCD screen requires a large bias voltage of \unit{+22}{\volt} to operate \cite{LCD_Module}. A Linear Technology LT1615 step-up DC/DC converter is used as the heart of a boost converter circuit to generate this bias voltage. The circuit schematic for the boost converter is shown in Fig.\ \ref{fig:lcd_boost_converter}.
+The LCD screen requires a large bias voltage of \unit{+22}{\volt} to operate \cite{LCD_Module}. A Linear Technology LT1615 step-up DC/DC converter is used as the heart of a boost converter circuit to generate this bias voltage. The circuit schematic for the boost converter, based off the reference design in \cite{LCD_Module}, is shown in Fig.\ \ref{fig:lcd_boost_converter}.
 
 \begin{figure}[H]
  \centering
@@ -40,7 +63,7 @@ R_{3}=R_{4}\cdot\left(\frac{V_{bias}}{1.23}-1\right)
 \subsubsection{LCD Module Data Interface\label{sec:lcd_module_data_interface}}
 \nomenclature{ALE}{Address Latch Enable}
 
-The LCD's 8-bit interface can be connected to an external memory interface, making the LCD a memory-mapped peripheral. All of the read and write strobes are handled by the memory controller. The AT90CAN128's external memory interface uses a bank of eight pins as a multiplexed data and address bus. This bus must be demultiplexed in order to offer the separate address and data buses required by the LCD module. In operation, the micro-controller first puts out the address on the combined bus, followed by the data. A \emph{address latch enable} (ALE) signal to interface with an external latch to store the address bits.\cite{AT90CAN}.
+The LCD's 8-bit interface can be connected to an external memory interface, making the LCD a memory-mapped peripheral. All of the read and write strobes are handled by the memory controller. The AT90CAN128's external memory interface uses a bank of eight pins as a multiplexed data and address bus. This bus must be demultiplexed in order to offer the separate address and data buses required by the LCD module. In operation, the micro-controller first puts out the address on the combined bus, followed by the data. An \emph{address latch enable} (ALE) signal from the memory interface is used with an external latch to store the address bits.\cite{AT90CAN}.
 
 \nomenclature{$t_{LHLL}$}{The Address Latch Enable pulse width on the AT90CAN128's external memory interface}
 A fast octal D-Type latch from NXP, the 74LVC373A, is used to latch the address from the micro-controller. The width of the ALE pulse, $t_{LHLL}$, provided by the micro-controller is given as:
@@ -49,17 +72,15 @@ A fast octal D-Type latch from NXP, the 74LVC373A, is used to latch the address 
 t_{LHLL}=t_{CLCL}-15\, \nano\second
 \end{equation}
 
-Here, $t_{CLCL}$ is the main clock period. With the main clock running at $\unit{16}{\mega\hertz}$, $t_{LHLL}=\unit{48}{\nano\second}$.
+Here, $t_{CLCL}$ is the main clock period. Given a main clock frequency of $\unit{16}{\mega\hertz}$, $t_{LHLL}=\unit{48}{\nano\second}$. The 74LVC373A latch from NXP requires a minimum LE pulse width of $\unit{4.5}{\nano\second}$, so is suitable as a demultiplexing interface.
 
 \nomenclature{$t_{CLCL}$}{The main system clock period on the AT90CAN128.}
-
-The 74LVC373A latch from NXP requires a minimum LE pulse width of $\unit{4.5}{\nano\second}$, so is suitable as a demultiplexing interface.
 
 The external memory on the AT90CAN128 starts at address 0x1100h, and there are two possible registers to read/write to on the LCD controller. The LCD controller therefore has it's single address select pin connected to the LSB of the address lines output from the latch. Since only two addresses are required, the upper 8 address lines of the external memory interface were not used.
 
 \nomenclature{CS}{Chip Select}
 
-A logical combination of the lower byte address lines are connected to the \emph{chip select} (CS) line on the LCD controller. Since the external memory controller only outputs it's control signals when the requested memory operation is referencing external memory, it is safe to ignore the upper byte address lines. The second bit of the address lines to the CS line on the LCD controller. The resulting operations when interacting with the LCD controller are summarized in Table \ref{tab:lcd_memory_map}.
+A logical combination of the lower byte address lines are connected to the \emph{chip select} (CS) line on the LCD controller. Since the external memory controller only outputs its control signals when the requested memory operation is referencing external memory, it is safe to ignore the upper byte address lines. The second bit of the address lines is connected to the CS line on the LCD controller. The resulting logical operations when interacting with the LCD controller are summarized in Table \ref{tab:lcd_memory_map}.
 
 \begin{table}[H]
 \caption{List of memory addresses associated with the LCD interface.}
@@ -71,7 +92,7 @@ Address  & Read Function  & Write Function\tabularnewline
 \hline 
 0x1101  & Status flag read  & Display data and parameter write\tabularnewline
 \hline 
-0x1102  & Display dada and cursor address read  & Command write\tabularnewline
+0x1102  & Display data and cursor address read  & Command write\tabularnewline
 \hline
 \end{tabular}
 \label{tab:lcd_memory_map}
@@ -79,7 +100,7 @@ Address  & Read Function  & Write Function\tabularnewline
 
 \subsection{Software}
 
-The software running on the driver interface module acts as a major source and sink of data on the network, sending driver commands out and listening to incoming diagnostic information. The majority of the software implemented is to support the LCD hardware. The software supporting the buttons, knobs, and paddles is very simple in comparison. The actual user interface and vehicle diagnostic mode managers are in the process of being implemented, however the main priority of the team has been to finish debugging the electro-pneumatic system and finish the transmission control software.
+The software running on the driver interface module acts as a major source and sink of data on the network, sending driver commands out and listening to incoming diagnostic information. The majority of the software implemented is to support the LCD hardware. The software supporting the buttons, knobs, and paddles is very simple in comparison. Several libraries implementing a slightly abstracted software interface to the LCD module were written, including initialization, screen mode setting and font handling routines.
 
 \subsubsection{LCD Module Library}
 

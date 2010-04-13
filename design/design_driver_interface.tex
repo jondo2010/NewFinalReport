@@ -1,7 +1,7 @@
 \section{Driver Interface Module\label{sec:Driver-Interface-Module}}
 \nomenclature{LCD}{Liquid Crystal Display}
 
-In previous years, the team has often been hindered by a lack of direct information from the electronic systems in the car. The driver interface module remedies this by providing information to the driver in real-time, and allows the driver to control aspects of the electronic control systems. The driver module and its interactions are shown in Fig. \ref{fig:design_interface_overview_block}.
+In previous years, the team has often been hindered by a lack of direct information from the electronic systems in the car. The driver interface module remedies this by providing information to the driver in real-time, and allows the driver to control aspects of the electronic control systems. The driver module and its interactions are shown in Fig.\ \ref{fig:design_interface_overview_block}.
 
 \begin{figure}[H]
 	\centering
@@ -80,7 +80,7 @@ The list of available options and the current value for the selected option is d
 
 \subsection{Hardware}
 
-A high-level overview of the module's hardware design is shown in Fig. \ref{fig:interface_hardware_design_block}. The driver interface module builds on the common architecture present in the other three modules. 
+A high-level overview of the module's hardware design is shown in Fig.\ \ref{fig:interface_hardware_design_block}. The driver interface module builds on the common architecture present in the other three modules. 
 
 \begin{figure}[H]
 \centering
@@ -95,11 +95,11 @@ The LCD module is a self-contained unit that consists of an easy-to-read LCD scr
 
 \subsubsection{Knobs, Buttons, and Paddles}
 
-The buttons and paddles described in Sec. \ref{sec:interface_controls} are connected to the driver interface module through wiring to allow placement throughout the steering wheel. Appropriate de-bouncing and encoding circuitry is present to interface the controls with the module. 
+The buttons and paddles described in Sec.\ \ref{sec:interface_controls} are connected to the driver interface module through wiring to allow placement throughout the steering wheel. Appropriate de-bouncing and encoding circuitry is present to interface the controls with the module. 
 
 \subsection{Software}
 
-A block-diagram overview of the software design is shown in Fig. \ref{fig:interface_software_design_block}. Like with other designs, various managers oversee operation of the module, and interact with hardware through abstraction interfaces.
+A block-diagram overview of the software design is shown in Fig.\ \ref{fig:interface_software_design_block}. Like with other designs, various managers oversee operation of the module, and interact with hardware through abstraction interfaces.
 
 \begin{figure}[H]
 	\centering
@@ -114,7 +114,7 @@ The user interface manager controls the content displayed on the information dis
 
 \subsubsection{Diagnostics Manager}
 
-The diagnostics manager listens to the network for the information listed in Sec. \ref{sec:interface_diag}. It grabs important vehicle parameters and coordinates with the user interface manager to display them on the information display panel.
+The diagnostics manager listens to the network for the information listed in Sec.\ \ref{sec:interface_diag}. It grabs important vehicle parameters and coordinates with the user interface manager to display them on the information display panel.
 
 \subsubsection{VDM Manager}
 
